@@ -15,18 +15,6 @@ type SysLoginLog struct {
 }
 
 // GetPage 登录日志列表
-// @Summary 登录日志列表
-// @Description 获取JSON
-// @Tags 登录日志
-// @Param username query string false "用户名"
-// @Param ipaddr query string false "ip地址"
-// @Param loginLocation  query string false "归属地"
-// @Param status query string false "状态"
-// @Param beginTime query string false "开始时间"
-// @Param endTime query string false "结束时间"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-login-log [get]
-// @Security Bearer
 func (e SysLoginLog) GetPage(c *gin.Context) {
 	s := service.SysLoginLog{}
 	req := dto.SysLoginLogSearch{}
@@ -51,13 +39,6 @@ func (e SysLoginLog) GetPage(c *gin.Context) {
 }
 
 // Get 登录日志通过id获取
-// @Summary 登录日志通过id获取
-// @Description 获取JSON
-// @Tags 登录日志
-// @Param id path string false "id"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-login-log/{id} [get]
-// @Security Bearer
 func (e SysLoginLog) Get(c *gin.Context) {
 	s := service.SysLoginLog{}
 	req := dto.SysLoginLogGetReq{}
@@ -80,13 +61,6 @@ func (e SysLoginLog) Get(c *gin.Context) {
 }
 
 // Delete 登录日志删除
-// @Summary 登录日志删除
-// @Description 登录日志删除
-// @Tags 登录日志
-// @Param data body authdto.SysLoginLogById true "body"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-login-log [delete]
-// @Security Bearer
 func (e SysLoginLog) Delete(c *gin.Context) {
 	s := service.SysLoginLog{}
 	req := dto.SysLoginLogDeleteReq{}

@@ -17,17 +17,6 @@ type SysDictType struct {
 }
 
 // GetPage 字典类型列表数据
-// @Summary 字典类型列表数据
-// @Description 获取JSON
-// @Tags 字典类型
-// @Param dictName query string false "dictName"
-// @Param dictId query string false "dictId"
-// @Param dictType query string false "dictType"
-// @Param pageSize query int false "页条数"
-// @Param pageIndex query int false "页码"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/dict/type [get]
-// @Security Bearer
 func (e SysDictType) GetPage(c *gin.Context) {
 	s := service.SysDictType{}
 	req := dto.SysDictTypeSearch{}
@@ -52,13 +41,6 @@ func (e SysDictType) GetPage(c *gin.Context) {
 }
 
 // Get 字典类型通过字典id获取
-// @Summary 字典类型通过字典id获取
-// @Description 获取JSON
-// @Tags 字典类型
-// @Param dictId path int true "字典类型编码"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/dict/type/{dictId} [get]
-// @Security Bearer
 func (e SysDictType) Get(c *gin.Context) {
 	s := service.SysDictType{}
 	req := dto.SysDictTypeById{}
@@ -81,16 +63,6 @@ func (e SysDictType) Get(c *gin.Context) {
 }
 
 //Insert 字典类型创建
-// @Summary 添加字典类型
-// @Description 获取JSON
-// @Tags 字典类型
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.SysDictTypeControl true "data"
-// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /admin-api/v1/dict/type [post]
-// @Security Bearer
 func (e SysDictType) Insert(c *gin.Context) {
 	s := service.SysDictType{}
 	req := dto.SysDictTypeControl{}
@@ -120,16 +92,6 @@ func (e SysDictType) Insert(c *gin.Context) {
 }
 
 // Update
-// @Summary 修改字典类型
-// @Description 获取JSON
-// @Tags 字典类型
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.SysDictTypeControl true "body"
-// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /admin-api/v1/dict/type/{dictId} [put]
-// @Security Bearer
 func (e SysDictType) Update(c *gin.Context) {
 	s := service.SysDictType{}
 	req := dto.SysDictTypeControl{}
@@ -162,14 +124,6 @@ func (e SysDictType) Update(c *gin.Context) {
 }
 
 // Delete
-// @Summary 删除字典类型
-// @Description 删除数据
-// @Tags 字典类型
-// @Param dictId path int true "dictId"
-// @Success 200 {string} string	"{"code": 200, "message": "删除成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "删除失败"}"
-// @Router /admin-api/v1/dict/type [delete]
-// @Security Bearer
 func (e SysDictType) Delete(c *gin.Context) {
 	s := service.SysDictType{}
 	req := dto.SysDictTypeById{}
@@ -192,15 +146,6 @@ func (e SysDictType) Delete(c *gin.Context) {
 }
 
 // GetAll
-// @Summary 字典类型全部数据 代码生成使用接口
-// @Description 获取JSON
-// @Tags 字典类型
-// @Param dictName query string false "dictName"
-// @Param dictId query string false "dictId"
-// @Param dictType query string false "dictType"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/dict/type-option-select [get]
-// @Security Bearer
 func (e SysDictType) GetAll(c *gin.Context) {
 	s := service.SysDictType{}
 	req := dto.SysDictTypeSearch{}

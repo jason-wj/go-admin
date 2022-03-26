@@ -15,20 +15,6 @@ type SysOperaLog struct {
 }
 
 // GetPage 操作日志列表
-// @Summary 操作日志列表
-// @Description 获取JSON
-// @Tags 操作日志
-// @Param title query string false "title"
-// @Param method query string false "method"
-// @Param requestMethod  query string false "requestMethod"
-// @Param operUrl query string false "operUrl"
-// @Param operIp query string false "operIp"
-// @Param status query string false "status"
-// @Param beginTime query string false "beginTime"
-// @Param endTime query string false "endTime"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-opera-log [get]
-// @Security Bearer
 func (e SysOperaLog) GetPage(c *gin.Context) {
 	s := service.SysOperaLog{}
 	req := new(dto.SysOperaLogQueryReq)
@@ -56,13 +42,6 @@ func (e SysOperaLog) GetPage(c *gin.Context) {
 }
 
 // Get 操作日志通过id获取
-// @Summary 操作日志通过id获取
-// @Description 获取JSON
-// @Tags 操作日志
-// @Param id path string false "id"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-opera-log/{id} [get]
-// @Security Bearer
 func (e SysOperaLog) Get(c *gin.Context) {
 	s := new(service.SysOperaLog)
 	req := dto.SysOperaLogGetReq{}
@@ -85,14 +64,6 @@ func (e SysOperaLog) Get(c *gin.Context) {
 }
 
 // Delete 操作日志删除
-// DeleteSysMenu 操作日志删除
-// @Summary 删除操作日志
-// @Description 删除数据
-// @Tags 操作日志
-// @Param data body authdto.SysOperaLogById true "body"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-opera-log [delete]
-// @Security Bearer
 func (e SysOperaLog) Delete(c *gin.Context) {
 	s := new(service.SysOperaLog)
 	req := dto.SysOperaLogDeleteReq{}

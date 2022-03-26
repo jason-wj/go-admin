@@ -18,15 +18,6 @@ type SysDept struct {
 }
 
 // GetPage
-// @Summary 分页部门列表数据
-// @Description 分页列表
-// @Tags 部门
-// @Param deptName query string false "deptName"
-// @Param deptId query string false "deptId"
-// @Param position query string false "position"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/dept [get]
-// @Security Bearer
 func (e SysDept) GetPage(c *gin.Context) {
 	s := service.SysDept{}
 	req := dto.SysDeptSearch{}
@@ -50,14 +41,6 @@ func (e SysDept) GetPage(c *gin.Context) {
 }
 
 // Get
-// @Summary 部门列表数据
-// @Description 获取JSON
-// @Tags 部门
-// @Param deptId path string false "deptId"
-// @Param position query string false "position"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/dept/{deptId} [get]
-// @Security Bearer
 func (e SysDept) Get(c *gin.Context) {
 	s := service.SysDept{}
 	req := dto.SysDeptById{}
@@ -82,16 +65,6 @@ func (e SysDept) Get(c *gin.Context) {
 }
 
 // Insert 添加部门
-// @Summary 添加部门
-// @Description 获取JSON
-// @Tags 部门
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.SysDeptControl true "data"
-// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /admin-api/v1/dept [post]
-// @Security Bearer
 func (e SysDept) Insert(c *gin.Context) {
 	s := service.SysDept{}
 	req := dto.SysDeptControl{}
@@ -122,17 +95,6 @@ func (e SysDept) Insert(c *gin.Context) {
 }
 
 // Update
-// @Summary 修改部门
-// @Description 获取JSON
-// @Tags 部门
-// @Accept  application/json
-// @Product application/json
-// @Param id path int true "id"
-// @Param data body dto.SysDeptControl true "body"
-// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /admin-api/v1/dept/{deptId} [put]
-// @Security Bearer
 func (e SysDept) Update(c *gin.Context) {
 	s := service.SysDept{}
 	req := dto.SysDeptControl{}
@@ -161,14 +123,6 @@ func (e SysDept) Update(c *gin.Context) {
 }
 
 // Delete
-// @Summary 删除部门
-// @Description 删除数据
-// @Tags 部门
-// @Param data body dto.SysDeptById true "body"
-// @Success 200 {string} string	"{"code": 200, "message": "删除成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "删除失败"}"
-// @Router /admin-api/v1/dept [delete]
-// @Security Bearer
 func (e SysDept) Delete(c *gin.Context) {
 	s := service.SysDept{}
 	req := dto.SysDeptById{}

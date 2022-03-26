@@ -16,18 +16,6 @@ type SysConfig struct {
 }
 
 // GetPage 获取配置管理列表
-// @Summary 获取配置管理列表
-// @Description 获取配置管理列表
-// @Tags 配置管理
-// @Param configName query string false "名称"
-// @Param configKey query string false "key"
-// @Param configType query string false "类型"
-// @Param isFrontend query int false "是否前端"
-// @Param pageSize query int false "页条数"
-// @Param pageIndex query int false "页码"
-// @Success 200 {object} response.Response{data=response.Page{list=[]models.SysApi}} "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-config [get]
-// @Security Bearer
 func (e SysConfig) GetPage(c *gin.Context) {
 	s := service.SysConfig{}
 	req := dto.SysConfigSearch{}
@@ -52,13 +40,6 @@ func (e SysConfig) GetPage(c *gin.Context) {
 }
 
 // Get 获取配置管理
-// @Summary 获取配置管理
-// @Description 获取配置管理
-// @Tags 配置管理
-// @Param id path string false "id"
-// @Success 200 {object} response.Response{data=models.SysConfig} "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-config/{id} [get]
-// @Security Bearer
 func (e SysConfig) Get(c *gin.Context) {
 	req := dto.SysConfigById{}
 	s := service.SysConfig{}
@@ -82,15 +63,6 @@ func (e SysConfig) Get(c *gin.Context) {
 }
 
 // Insert 创建配置管理
-// @Summary 创建配置管理
-// @Description 创建配置管理
-// @Tags 配置管理
-// @Accept application/json
-// @Product application/json
-// @Param data body dto.SysConfigControl true "body"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "创建成功"}"
-// @Router /admin-api/v1/sys-config [post]
-// @Security Bearer
 func (e SysConfig) Insert(c *gin.Context) {
 	s := service.SysConfig{}
 	req := dto.SysConfigControl{}
@@ -120,15 +92,6 @@ func (e SysConfig) Insert(c *gin.Context) {
 }
 
 // Update 修改配置管理
-// @Summary 修改配置管理
-// @Description 修改配置管理
-// @Tags 配置管理
-// @Accept application/json
-// @Product application/json
-// @Param data body dto.SysConfigControl true "body"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "修改成功"}"
-// @Router /admin-api/v1/sys-config/{id} [put]
-// @Security Bearer
 func (e SysConfig) Update(c *gin.Context) {
 	s := service.SysConfig{}
 	req := dto.SysConfigControl{}
@@ -161,13 +124,6 @@ func (e SysConfig) Update(c *gin.Context) {
 }
 
 // Delete 删除配置管理
-// @Summary 删除配置管理
-// @Description 删除配置管理
-// @Tags 配置管理
-// @Param ids body []int false "ids"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "删除成功"}"
-// @Router /admin-api/v1/sys-config [delete]
-// @Security Bearer
 func (e SysConfig) Delete(c *gin.Context) {
 	s := service.SysConfig{}
 	req := dto.SysConfigById{}
@@ -190,11 +146,6 @@ func (e SysConfig) Delete(c *gin.Context) {
 }
 
 // GetSysConfigBySysApp 获取系统配置信息
-// @Summary 获取系统前台配置信息，主要注意这里不在验证权限
-// @Description 获取系统配置信息，主要注意这里不在验证权限
-// @Tags 配置管理
-// @Success 200 {object} response.Response{data=map[string]string} "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/app-config [get]
 func (e SysConfig) GetSysConfigBySysApp(c *gin.Context) {
 	req := dto.SysConfigSearch{}
 	s := service.SysConfig{}
@@ -226,14 +177,6 @@ func (e SysConfig) GetSysConfigBySysApp(c *gin.Context) {
 }
 
 // Get2Set 获取配置
-// @Summary 获取配置
-// @Description 界面操作设置配置值的获取
-// @Tags 配置管理
-// @Accept application/json
-// @Product application/json
-// @Success 200 {object} response.Response{data=map[string]interface{}}	"{"code": 200, "message": "修改成功"}"
-// @Router /admin-api/v1/set-config [get]
-// @Security Bearer
 func (e SysConfig) Get2Set(c *gin.Context) {
 	s := service.SysConfig{}
 	req := make([]dto.GetSetSysConfigReq, 0)
@@ -262,12 +205,6 @@ func (e SysConfig) Get2Set(c *gin.Context) {
 // @Summary 设置配置
 // @Description 界面操作设置配置值
 // @Tags 配置管理
-// @Accept application/json
-// @Product application/json
-// @Param data body []dto.GetSetSysConfigReq true "body"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "修改成功"}"
-// @Router /admin-api/v1/set-config [put]
-// @Security Bearer
 func (e SysConfig) Update2Set(c *gin.Context) {
 	s := service.SysConfig{}
 	req := make([]dto.GetSetSysConfigReq, 0)
@@ -292,13 +229,6 @@ func (e SysConfig) Update2Set(c *gin.Context) {
 }
 
 // GetSysConfigByKEYForService 根据Key获取SysConfig的Service
-// @Summary 根据Key获取SysConfig的Service
-// @Description 根据Key获取SysConfig的Service
-// @Tags 配置管理
-// @Param configKey path string false "configKey"
-// @Success 200 {object} response.Response{data=dto.SysConfigByKeyReq} "{"code": 200, "data": [...]}"
-// @Router /admin-api/v1/sys-config/{id} [get]
-// @Security Bearer
 func (e SysConfig) GetSysConfigByKEYForService(c *gin.Context) {
 	var s = new(service.SysConfig)
 	var req = new(dto.SysConfigByKeyReq)
