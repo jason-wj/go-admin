@@ -1,0 +1,29 @@
+package models
+
+import (
+   // "gorm.io/gorm"
+   "github.com/shopspring/decimal"
+    "time"
+	"go-admin/common/models"
+)
+
+type {{.ClassName}} struct {
+    Id            int64           `json:"id" gorm:"primaryKey;autoIncrement;comment:主键编码"`
+    {{ range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"column:{{.ColumnName}};type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{end -}}"` {{end -}}
+    {{- end }}
+    CreateBy   string          `json:"createBy" gorm:"column:create_by;type:varchar(64);comment:创建人"`
+    UpdateBy   string          `json:"updateBy" gorm:"column:update_by;type:varchar(64);comment:更新人"`
+}
+
+func ({{.ClassName}}) TableName() string {
+    return "{{.TBName}}"
+}

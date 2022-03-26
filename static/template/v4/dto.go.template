@@ -1,0 +1,113 @@
+package dto
+
+import (
+	"go-admin/app/{{.PackageName}}/models"
+	"go-admin/common/dto"
+	"github.com/shopspring/decimal"
+	common "go-admin/common/models"
+
+	 {{- $bb := false -}}
+	  {{- range .Columns -}}
+     {{$z := .IsQuery}}
+     {{- if ($z) }}
+     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+     {{- end -}}
+     {{- end -}}
+     {{- range .Columns -}}
+     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+     {{- end -}}
+     {{- if eq $bb true -}}
+     "time"
+     {{- end }}
+)
+
+type {{.ClassName}}QueryReq struct {
+	dto.Pagination     `search:"-"`
+    {{- $tablename := .TBName -}}
+    BeginTime           string `form:"beginTime" search:"type:gte;column:created_at;table:{{$tablename}}" comment:"创建时间"`
+    EndTime             string `form:"endTime" search:"type:lte;column:created_at;table:{{$tablename}}" comment:"创建时间"`
+    {{- range .Columns -}}
+    {{$z := .IsQuery}}
+    {{- if ($z) }}
+    {{.GoField}} {{.GoType}} `form:"{{.JsonField}}"  search:"type:{{if eq .QueryType "EQ"}}exact{{ else if eq .QueryType "NE"}}iexact{{ else if eq .QueryType "LIKE"}}contains{{ else if eq .QueryType "GT"}}gt{{ else if eq .QueryType "GTE"}}gte{{ else if eq .QueryType "LT"}}lt{{ else if eq .QueryType "LTE"}}lte{{- end }};column:{{.ColumnName}};table:{{$tablename}}" comment:"{{.ColumnComment}}"`
+    {{- end }}
+    {{- end }}
+    {{.ClassName}}Order
+}
+
+type {{.ClassName}}Order struct {
+    {{- $tablename := .TBName -}}
+    {{- range .Columns -}}
+    {{.GoField}}Order {{.GoType}} `form:"{{.JsonField}}Order"  search:"type:order;column:{{.ColumnName}};table:{{$tablename}}"`
+    {{ end }}
+}
+
+func (m *{{.ClassName}}QueryReq) GetNeedSearch() interface{} {
+	return *m
+}
+
+type {{.ClassName}}InsertReq struct {
+    {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `json:"-" comment:"{{.ColumnComment}}"` // {{.ColumnComment}}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" comment:"{{.ColumnComment}}"`
+    {{- end -}}
+    {{- end }}
+    CreateBy   string          `json:"createBy" comment:"创建者"`
+    UpdateBy   string          `json:"updateBy" comment:"更新者"`
+}
+
+func (s *{{.ClassName}}InsertReq) Generate(model *models.{{.ClassName}})  {
+	 {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else }}
+    model.{{.GoField}} = s.{{.GoField}}
+    {{- end -}}
+    {{- end }}
+    model.CreateBy = s.CreateBy
+    model.UpdateBy = s.UpdateBy
+}
+
+type {{.ClassName}}UpdateReq struct {
+    {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `uri:"{{.JsonField}}" comment:"{{.ColumnComment}}"` // {{.ColumnComment}}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" comment:"{{.ColumnComment}}"`
+    {{- end -}}
+    {{- end }}
+    CreateBy   string          `json:"createBy" comment:"创建者"`
+    UpdateBy   string          `json:"updateBy" comment:"更新者"`
+}
+
+// {{.ClassName}}GetReq 功能获取请求参数
+type {{.ClassName}}GetReq struct {
+	{{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+     {{.GoField}} {{.GoType}} `uri:"{{.JsonField}}"`
+    {{- end }}
+    {{- end }}
+}
+
+// {{.ClassName}}DeleteReq 功能删除请求参数
+type {{.ClassName}}DeleteReq struct {
+	id int64 `json:"id"`
+}
