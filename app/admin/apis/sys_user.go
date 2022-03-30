@@ -443,6 +443,10 @@ func (e SysUser) Login(c *gin.Context) {
 		e.Error(401, err, "登录失败")
 		return
 	}
+	userInfoResp := dto.UserInfoResp{
+		User: userResp,
+		Role: roleResp,
+	}
 
 	c.Set(authdto.LoginUserId, strconv.FormatInt(userResp.UserId, 10))
 	c.Set(authdto.RoleId, roleResp.RoleId)
@@ -450,7 +454,7 @@ func (e SysUser) Login(c *gin.Context) {
 	c.Set(authdto.RoleKey, roleResp.RoleKey)
 	c.Set(authdto.UserName, userResp.Username)
 	c.Set(authdto.DataScope, roleResp.DataScope)
-	c.Set(authdto.UserInfo, userResp)
+	c.Set(authdto.UserInfo, userInfoResp)
 	auth.Login(c)
 	s.LoginLogToDB(c, "0", "登录操作", userResp.UserId)
 }

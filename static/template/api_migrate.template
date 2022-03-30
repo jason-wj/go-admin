@@ -13,7 +13,7 @@ import (
 
 type Menu struct {
 	MenuId     int    `json:"menuId" gorm:"primaryKey;autoIncrement"`
-	MenuName   string `json:"menuName" gorm:"size:128;"`
+	Name   string `json:"name" gorm:"size:128;"`
 	Title      string `json:"title" gorm:"size:128;"`
 	Icon       string `json:"icon" gorm:"size:128;"`
 	Path       string `json:"path" gorm:"size:128;"`
@@ -49,7 +49,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
 
         timeNow := pkg.GetCurrentTime()
         Mmenu := Menu{}
-        Mmenu.MenuName = "{{.TBName}}Manage"
+        Mmenu.Name = "{{.TBName}}Manage"
         Mmenu.Title = "{{.TableComment}}"
         Mmenu.Icon = "pass"
         Mmenu.Path = "/{{.TBName}}"
@@ -71,7 +71,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
             return err
         }
         Cmenu := Menu{}
-        Cmenu.MenuName = "{{.TBName}}"
+        Cmenu.Name = "{{.TBName}}"
         Cmenu.Title = "{{.TableComment}}"
         Cmenu.Icon = "pass"
         Cmenu.Path = "{{.TBName}}"
@@ -95,7 +95,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         MList := Menu{}
-        MList.MenuName = ""
+        MList.Name = ""
         MList.Title = "分页获取{{.TableComment}}"
         MList.Icon = ""
         MList.Path = "{{.TBName}}"
@@ -118,7 +118,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         MCreate := Menu{}
-        MCreate.MenuName = ""
+        MCreate.Name = ""
         MCreate.Title = "创建{{.TableComment}}"
         MCreate.Icon = ""
         MCreate.Path = "{{.TBName}}"
@@ -141,7 +141,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         MUpdate := Menu{}
-        MUpdate.MenuName = ""
+        MUpdate.Name = ""
         MUpdate.Title = "修改{{.TableComment}}"
         MUpdate.Icon = ""
         MUpdate.Path = "{{.TBName}}"
@@ -164,7 +164,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         MDelete := Menu{}
-        MDelete.MenuName = ""
+        MDelete.Name = ""
         MDelete.Title = "删除{{.TableComment}}"
         MDelete.Icon = ""
         MDelete.Path = "{{.TBName}}"
@@ -188,7 +188,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
 
         var InterfaceId = 63
         Amenu := Menu{}
-        Amenu.MenuName = "{{.TBName}}"
+        Amenu.Name = "{{.TBName}}"
         Amenu.Title = "{{.TableComment}}"
         Amenu.Icon = "bug"
         Amenu.Path = "{{.TBName}}"
@@ -210,7 +210,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         AList := Menu{}
-        AList.MenuName = ""
+        AList.Name = ""
         AList.Title = "分页获取{{.TableComment}}"
         AList.Icon = "bug"
         AList.Path = "/admin-api/v1/{{.ModuleName}}"
@@ -232,7 +232,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         AGet := Menu{}
-        AGet.MenuName = ""
+        AGet.Name = ""
         AGet.Title = "根据id获取{{.TableComment}}"
         AGet.Icon = "bug"
         AGet.Path = "/admin-api/v1/{{.ModuleName}}/:id"
@@ -254,7 +254,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         ACreate := Menu{}
-        ACreate.MenuName = ""
+        ACreate.Name = ""
         ACreate.Title = "创建{{.TableComment}}"
         ACreate.Icon = "bug"
         ACreate.Path = "/admin-api/v1/{{.ModuleName}}"
@@ -276,7 +276,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         AUpdate := Menu{}
-        AUpdate.MenuName = ""
+        AUpdate.Name = ""
         AUpdate.Title = "修改{{.TableComment}}"
         AUpdate.Icon = "bug"
         AUpdate.Path = "/admin-api/v1/{{.ModuleName}}/:id"
@@ -298,7 +298,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         }
 
         ADelete := Menu{}
-        ADelete.MenuName = ""
+        ADelete.Name = ""
         ADelete.Title = "删除{{.TableComment}}"
         ADelete.Icon = "bug"
         ADelete.Path = "/admin-api/v1/{{.ModuleName}}"

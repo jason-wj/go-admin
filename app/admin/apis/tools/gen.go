@@ -320,7 +320,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	s.Insert(&Mmenu)
 
 	Cmenu := dto.SysMenuControl{}
-	Cmenu.MenuName = tab.ClassName + "Manage"
+	Cmenu.Name = tab.ClassName + "Manage"
 	Cmenu.Title = tab.TableComment
 	Cmenu.Icon = "pass"
 	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
@@ -338,7 +338,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	s.Insert(&Cmenu)
 
 	MList := dto.SysMenuControl{}
-	MList.MenuName = ""
+	MList.Name = ""
 	MList.Title = "分页获取" + tab.TableComment
 	MList.Icon = ""
 	MList.Path = tab.TBName
@@ -355,7 +355,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	s.Insert(&MList)
 
 	MCreate := dto.SysMenuControl{}
-	MCreate.MenuName = ""
+	MCreate.Name = ""
 	MCreate.Title = "创建" + tab.TableComment
 	MCreate.Icon = ""
 	MCreate.Path = tab.TBName
@@ -372,7 +372,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	s.Insert(&MCreate)
 
 	MUpdate := dto.SysMenuControl{}
-	MUpdate.MenuName = ""
+	MUpdate.Name = ""
 	MUpdate.Title = "修改" + tab.TableComment
 	MUpdate.Icon = ""
 	MUpdate.Path = tab.TBName
@@ -389,7 +389,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	s.Insert(&MUpdate)
 
 	MDelete := dto.SysMenuControl{}
-	MDelete.MenuName = ""
+	MDelete.Name = ""
 	MDelete.Title = "删除" + tab.TableComment
 	MDelete.Icon = ""
 	MDelete.Path = tab.TBName

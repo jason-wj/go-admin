@@ -7,6 +7,7 @@ import (
 	"go-admin/common/core/sdk"
 	"go-admin/common/core/sdk/pkg"
 	"go-admin/common/core/tools/language"
+	"go-admin/common/middleware/auth/authdto"
 	"go-admin/config/lang"
 	"io/ioutil"
 	"net/http"
@@ -326,7 +327,7 @@ func (mw *GinJWTMiddleware) MiddlewareInit() error {
 
 	if mw.LoginResponse == nil {
 		mw.LoginResponse = func(c *gin.Context, code int, token string, expire time.Time) {
-			userInfo, _ := c.Get("userInfo")
+			userInfo, _ := c.Get(authdto.UserInfo)
 			c.JSON(http.StatusOK, gin.H{
 				"requestId": pkg.GenerateMsgIDFromContext(c),
 				"msg":       "",

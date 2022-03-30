@@ -89,7 +89,7 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	var err error
 	now := time.Now()
 	data := models.SysMenu{}
-	data.MenuName = c.MenuName
+	data.Name = c.Name
 	data.Title = c.Title
 	data.Icon = c.Icon
 	data.Path = c.Path
@@ -162,7 +162,7 @@ func (e *SysMenu) Update(c *dto.SysMenuControl) error {
 		model.MenuId = c.MenuId
 	}
 	now := time.Now()
-	model.MenuName = c.MenuName
+	model.Name = c.Name
 	model.Title = c.Title
 	model.Icon = c.Icon
 	model.Path = c.Path
@@ -314,7 +314,7 @@ func menuCall(menuList *[]models.SysMenu, menu models.SysMenu) models.SysMenu {
 		}
 		mi := models.SysMenu{}
 		mi.MenuId = list[j].MenuId
-		mi.MenuName = list[j].MenuName
+		mi.Name = list[j].Name
 		mi.Title = list[j].Title
 		mi.Icon = list[j].Icon
 		mi.Path = list[j].Path
