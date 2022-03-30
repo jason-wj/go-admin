@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"go-admin/app/admin/models"
 	"go-admin/common/dto"
 )
 
@@ -108,9 +107,4 @@ type LoginReq struct {
 // SysUserDeleteReq 功能删除请求参数
 type SysUserDeleteReq struct {
 	Ids int64 `json:"ids"`
-}
-
-type UserInfoResp struct {
-	User models.SysUser `json:"user"`
-	Role models.SysRole `json:"role"`
 }

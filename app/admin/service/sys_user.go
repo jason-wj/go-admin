@@ -320,42 +320,28 @@ func (e *SysUser) UpdatePwd(id int64, oldPassword, newPassword string, p *action
 	return nil
 }
 
-func (e *SysUser) GetProfile(c *dto.SysUserById, user *models.SysUser) ([]models.SysRole, []models.SysPost, error) {
-	var roles []models.SysRole
-	var posts []models.SysPost
-	err := e.Orm.Preload("Dept").First(user, c.Id).Error
+func (e *SysUser) GetProfile(userId int64) (*models.SysUser, error) {
+	user := &models.SysUser{}
+	err := e.Orm.Preload("Dept").Preload("Post").Preload("Role").First(user, userId).Error
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	err = e.Orm.Find(roles, user.RoleId).Error
-	if err != nil {
-		return nil, nil, err
-	}
-	err = e.Orm.Find(posts, user.PostIds).Error
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return roles, posts, nil
+	return user, nil
 }
 
-func (e *SysUser) GetUser(login *dto.LoginReq) (user models.SysUser, role models.SysRole, err error) {
-	err = e.Orm.Table("sys_user").Where("username = ?  and status = 2", login.Username).First(&user).Error
+func (e *SysUser) GetUser(login *dto.LoginReq) (*models.SysUser, error) {
+	user := &models.SysUser{}
+	err := e.Orm.Preload("Dept").Preload("Post").Preload("Role").Where("username = ?  and status = 2", login.Username).First(user).Error
 	if err != nil {
 		e.Log.Errorf("SysUserService GetUser error:%s", err)
-		return
+		return nil, err
 	}
 	_, err = pkg.CompareHashAndPassword(user.Password, login.Password)
 	if err != nil {
 		e.Log.Errorf("SysUserService GetUser error:%s", err)
-		return
+		return nil, err
 	}
-	err = e.Orm.Table("sys_role").Where("role_id = ? ", user.RoleId).First(&role).Error
-	if err != nil {
-		e.Log.Errorf("SysUserService GetUser error:%s", err)
-		return
-	}
-	return
+	return user, nil
 }
 
 // LoginLogToDB Write log to database

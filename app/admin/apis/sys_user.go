@@ -322,7 +322,6 @@ func (e SysUser) UpdatePwd(c *gin.Context) {
 // GetProfile
 func (e SysUser) GetProfile(c *gin.Context) {
 	s := service.SysUser{}
-	req := dto.SysUserById{}
 	err := e.MakeContext(c).
 		MakeOrm().
 		MakeService(&s.Service).
@@ -338,20 +337,15 @@ func (e SysUser) GetProfile(c *gin.Context) {
 		e.Error(rCode, err, err.Error())
 		return
 	}
-	req.Id = uid
 
-	sysUser := models.SysUser{}
-	roles, posts, err := s.GetProfile(&req, &sysUser)
+	user, err := s.GetProfile(uid)
 	if err != nil {
 		e.Logger.Errorf("get user profile error, %s", err.Error())
 		e.Error(500, err, "获取用户信息失败")
 		return
 	}
-	e.OK(gin.H{
-		"user":  sysUser,
-		"roles": roles,
-		"posts": posts,
-	}, "查询成功")
+	//resp := dto.UserInfoResp{}
+	e.OK(user, "查询成功")
 }
 
 // GetInfo
@@ -415,17 +409,16 @@ func (e SysUser) GetInfo(c *gin.Context) {
 func (e SysUser) Login(c *gin.Context) {
 	req := dto.LoginReq{}
 	s := service.SysUser{}
-	r := service.SysRole{}
 	err := e.MakeContext(c).
 		MakeOrm().
 		Bind(&req).
-		MakeService(&r.Service).
 		MakeService(&s.Service).
 		Errors
 	if err != nil {
 		e.Error(500, err, err.Error())
 		return
 	}
+
 	if req.Code == "" || req.Password == "" || req.Username == "" {
 		e.Error(401, err, "登录信息异常，请检查")
 		return
@@ -438,23 +431,19 @@ func (e SysUser) Login(c *gin.Context) {
 		}
 	}
 
-	userResp, roleResp, err := s.GetUser(&req)
+	userResp, err := s.GetUser(&req)
 	if err != nil {
 		e.Error(401, err, "登录失败")
 		return
 	}
-	userInfoResp := dto.UserInfoResp{
-		User: userResp,
-		Role: roleResp,
-	}
 
 	c.Set(authdto.LoginUserId, strconv.FormatInt(userResp.UserId, 10))
-	c.Set(authdto.RoleId, roleResp.RoleId)
-	c.Set(authdto.RoleName, roleResp.RoleName)
-	c.Set(authdto.RoleKey, roleResp.RoleKey)
+	c.Set(authdto.RoleId, userResp.Role.RoleId)
+	c.Set(authdto.RoleName, userResp.Role.RoleName)
+	c.Set(authdto.RoleKey, userResp.Role.RoleKey)
 	c.Set(authdto.UserName, userResp.Username)
-	c.Set(authdto.DataScope, roleResp.DataScope)
-	c.Set(authdto.UserInfo, userInfoResp)
+	c.Set(authdto.DataScope, userResp.Role.DataScope)
+	c.Set(authdto.UserInfo, userResp)
 	auth.Login(c)
 	s.LoginLogToDB(c, "0", "登录操作", userResp.UserId)
 }
