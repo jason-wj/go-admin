@@ -314,7 +314,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	Mmenu.NoCache = false
 	Mmenu.Component = "Layout"
 	Mmenu.Sort = 0
-	Mmenu.Visible = "0"
+	Mmenu.Hidden = false
 	Mmenu.IsFrame = "0"
 	Mmenu.CreateBy = 1
 	s.Insert(&Mmenu)
@@ -331,7 +331,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.NoCache = false
 	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
 	Cmenu.Sort = 0
-	Cmenu.Visible = "0"
+	Cmenu.Hidden = false
 	Cmenu.IsFrame = "0"
 	Cmenu.CreateBy = 1
 	Cmenu.UpdateBy = 1
@@ -348,7 +348,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MList.ParentId = Cmenu.MenuId
 	MList.NoCache = false
 	MList.Sort = 0
-	MList.Visible = "0"
+	MList.Hidden = false
 	MList.IsFrame = "0"
 	MList.CreateBy = 1
 	MList.UpdateBy = 1
@@ -365,7 +365,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.ParentId = Cmenu.MenuId
 	MCreate.NoCache = false
 	MCreate.Sort = 0
-	MCreate.Visible = "0"
+	MCreate.Hidden = false
 	MCreate.IsFrame = "0"
 	MCreate.CreateBy = 1
 	MCreate.UpdateBy = 1
@@ -382,7 +382,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.ParentId = Cmenu.MenuId
 	MUpdate.NoCache = false
 	MUpdate.Sort = 0
-	MUpdate.Visible = "0"
+	MUpdate.Hidden = false
 	MUpdate.IsFrame = "0"
 	MUpdate.CreateBy = 1
 	MUpdate.UpdateBy = 1
@@ -399,7 +399,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MDelete.ParentId = Cmenu.MenuId
 	MDelete.NoCache = false
 	MDelete.Sort = 0
-	MDelete.Visible = "0"
+	MDelete.Hidden = false
 	MDelete.IsFrame = "0"
 	MDelete.CreateBy = 1
 	MDelete.UpdateBy = 1

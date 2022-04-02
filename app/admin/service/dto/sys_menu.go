@@ -9,7 +9,7 @@ import (
 type SysMenuSearch struct {
 	dto.Pagination `search:"-"`
 	Title          string `form:"title" search:"type:contains;column:title;table:sys_menu" comment:"菜单名称"`  // 菜单名称
-	Visible        int    `form:"visible" search:"type:exact;column:visible;table:sys_menu" comment:"显示状态"` // 显示状态
+	Visible        bool   `form:"visible" search:"type:exact;column:visible;table:sys_menu" comment:"显示状态"` // 显示状态
 }
 
 func (m *SysMenuSearch) GetNeedSearch() interface{} {
@@ -34,7 +34,7 @@ type SysMenuControl struct {
 	Breadcrumb  string          `form:"breadcrumb" comment:"是否面包屑"` //是否面包屑
 	Component   string          `form:"component" comment:"组件"`     //组件
 	Sort        int             `form:"sort" comment:"排序"`          //排序
-	Visible     string          `form:"visible" comment:"是否显示"`     //是否显示
+	Hidden      bool            `form:"hidden" comment:"是否显示"`      //是否显示
 	IsFrame     string          `form:"isFrame" comment:"是否frame"`  //是否frame
 	CurrAdminId int64           `json:"-" comment:""`
 	CreateBy    int             `json:"createBy" gorm:"index;comment:创建者"`

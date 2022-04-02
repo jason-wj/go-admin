@@ -103,7 +103,7 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	data.Breadcrumb = c.Breadcrumb
 	data.Component = c.Component
 	data.Sort = c.Sort
-	data.Visible = c.Visible
+	data.Hidden = c.Hidden
 	data.IsFrame = c.IsFrame
 	data.CreateBy = c.CurrAdminId
 	data.UpdateBy = c.CurrAdminId
@@ -175,7 +175,7 @@ func (e *SysMenu) Update(c *dto.SysMenuControl) error {
 	model.Breadcrumb = c.Breadcrumb
 	model.Component = c.Component
 	model.Sort = c.Sort
-	model.Visible = c.Visible
+	model.Hidden = c.Hidden
 	model.IsFrame = c.IsFrame
 	model.UpdateBy = c.CurrAdminId
 	model.UpdatedAt = &now
@@ -326,7 +326,7 @@ func menuCall(menuList *[]models.SysMenu, menu models.SysMenu) models.SysMenu {
 		mi.Breadcrumb = list[j].Breadcrumb
 		mi.Component = list[j].Component
 		mi.Sort = list[j].Sort
-		mi.Visible = list[j].Visible
+		mi.Hidden = list[j].Hidden
 		mi.CreatedAt = list[j].CreatedAt
 		mi.SysApi = list[j].SysApi
 		mi.Children = []models.SysMenu{}

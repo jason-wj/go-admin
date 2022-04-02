@@ -17,7 +17,7 @@ type SysMenu struct {
 	Breadcrumb string     `json:"breadcrumb" gorm:"size:255;"`
 	Component  string     `json:"component" gorm:"size:255;"`
 	Sort       int        `json:"sort" gorm:"size:4;"`
-	Visible    string     `json:"visible" gorm:"size:1;"`
+	Hidden     bool       `json:"hidden" gorm:"size:1;"`
 	IsFrame    string     `json:"isFrame" gorm:"size:1;DEFAULT:0;"`
 	SysApi     []SysApi   `json:"sysApi" gorm:"many2many:sys_menu_api_rule"`
 	CreateBy   int64      `json:"createBy" gorm:"index;comment:创建者"`
