@@ -86,6 +86,21 @@ type SysUserUpdateReq struct {
 	Password    string `json:"password" comment:""`
 }
 
+type SysUserUpdatePhoneReq struct {
+	CurrAdminId int64  `json:"-" comment:""`
+	Phone       string `json:"phone" comment:"手机号"`
+}
+
+type SysUserUpdateNickNameReq struct {
+	CurrAdminId int64  `json:"-" comment:""`
+	NickName    string `json:"nickName" comment:"昵称"`
+}
+
+type SysUserUpdateEmailReq struct {
+	CurrAdminId int64  `json:"-" comment:""`
+	Email       string `json:"email" comment:"邮箱号"`
+}
+
 type SysUserById struct {
 	dto.ObjectById
 	CurrAdminId int64 `json:"-" comment:""`

@@ -98,10 +98,7 @@ func (e *SysUser) Get(id int64, p *actions.DataPermission) (*models.SysUser, err
 		Scopes(
 			actions.Permission(model.TableName(), p),
 		).First(model, id).Error
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("无权查看该数据%s", err))
-	}
-	return model, nil
+	return model, err
 }
 
 // Insert 创建SysUser对象
@@ -118,6 +115,51 @@ func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
 	}
 	if i > 0 {
 		return errors.New("用户名已存在！")
+	}
+
+	if c.Username != "" {
+		query := dto.SysUserQueryReq{}
+		query.Username = c.Username
+		count, err := e.Count(&query)
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			return errors.New("用户名已存在")
+		}
+	}
+	if c.NickName != "" {
+		query := dto.SysUserQueryReq{}
+		query.NickName = c.NickName
+		count, err := e.Count(&query)
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			return errors.New("昵称已存在")
+		}
+	}
+	if c.Phone != "" {
+		query := dto.SysUserQueryReq{}
+		query.Phone = c.Phone
+		count, err := e.Count(&query)
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			return errors.New("手机号已存在")
+		}
+	}
+	if c.Email != "" {
+		query := dto.SysUserQueryReq{}
+		query.Email = c.Email
+		count, err := e.Count(&query)
+		if err != nil {
+			return err
+		}
+		if count > 0 {
+			return errors.New("邮箱已存在")
+		}
 	}
 
 	now := time.Now()
@@ -214,9 +256,6 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 		if !strutils.VerifyEmailFormat(c.Email) {
 			return false, errors.New(fmt.Sprintf("邮箱格式异常%s", err))
 		}
-		if len(c.Phone) < 6 {
-			return false, errors.New(fmt.Sprintf("手机号格式异常%s", err))
-		}
 		query := dto.SysUserQueryReq{}
 		query.Email = c.Email
 		result, err := e.FindOne(&query)
@@ -251,6 +290,123 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.UserId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysUserService Update error:%s", err)
+			return false, err
+		}
+		return true, nil
+	}
+	return false, nil
+}
+
+// UpdateSelfPhone 修改手机号
+func (e *SysUser) UpdateSelfPhone(c *dto.SysUserUpdatePhoneReq) (bool, error) {
+	if c.CurrAdminId <= 0 || len(c.Phone) < 6 {
+		return false, errors.New("参数错误")
+	}
+	var err error
+	u, err := e.Get(c.CurrAdminId, nil)
+	if err != nil {
+		return false, err
+	}
+
+	updates := map[string]interface{}{}
+	if c.Phone != "" && u.Phone != c.Phone {
+		if len(c.Phone) < 6 {
+			return false, errors.New(fmt.Sprintf("手机号格式异常%s", err))
+		}
+		query := dto.SysUserQueryReq{}
+		query.Phone = c.Phone
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.CurrAdminId {
+			return false, errors.New("手机号已存在")
+		}
+		updates["phone"] = c.Phone
+	}
+
+	if len(updates) > 0 {
+		updates["update_by"] = c.CurrAdminId
+		updates["updated_at"] = time.Now()
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrAdminId).Updates(updates).Error
+		if err != nil {
+			e.Log.Errorf("SysUserService UpdateSelfPhone error:%s", err)
+			return false, err
+		}
+		return true, nil
+	}
+	return false, nil
+}
+
+// UpdateSelfNickName 更新昵称
+func (e *SysUser) UpdateSelfNickName(c *dto.SysUserUpdateNickNameReq) (bool, error) {
+	if c.CurrAdminId <= 0 || c.NickName == "" {
+		return false, errors.New("参数错误")
+	}
+	var err error
+	u, err := e.Get(c.CurrAdminId, nil)
+	if err != nil {
+		return false, err
+	}
+
+	updates := map[string]interface{}{}
+	if c.NickName != "" && u.NickName != c.NickName {
+		query := dto.SysUserQueryReq{}
+		query.NickName = c.NickName
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.CurrAdminId {
+			return false, errors.New("昵称已存在")
+		}
+		updates["nick_name"] = c.NickName
+	}
+
+	if len(updates) > 0 {
+		updates["update_by"] = c.CurrAdminId
+		updates["updated_at"] = time.Now()
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrAdminId).Updates(updates).Error
+		if err != nil {
+			e.Log.Errorf("SysUserService UpdateSelfNickName error:%s", err)
+			return false, err
+		}
+		return true, nil
+	}
+	return false, nil
+}
+
+// UpdateSelfEmail 修改邮箱号
+func (e *SysUser) UpdateSelfEmail(c *dto.SysUserUpdateEmailReq) (bool, error) {
+	if c.CurrAdminId <= 0 || !strutils.VerifyEmailFormat(c.Email) {
+		return false, errors.New("邮箱格式错误")
+	}
+	var err error
+	u, err := e.Get(c.CurrAdminId, nil)
+	if err != nil {
+		return false, err
+	}
+
+	updates := map[string]interface{}{}
+	if c.Email != "" && u.Email != c.Email {
+		query := dto.SysUserQueryReq{}
+		query.Email = c.Email
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.CurrAdminId {
+			return false, errors.New("邮箱已存在")
+		}
+		updates["email"] = c.Email
+	}
+
+	if len(updates) > 0 {
+		updates["update_by"] = c.CurrAdminId
+		updates["updated_at"] = time.Now()
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrAdminId).Updates(updates).Error
+		if err != nil {
+			e.Log.Errorf("SysUserService UpdateSelfEmail error:%s", err)
 			return false, err
 		}
 		return true, nil

@@ -130,7 +130,6 @@ func (e SysUser) Update(c *gin.Context) {
 		return
 	}
 	req.CurrAdminId = uid
-	req.UserId = uid
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
@@ -145,6 +144,117 @@ func (e SysUser) Update(c *gin.Context) {
 		return
 	}
 	e.OK(req.UserId, "修改成功")
+}
+
+//
+//  UpdateSelfPhone
+//  @Description: 更新手机号
+//  @receiver e
+//  @param c
+//
+func (e SysUser) UpdateSelfPhone(c *gin.Context) {
+	s := service.SysUser{}
+	req := dto.SysUserUpdatePhoneReq{}
+	err := e.MakeContext(c).
+		MakeOrm().
+		Bind(&req).
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		e.Logger.Error(err)
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	uid, rCode, err := auth.GetUserId(c)
+	if err != nil {
+		e.Error(rCode, err, err.Error())
+		return
+	}
+	req.CurrAdminId = uid
+
+	b, err := s.UpdateSelfPhone(&req)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		return
+	}
+	if !b {
+		e.OK(req.CurrAdminId, "未修改任何信息")
+		return
+	}
+	e.OK(req.CurrAdminId, "修改成功")
+}
+
+func (e SysUser) UpdateSelfNickName(c *gin.Context) {
+	s := service.SysUser{}
+	req := dto.SysUserUpdateNickNameReq{}
+	err := e.MakeContext(c).
+		MakeOrm().
+		Bind(&req).
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		e.Logger.Error(err)
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	uid, rCode, err := auth.GetUserId(c)
+	if err != nil {
+		e.Error(rCode, err, err.Error())
+		return
+	}
+	req.CurrAdminId = uid
+
+	b, err := s.UpdateSelfNickName(&req)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		return
+	}
+	if !b {
+		e.OK(req.CurrAdminId, "未修改任何信息")
+		return
+	}
+	e.OK(req.CurrAdminId, "修改成功")
+}
+
+//
+//  UpdateSelfEmail
+//  @Description: 更新邮箱
+//  @receiver e
+//  @param c
+//
+func (e SysUser) UpdateSelfEmail(c *gin.Context) {
+	s := service.SysUser{}
+	req := dto.SysUserUpdateEmailReq{}
+	err := e.MakeContext(c).
+		MakeOrm().
+		Bind(&req).
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		e.Logger.Error(err)
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	uid, rCode, err := auth.GetUserId(c)
+	if err != nil {
+		e.Error(rCode, err, err.Error())
+		return
+	}
+	req.CurrAdminId = uid
+
+	b, err := s.UpdateSelfEmail(&req)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		return
+	}
+	if !b {
+		e.OK(req.CurrAdminId, "未修改任何信息")
+		return
+	}
+	e.OK(req.CurrAdminId, "修改成功")
 }
 
 // Delete
