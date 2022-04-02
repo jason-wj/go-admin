@@ -12,6 +12,7 @@ import (
 	"go-admin/common/core/sdk/service"
 	cDto "go-admin/common/dto"
 	"go-admin/common/utils/fileUtils/ossUtils"
+	"gorm.io/gorm"
 	"mime/multipart"
 	"path"
 	"time"
@@ -110,7 +111,9 @@ func (e *AppManager) Count(c *dto.AppManagerQueryReq) (int64, error) {
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 		).Limit(-1).Offset(-1).Count(&count).Error
-
+	if err == gorm.ErrRecordNotFound {
+		return 0, nil
+	}
 	if err != nil {
 		e.Log.Errorf("AppManagerService Count error:%s", err)
 		return 0, err

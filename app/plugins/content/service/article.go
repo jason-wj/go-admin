@@ -6,6 +6,7 @@ import (
 	"go-admin/app/plugins/content/models"
 	"go-admin/app/plugins/content/service/dto"
 	"go-admin/common/core/sdk/service"
+	"gorm.io/gorm"
 	"time"
 
 	"go-admin/common/actions"
@@ -80,6 +81,9 @@ func (e *Article) Count(c *dto.ArticleQueryReq) (int64, error) {
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 		).Limit(-1).Offset(-1).Count(&count).Error
+	if err == gorm.ErrRecordNotFound {
+		return 0, nil
+	}
 	if err != nil {
 		e.Log.Errorf("ArticleService Count error:%s", err)
 		return 0, err

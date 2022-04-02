@@ -12,6 +12,7 @@ import (
 	"go-admin/common/core/sdk"
 	"go-admin/common/global"
 	"go-admin/common/utils/strutils"
+	"gorm.io/gorm"
 	"time"
 
 	"go-admin/common/actions"
@@ -48,6 +49,42 @@ func (e *SysUser) GetPage(c *dto.SysUserQueryReq, p *actions.DataPermission) ([]
 		return nil, 0, err
 	}
 	return list, count, nil
+}
+
+// Count 获取条数
+func (e *SysUser) Count(c *dto.SysUserQueryReq) (int64, error) {
+	var err error
+	var count int64
+	err = e.Orm.Model(&models.SysUser{}).
+		Scopes(
+			cDto.MakeCondition(c.GetNeedSearch()),
+		).Limit(-1).Offset(-1).Count(&count).Error
+	if err == gorm.ErrRecordNotFound {
+		return 0, nil
+	}
+	if err != nil {
+		e.Log.Errorf("SysUserService Count error:%s", err)
+		return 0, err
+	}
+	return count, nil
+}
+
+// FindOne 获取一条
+func (e *SysUser) FindOne(c *dto.SysUserQueryReq) (*models.SysUser, error) {
+	var err error
+	result := &models.SysUser{}
+	err = e.Orm.Model(&models.SysUser{}).
+		Scopes(
+			cDto.MakeCondition(c.GetNeedSearch()),
+		).First(result).Error
+	if err == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	if err != nil {
+		e.Log.Errorf("SysUserService FindOne error:%s", err)
+		return nil, err
+	}
+	return result, nil
 }
 
 // Get 获取SysUser对象
@@ -110,7 +147,6 @@ func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
 }
 
 // Update 修改SysUser对象
-// TODO 变更手机号、邮箱、昵称，需要检测是否已存在
 func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bool, error) {
 	if c.UserId <= 0 || c.CurrAdminId <= 0 {
 		return false, errors.New("参数错误")
@@ -127,14 +163,41 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 	updates := map[string]interface{}{}
 
 	if c.Username != "" && model.Username != c.Username {
+		query := dto.SysUserQueryReq{}
+		query.Username = c.Username
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.UserId {
+			return false, errors.New("用户名已存在")
+		}
 		updates["username"] = c.Username
 	}
 	if c.NickName != "" && model.NickName != c.NickName {
+		query := dto.SysUserQueryReq{}
+		query.NickName = c.NickName
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.UserId {
+			return false, errors.New("昵称已存在")
+		}
 		updates["nick_name"] = c.NickName
 	}
 	if c.Phone != "" && model.Phone != c.Phone {
 		if len(c.Phone) < 6 {
 			return false, errors.New(fmt.Sprintf("手机号格式异常%s", err))
+		}
+		query := dto.SysUserQueryReq{}
+		query.Phone = c.Phone
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.UserId {
+			return false, errors.New("手机号已存在")
 		}
 		updates["phone"] = c.Phone
 	}
@@ -150,6 +213,18 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 	if c.Email != "" && model.Email != c.Email {
 		if !strutils.VerifyEmailFormat(c.Email) {
 			return false, errors.New(fmt.Sprintf("邮箱格式异常%s", err))
+		}
+		if len(c.Phone) < 6 {
+			return false, errors.New(fmt.Sprintf("手机号格式异常%s", err))
+		}
+		query := dto.SysUserQueryReq{}
+		query.Email = c.Email
+		result, err := e.FindOne(&query)
+		if err != nil {
+			return false, err
+		}
+		if result != nil && result.UserId != c.UserId {
+			return false, errors.New("邮箱已存在")
 		}
 		updates["email"] = c.Email
 	}
