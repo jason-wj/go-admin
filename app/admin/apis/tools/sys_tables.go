@@ -43,7 +43,7 @@ func (e SysTable) GetPage(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -52,7 +52,7 @@ func (e SysTable) GetPage(c *gin.Context) {
 	result, count, err := data.GetPage(db, pageSize, pageIndex)
 	if err != nil {
 		log.Errorf("GetPage error, %s", err.Error())
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 	e.PageOK(result, nil, count, pageIndex, pageSize, "查询成功")
@@ -72,7 +72,7 @@ func (e SysTable) Get(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -81,7 +81,7 @@ func (e SysTable) Get(c *gin.Context) {
 	result, err := data.Get(db, true)
 	if err != nil {
 		log.Errorf("Get error, %s", err.Error())
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 
@@ -97,7 +97,7 @@ func (e SysTable) GetSysTablesInfo(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -108,7 +108,7 @@ func (e SysTable) GetSysTablesInfo(c *gin.Context) {
 	result, err := data.Get(db, true)
 	if err != nil {
 		log.Errorf("Get error, %s", err.Error())
-		e.Error(500, err, "抱歉未找到相关信息")
+		e.Error(500, "抱歉未找到相关信息")
 		return
 	}
 
@@ -126,7 +126,7 @@ func (e SysTable) GetSysTablesTree(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -134,7 +134,7 @@ func (e SysTable) GetSysTablesTree(c *gin.Context) {
 	result, err := data.GetTree(db)
 	if err != nil {
 		log.Errorf("GetTree error, %s", err.Error())
-		e.Error(500, err, "抱歉未找到相关信息")
+		e.Error(500, "抱歉未找到相关信息")
 		return
 	}
 
@@ -158,7 +158,7 @@ func (e SysTable) Insert(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -168,14 +168,14 @@ func (e SysTable) Insert(c *gin.Context) {
 		data, err := genTableInit(db, tablesList, i, c)
 		if err != nil {
 			log.Errorf("genTableInit error, %s", err.Error())
-			e.Error(500, err, "")
+			e.Error(500, "")
 			return
 		}
 
 		_, err = data.Create(db)
 		if err != nil {
 			log.Errorf("Create error, %s", err.Error())
-			e.Error(500, err, "")
+			e.Error(500, "")
 			return
 		}
 	}
@@ -315,7 +315,7 @@ func (e SysTable) Update(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -323,7 +323,7 @@ func (e SysTable) Update(c *gin.Context) {
 	result, err := data.Update(db)
 	if err != nil {
 		log.Errorf("Update error, %s", err.Error())
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 	e.OK(result, "修改成功")
@@ -343,7 +343,7 @@ func (e SysTable) Delete(c *gin.Context) {
 	db, err := e.GetOrm()
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -352,7 +352,7 @@ func (e SysTable) Delete(c *gin.Context) {
 	_, err = data.BatchDelete(db, IDS)
 	if err != nil {
 		log.Errorf("BatchDelete error, %s", err.Error())
-		e.Error(500, err, "删除失败")
+		e.Error(500, "删除失败")
 		return
 	}
 	e.OK(nil, "删除成功")

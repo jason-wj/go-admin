@@ -27,7 +27,7 @@ func (e SysDictData) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -35,7 +35,7 @@ func (e SysDictData) GetPage(c *gin.Context) {
 	var count int64
 	list, count, err = s.GetPage(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -53,14 +53,14 @@ func (e SysDictData) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	result, err := s.Get(req.Id)
 	if err != nil {
 		e.Logger.Warnf("Get error: %s", err.Error())
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -78,18 +78,18 @@ func (e SysDictData) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Insert(&req)
 	if err != nil {
-		e.Error(500, err, "创建失败")
+		e.Error(500, "创建失败")
 		return
 	}
 
@@ -107,18 +107,18 @@ func (e SysDictData) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	b, err := s.Update(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -139,12 +139,12 @@ func (e SysDictData) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	err = s.Remove(req.Ids)
 	if err != nil {
-		e.Error(500, err, "删除失败")
+		e.Error(500, "删除失败")
 		return
 	}
 	e.OK(req.Id, "删除成功")
@@ -161,12 +161,12 @@ func (e SysDictData) GetSysDictDataAll(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	list, err := s.GetAll(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	e.OK(list, "查询成功")

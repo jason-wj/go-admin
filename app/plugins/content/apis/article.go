@@ -27,7 +27,7 @@ func (e Article) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -37,7 +37,7 @@ func (e Article) GetPage(c *gin.Context) {
 
 	list, count, err = s.GetPage(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取富文本内容 失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取富文本内容 失败，\r\n失败信息 %s", err.Error()))
 		return
 	}
 
@@ -55,14 +55,14 @@ func (e Article) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	p := actions.GetPermissionFromContext(c)
 	result, err := s.Get(req.Id, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取富文本内容失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取富文本内容失败，\r\n失败信息 %s", err.Error()))
 		return
 	}
 
@@ -80,18 +80,18 @@ func (e Article) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Insert(&req)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -109,19 +109,19 @@ func (e Article) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	p := actions.GetPermissionFromContext(c)
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	b, err := s.Update(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -142,7 +142,7 @@ func (e Article) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -150,7 +150,7 @@ func (e Article) Delete(c *gin.Context) {
 
 	err = s.Remove(req.Ids, p)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	e.OK(req.Ids, "删除成功")

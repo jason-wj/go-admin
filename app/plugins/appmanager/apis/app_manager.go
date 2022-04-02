@@ -40,7 +40,7 @@ func (e AppManager) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -50,7 +50,7 @@ func (e AppManager) GetPage(c *gin.Context) {
 
 	list, count, err = s.GetPage(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取App管理 失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取App管理 失败，\r\n失败信息 %s", err.Error()))
 		return
 	}
 
@@ -75,13 +75,13 @@ func (e AppManager) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	p := actions.GetPermissionFromContext(c)
 	result, err := s.Get(req.Id, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取App管理失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取App管理失败，\r\n失败信息 %s", err.Error()))
 		return
 	}
 
@@ -108,18 +108,18 @@ func (e AppManager) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Insert(&req)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -144,7 +144,7 @@ func (e AppManager) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -152,7 +152,7 @@ func (e AppManager) Delete(c *gin.Context) {
 
 	err = s.Remove(req.Ids, p)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	e.OK(req.Ids, "删除成功")
@@ -173,13 +173,13 @@ func (e AppManager) Upload(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	form, err := e.Context.MultipartForm()
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("上传文件异常：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("上传文件异常：%s", err.Error()))
 		return
 	}
 
@@ -189,13 +189,13 @@ func (e AppManager) Upload(c *gin.Context) {
 
 	err = s.GetSingleUploadFileInfo(form, file, &filePath)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取文件信息异常：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取文件信息异常：%s", err.Error()))
 		return
 	}
 
 	//保存上传文件
 	if err := c.SaveUploadedFile(file, filePath); err != nil {
-		e.Error(500, err, "上传失败")
+		e.Error(500, "上传失败")
 		return
 	}
 	e.OK(filePath, "上传成功")
@@ -221,20 +221,20 @@ func (e AppManager) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	p := actions.GetPermissionFromContext(c)
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	b, err := s.Update(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {

@@ -27,7 +27,7 @@ func (e SysPost) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -36,7 +36,7 @@ func (e SysPost) GetPage(c *gin.Context) {
 
 	list, count, err = s.GetPage(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -54,13 +54,13 @@ func (e SysPost) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	result, err := s.Get(req.Id)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("岗位信息获取失败！错误详情：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("岗位信息获取失败！错误详情：%s", err.Error()))
 		return
 	}
 
@@ -78,18 +78,18 @@ func (e SysPost) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Insert(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("新建岗位失败！错误详情：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("新建岗位失败！错误详情：%s", err.Error()))
 		return
 	}
 	e.OK(req.PostId, "创建成功")
@@ -106,20 +106,20 @@ func (e SysPost) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 
 	b, err := s.Update(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -140,12 +140,12 @@ func (e SysPost) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	err = s.Remove(req.Ids)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("岗位删除失败！错误详情：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("岗位删除失败！错误详情：%s", err.Error()))
 		return
 	}
 	e.OK(req.Ids, "删除成功")

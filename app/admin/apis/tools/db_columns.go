@@ -35,7 +35,7 @@ func (e *Gen) GetDBColumnList(c *gin.Context) {
 	db, err := pkg.GetOrm(c)
 	if err != nil {
 		log.Errorf("get db connection error, %s", err.Error())
-		e.Error(500, err, "数据库连接获取失败")
+		e.Error(500, "数据库连接获取失败")
 		return
 	}
 
@@ -44,7 +44,7 @@ func (e *Gen) GetDBColumnList(c *gin.Context) {
 	result, count, err := data.GetPage(db, pageSize, pageIndex)
 	if err != nil {
 		log.Errorf("GetPage error, %s", err.Error())
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 	e.PageOK(result, nil, count, pageIndex, pageSize, "查询成功")

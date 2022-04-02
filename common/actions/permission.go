@@ -33,7 +33,7 @@ func PermissionAction() gin.HandlerFunc {
 			p, err = newDataPermission(db, userId)
 			if err != nil {
 				log.Errorf("MsgID[%s] PermissionAction error: %s", msgID, err)
-				response.Error(c, 500, err, "权限范围鉴定错误")
+				response.Error(c, 500, "权限范围鉴定错误")
 				c.Abort()
 				return
 			}

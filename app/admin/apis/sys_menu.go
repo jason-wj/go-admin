@@ -25,13 +25,13 @@ func (e SysMenu) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	var list = make([]models.SysMenu, 0)
 	list, err = s.GetPage(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	e.OK(list, "查询成功")
@@ -48,12 +48,12 @@ func (e SysMenu) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	result, err := s.Get(req.Id)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	e.OK(result, "查询成功")
@@ -70,19 +70,19 @@ func (e SysMenu) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	// 设置创建人
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Insert(&req)
 	if err != nil {
-		e.Error(500, err, "创建失败")
+		e.Error(500, "创建失败")
 		return
 	}
 	e.OK(req.MenuId, "创建成功")
@@ -99,19 +99,19 @@ func (e SysMenu) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Update(&req)
 	if err != nil {
-		e.Error(500, err, "更新失败")
+		e.Error(500, "更新失败")
 		return
 	}
 	e.OK(req.MenuId, "更新成功")
@@ -128,13 +128,13 @@ func (e SysMenu) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	err = s.Remove(control.Ids)
 	if err != nil {
 		e.Logger.Errorf("RemoveSysMenu error, %s", err)
-		e.Error(500, err, "删除失败")
+		e.Error(500, "删除失败")
 		return
 	}
 	e.OK(control.Ids, "删除成功")
@@ -149,14 +149,14 @@ func (e SysMenu) GetMenuRole(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	result, err := s.SetMenuRole(auth.GetRoleName(c))
 
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -176,7 +176,7 @@ func (e SysMenu) GetMenuRole(c *gin.Context) {
 //		Errors
 //	if err != nil {
 //		e.Logger.Error(err)
-//		e.Error(500, err, err.Error())
+//		e.Error(500,  err.Error())
 //		return
 //	}
 //	var data models.SysRole
@@ -188,7 +188,7 @@ func (e SysMenu) GetMenuRole(c *gin.Context) {
 //
 //	if err != nil {
 //		e.Logger.Errorf("GetIDS error, %s", err.Error())
-//		e.Error(500, err, "获取失败")
+//		e.Error(500,  "获取失败")
 //		return
 //	}
 //	e.OK(result, "")
@@ -207,13 +207,13 @@ func (e SysMenu) GetMenuTreeSelect(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	result, err := m.SetLabel()
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -221,7 +221,7 @@ func (e SysMenu) GetMenuTreeSelect(c *gin.Context) {
 	if req.RoleId != 0 {
 		menuIds, err = r.GetRoleMenuId(req.RoleId)
 		if err != nil {
-			e.Error(500, err, "")
+			e.Error(500, "")
 			return
 		}
 	}

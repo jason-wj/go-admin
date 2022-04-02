@@ -14,13 +14,13 @@ type System struct {
 func (e System) GenerateCaptchaHandler(c *gin.Context) {
 	err := e.MakeContext(c).Errors
 	if err != nil {
-		e.Error(500, err, "服务初始化失败！")
+		e.Error(500, "服务初始化失败！")
 		return
 	}
 	id, b64s, err := captcha.DriverDigitFunc()
 	if err != nil {
 		e.Logger.Errorf("DriverDigitFunc error, %s", err.Error())
-		e.Error(500, err, "验证码获取失败")
+		e.Error(500, "验证码获取失败")
 		return
 	}
 	e.Custom(gin.H{

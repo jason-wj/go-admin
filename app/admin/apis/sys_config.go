@@ -33,7 +33,7 @@ func (e SysConfig) GetPage(c *gin.Context) {
 	var count int64
 	list, count, err = s.GetPage(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	e.PageOK(list, nil, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
@@ -50,12 +50,12 @@ func (e SysConfig) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	result, err := s.Get(req.Id)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -73,19 +73,19 @@ func (e SysConfig) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 
 	err = s.Insert(&req)
 	if err != nil {
-		e.Error(500, err, "创建失败")
+		e.Error(500, "创建失败")
 		return
 	}
 	e.OK(req.Id, "创建成功")
@@ -102,18 +102,18 @@ func (e SysConfig) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	b, err := s.Update(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -134,12 +134,12 @@ func (e SysConfig) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	err = s.Remove(req.Ids)
 	if err != nil {
-		e.Error(500, err, "删除失败")
+		e.Error(500, "删除失败")
 		return
 	}
 	e.OK(req.Id, "删除成功")
@@ -163,7 +163,7 @@ func (e SysConfig) GetSysConfigBySysApp(c *gin.Context) {
 	list := make([]models.SysConfig, 0)
 	list, err = s.GetWithKeyList(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	mp := make(map[string]string)
@@ -186,12 +186,12 @@ func (e SysConfig) Get2Set(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	err = s.GetForSet(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	m := make(map[string]interface{}, 0)
@@ -215,13 +215,13 @@ func (e SysConfig) Update2Set(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	err = s.UpdateForSet(&req)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -240,13 +240,13 @@ func (e SysConfig) GetSysConfigByKEYForService(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	resp, err = s.GetWithKey(req)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	e.OK(resp, s.Msg)

@@ -25,14 +25,14 @@ func (e SysLoginLog) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	list := make([]models.SysLoginLog, 0)
 	var count int64
 	list, count, err = s.GetPage(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	e.PageOK(list, nil, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
@@ -49,12 +49,12 @@ func (e SysLoginLog) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	result, err := s.Get(req.Id)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 	e.OK(result, "查询成功")
@@ -71,12 +71,12 @@ func (e SysLoginLog) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	err = s.Remove(req.Ids)
 	if err != nil {
-		e.Error(500, err, "删除失败")
+		e.Error(500, "删除失败")
 		return
 	}
 	e.OK(req.Ids, "删除成功")

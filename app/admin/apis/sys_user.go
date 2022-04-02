@@ -35,7 +35,7 @@ func (e SysUser) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -47,7 +47,7 @@ func (e SysUser) GetPage(c *gin.Context) {
 
 	list, count, err = s.GetPage(&req, p)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -65,14 +65,14 @@ func (e SysUser) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
 	result, err := s.Get(req.Id, p)
 	if err != nil {
-		e.Error(http.StatusUnprocessableEntity, err, "查询失败")
+		e.Error(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 	e.OK(result, "查询成功")
@@ -89,20 +89,20 @@ func (e SysUser) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	// 设置创建人
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.Insert(&req)
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -120,13 +120,13 @@ func (e SysUser) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
@@ -136,7 +136,7 @@ func (e SysUser) Update(c *gin.Context) {
 
 	b, err := s.Update(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -162,20 +162,20 @@ func (e SysUser) UpdateSelfPhone(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 
 	b, err := s.UpdateSelfPhone(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -195,20 +195,20 @@ func (e SysUser) UpdateSelfNickName(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 
 	b, err := s.UpdateSelfNickName(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -234,20 +234,20 @@ func (e SysUser) UpdateSelfEmail(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 
 	b, err := s.UpdateSelfEmail(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -268,7 +268,7 @@ func (e SysUser) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -293,7 +293,7 @@ func (e SysUser) InsetAvatar(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	// 数据权限检查
@@ -307,7 +307,7 @@ func (e SysUser) InsetAvatar(c *gin.Context) {
 		err = fileutil.CreateDirAll(path)
 		if err != nil {
 			e.Logger.Errorf("dir create error, %s", err.Error())
-			e.Error(500, err, "")
+			e.Error(500, "")
 			return
 		}
 	}
@@ -318,7 +318,7 @@ func (e SysUser) InsetAvatar(c *gin.Context) {
 		err = c.SaveUploadedFile(file, filPath)
 		if err != nil {
 			e.Logger.Errorf("save file error, %s", err.Error())
-			e.Error(500, err, "")
+			e.Error(500, "")
 			return
 		}
 	}
@@ -344,13 +344,13 @@ func (e SysUser) UpdateStatus(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
@@ -377,13 +377,13 @@ func (e SysUser) ResetPwd(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
@@ -410,7 +410,7 @@ func (e SysUser) UpdatePwd(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -418,13 +418,13 @@ func (e SysUser) UpdatePwd(c *gin.Context) {
 	p := actions.GetPermissionFromContext(c)
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	err = s.UpdatePwd(uid, req.OldPassword, req.NewPassword, p)
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(http.StatusForbidden, err, "密码修改失败")
+		e.Error(http.StatusForbidden, "密码修改失败")
 		return
 	}
 	e.OK(nil, "密码修改成功")
@@ -439,20 +439,20 @@ func (e SysUser) GetProfile(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 
 	user, err := s.GetProfile(uid)
 	if err != nil {
 		e.Logger.Errorf("get user profile error, %s", err.Error())
-		e.Error(500, err, "获取用户信息失败")
+		e.Error(500, "获取用户信息失败")
 		return
 	}
 	//resp := dto.UserInfoResp{}
@@ -471,7 +471,7 @@ func (e SysUser) GetInfo(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	p := actions.GetPermissionFromContext(c)
@@ -495,13 +495,13 @@ func (e SysUser) GetInfo(c *gin.Context) {
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.Id = uid
 	result, err := s.Get(req.Id, p)
 	if err != nil {
-		e.Error(http.StatusUnauthorized, err, "登录失败")
+		e.Error(http.StatusUnauthorized, "登录失败")
 		return
 	}
 	mp["introduction"] = " am a super administrator"
@@ -526,25 +526,25 @@ func (e SysUser) Login(c *gin.Context) {
 		MakeService(&s.Service).
 		Errors
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	if req.Code == "" || req.Password == "" || req.Username == "" {
-		e.Error(401, err, "登录信息异常，请检查")
+		e.Error(401, "登录信息异常，请检查")
 		return
 	}
 
 	if config.ApplicationConfig.Mode != "dev" {
 		if !captcha.Verify(req.UUID, req.Code, true) {
-			e.Error(500, err, "验证码错误")
+			e.Error(500, "验证码错误")
 			return
 		}
 	}
 
 	userResp, err := s.GetUser(&req)
 	if err != nil {
-		e.Error(401, err, "登录失败")
+		e.Error(401, err.Error())
 		return
 	}
 
@@ -567,7 +567,7 @@ func (e *SysUser) LogOut(c *gin.Context) {
 		MakeService(&s.Service).
 		Errors
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 

@@ -27,7 +27,7 @@ func (e Announcement) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -37,7 +37,7 @@ func (e Announcement) GetPage(c *gin.Context) {
 
 	list, count, err = s.GetPage(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取公告管理 失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取公告管理 失败，\r\n失败信息 %s", err.Error()))
 		return
 	}
 
@@ -55,14 +55,14 @@ func (e Announcement) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	p := actions.GetPermissionFromContext(c)
 	result, err := s.Get(req.Id, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取公告管理失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500, fmt.Sprintf("获取公告管理失败，\r\n失败信息 %s", err.Error()))
 		return
 	}
 
@@ -80,17 +80,17 @@ func (e Announcement) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	err = s.Insert(&req, uid)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -108,19 +108,19 @@ func (e Announcement) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	p := actions.GetPermissionFromContext(c)
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	b, err := s.Update(&req, p)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500, fmt.Sprintf("%s", err.Error()))
 		return
 	}
 	if !b {
@@ -141,7 +141,7 @@ func (e Announcement) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -149,7 +149,7 @@ func (e Announcement) Delete(c *gin.Context) {
 
 	err = s.Remove(req.Ids, p)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	e.OK(req.Ids, "删除成功")

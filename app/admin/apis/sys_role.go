@@ -31,7 +31,7 @@ func (e SysRole) GetPage(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
@@ -40,7 +40,7 @@ func (e SysRole) GetPage(c *gin.Context) {
 
 	list, count, err = s.GetPage(&req)
 	if err != nil {
-		e.Error(500, err, "查询失败")
+		e.Error(500, "查询失败")
 		return
 	}
 
@@ -58,13 +58,13 @@ func (e SysRole) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, fmt.Sprintf(" %s ", err.Error()))
+		e.Error(500, fmt.Sprintf(" %s ", err.Error()))
 		return
 	}
 
 	result, err := s.Get(req.Id)
 	if err != nil {
-		e.Error(http.StatusUnprocessableEntity, err, "查询失败")
+		e.Error(http.StatusUnprocessableEntity, "查询失败")
 		return
 	}
 
@@ -82,14 +82,14 @@ func (e SysRole) Insert(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 
 	// 设置创建人
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
@@ -100,12 +100,12 @@ func (e SysRole) Insert(c *gin.Context) {
 	err = s.Insert(&req, cb)
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, "创建失败")
+		e.Error(500, "创建失败")
 		return
 	}
 	_, err = global.LoadPolicy(c)
 	if err != nil {
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 	e.OK(req.RoleId, "创建成功")
@@ -122,14 +122,14 @@ func (e SysRole) Update(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	cb := sdk.Runtime.GetCasbinKey(c.Request.Host)
 
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
@@ -141,7 +141,7 @@ func (e SysRole) Update(c *gin.Context) {
 	}
 	_, err = global.LoadPolicy(c)
 	if err != nil {
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 	e.OK(req.RoleId, "更新成功")
@@ -158,19 +158,19 @@ func (e SysRole) Delete(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, fmt.Sprintf("删除角色 %v 失败，\r\n失败信息 %s", req.Ids, err.Error()))
+		e.Error(500, fmt.Sprintf("删除角色 %v 失败，\r\n失败信息 %s", req.Ids, err.Error()))
 		return
 	}
 
 	err = s.Remove(req.Ids)
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, "")
+		e.Error(500, "")
 		return
 	}
 	_, err = global.LoadPolicy(c)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("删除角色 %v 失败，失败信息 %s", req.Id, err.Error()))
+		e.Error(500, fmt.Sprintf("删除角色 %v 失败，失败信息 %s", req.Id, err.Error()))
 		return
 	}
 	e.OK(req.Id, fmt.Sprintf("删除角色角色 %v 状态成功！", req.Id))
@@ -187,18 +187,18 @@ func (e SysRole) Update2Status(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))
+		e.Error(500, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))
 		return
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	req.CurrAdminId = uid
 	err = s.UpdateStatus(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))
+		e.Error(500, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))
 		return
 	}
 	e.OK(req.RoleId, fmt.Sprintf("更新角色 %v 状态成功！", req.RoleId))
@@ -215,7 +215,7 @@ func (e SysRole) Update2DataScope(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500, err.Error())
 		return
 	}
 	data := &models.SysRole{
@@ -225,13 +225,13 @@ func (e SysRole) Update2DataScope(c *gin.Context) {
 	}
 	uid, rCode, err := auth.GetUserId(c)
 	if err != nil {
-		e.Error(rCode, err, err.Error())
+		e.Error(rCode, err.Error())
 		return
 	}
 	data.UpdateBy = uid
 	err = s.UpdateDataScope(&req)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("更新角色数据权限失败！错误详情：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("更新角色数据权限失败！错误详情：%s", err.Error()))
 		return
 	}
 	e.OK(nil, "操作成功")

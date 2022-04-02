@@ -45,7 +45,7 @@ func (e {{.ClassName}}) GetPage(c *gin.Context) {
         Errors
    	if err != nil {
    		e.Logger.Error(err)
-   		e.Error(500, err, err.Error())
+   		e.Error(500,  err.Error())
    		return
    	}
 
@@ -55,7 +55,7 @@ func (e {{.ClassName}}) GetPage(c *gin.Context) {
 
 	err = s.GetPage(&req, p, &list, &count)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取{{.TableComment}} 失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500,  fmt.Sprintf("获取{{.TableComment}} 失败，\r\n失败信息 %s", err.Error()))
         return
 	}
 
@@ -80,7 +80,7 @@ func (e {{.ClassName}}) Get(c *gin.Context) {
 		Errors
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(500, err, err.Error())
+		e.Error(500,  err.Error())
 		return
 	}
 	var object models.{{.ClassName}}
@@ -88,7 +88,7 @@ func (e {{.ClassName}}) Get(c *gin.Context) {
 	p := actions.GetPermissionFromContext(c)
 	err = s.Get(req.Id, p, &object)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("获取{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
+		e.Error(500,  fmt.Sprintf("获取{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
         return
 	}
 
@@ -115,19 +115,19 @@ func (e {{.ClassName}}) Insert(c *gin.Context) {
         Errors
     if err != nil {
         e.Logger.Error(err)
-        e.Error(500, err, err.Error())
+        e.Error(500,  err.Error())
         return
     }
 
     uid, rCode, err := auth.GetUserId(c)
     if err != nil {
-        e.Error(rCode, err, err.Error())
+        e.Error(rCode,  err.Error())
         return
     }
 
 	err = s.Insert(&req,uid)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500,  err.Error())
         return
 	}
 
@@ -154,19 +154,19 @@ func (e {{.ClassName}}) Update(c *gin.Context) {
         Errors
     if err != nil {
         e.Logger.Error(err)
-        e.Error(500, err, err.Error())
+        e.Error(500,  err.Error())
         return
     }
 	p := actions.GetPermissionFromContext(c)
 
     uid, rCode, err := auth.GetUserId(c)
     if err != nil {
-        e.Error(rCode, err, err.Error())
+        e.Error(rCode,  err.Error())
         return
     }
 	b, err := s.Update(&req, p, uid)
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("%s", err.Error()))
+		e.Error(500,  fmt.Sprintf("%s", err.Error()))
         return
 	}
 	if !b{
@@ -194,7 +194,7 @@ func (e {{.ClassName}}) Delete(c *gin.Context) {
         Errors
     if err != nil {
         e.Logger.Error(err)
-        e.Error(500, err, err.Error())
+        e.Error(500,  err.Error())
         return
     }
 
@@ -202,7 +202,7 @@ func (e {{.ClassName}}) Delete(c *gin.Context) {
 
 	err = s.Remove(req.Id, p)
 	if err != nil {
-		e.Error(500, err, err.Error())
+		e.Error(500,  err.Error())
         return
 	}
 	e.OK( req.Id, "删除成功")
@@ -224,7 +224,7 @@ func (e {{.ClassName}}) Export(c *gin.Context) {
         Errors
    	if err != nil {
    		e.Logger.Error(err)
-   		e.Error(500, err, err.Error())
+   		e.Error(500,  err.Error())
    		return
    	}
 
@@ -233,7 +233,7 @@ func (e {{.ClassName}}) Export(c *gin.Context) {
 	//最小规格数
 	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("test_max_export_size","1000"))
 	if err != nil {
-		e.Error(500, err, fmt.Sprintf("配置读取异常：%s", err.Error()))
+		e.Error(500,  fmt.Sprintf("配置读取异常：%s", err.Error()))
 		return
 	}
     p := actions.GetPermissionFromContext(c)
@@ -243,7 +243,7 @@ func (e {{.ClassName}}) Export(c *gin.Context) {
 	req.PageSize = maxSize
 	err = s.GetPage(&req, p, &list, &count)
     if err != nil {
-        e.Error(500, err, err.Error())
+        e.Error(500,  err.Error())
         return
     }
 	data, _ := s.GetExcel(list)
