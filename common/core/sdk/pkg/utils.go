@@ -17,12 +17,12 @@ const (
 	LoggerKey  = "_go-admin-logger-request"
 )
 
-func CompareHashAndPassword(e string, p string) (bool, error) {
+func CompareHashAndPassword(e string, p string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(e), []byte(p))
 	if err != nil {
-		return false, err
+		return false
 	}
-	return true, nil
+	return true
 }
 
 // Assert 条件断言

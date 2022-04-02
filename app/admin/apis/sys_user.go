@@ -424,7 +424,7 @@ func (e SysUser) UpdatePwd(c *gin.Context) {
 	err = s.UpdatePwd(uid, req.OldPassword, req.NewPassword, p)
 	if err != nil {
 		e.Logger.Error(err)
-		e.Error(http.StatusForbidden, "密码修改失败")
+		e.Error(http.StatusForbidden, err.Error())
 		return
 	}
 	e.OK(nil, "密码修改成功")

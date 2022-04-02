@@ -541,13 +541,7 @@ func (e *SysUser) UpdatePwd(id int64, oldPassword, newPassword string, p *action
 	if err != nil {
 		return errors.New(fmt.Sprintf("无权更新该数据%s", err))
 	}
-	var ok bool
-	ok, err = pkg.CompareHashAndPassword(c.Password, oldPassword)
-	if err != nil {
-		e.Log.Errorf("SysUserService UpdatePwd error:%s", err)
-		return err
-	}
-	if !ok {
+	if !pkg.CompareHashAndPassword(c.Password, oldPassword) {
 		return errors.New("密码输入错误")
 	}
 	c.Password = newPassword
@@ -575,10 +569,8 @@ func (e *SysUser) GetUser(login *dto.LoginReq) (*models.SysUser, error) {
 		e.Log.Errorf("SysUserService GetUser error:%s", err)
 		return nil, err
 	}
-	_, err = pkg.CompareHashAndPassword(user.Password, login.Password)
-	if err != nil {
-		e.Log.Errorf("SysUserService GetUser error:%s", err)
-		return nil, err
+	if !pkg.CompareHashAndPassword(user.Password, login.Password) {
+		return nil, errors.New("密码输入错误")
 	}
 	return user, nil
 }
