@@ -71,14 +71,14 @@ type SysUserInsertReq struct {
 
 type SysUserUpdateReq struct {
 	UserId      int64  `json:"userId" comment:"用户ID"` // 用户ID
-	Username    string `json:"username" comment:"用户名" vd:"len($)>0"`
-	NickName    string `json:"nickName" comment:"昵称" vd:"len($)>0"`
-	Phone       string `json:"phone" comment:"手机号" vd:"len($)>0"`
+	Username    string `json:"username" comment:"用户名"`
+	NickName    string `json:"nickName" comment:"昵称"`
+	Phone       string `json:"phone" comment:"手机号"`
 	RoleId      int    `json:"roleId" comment:"角色ID"`
 	Avatar      string `json:"avatar" comment:"头像"`
 	Sex         string `json:"sex" comment:"性别"`
-	Email       string `json:"email" comment:"邮箱" vd:"len($)>0,email"`
-	DeptId      int    `json:"deptId" comment:"部门" vd:"$>0"`
+	Email       string `json:"email" comment:"邮箱"`
+	DeptId      int    `json:"deptId" comment:"部门"`
 	PostId      int    `json:"postId" comment:"岗位"`
 	Remark      string `json:"remark" comment:"备注"`
 	Status      string `json:"status" comment:"状态" default:"1"`

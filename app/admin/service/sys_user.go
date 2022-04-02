@@ -11,6 +11,7 @@ import (
 	"go-admin/common/core/config"
 	"go-admin/common/core/sdk"
 	"go-admin/common/global"
+	"go-admin/common/utils/strutils"
 	"time"
 
 	"go-admin/common/actions"
@@ -109,6 +110,7 @@ func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
 }
 
 // Update 修改SysUser对象
+// TODO 变更手机号、邮箱、昵称，需要检测是否已存在
 func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bool, error) {
 	if c.UserId <= 0 || c.CurrAdminId <= 0 {
 		return false, errors.New("参数错误")
@@ -124,48 +126,54 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 
 	updates := map[string]interface{}{}
 
-	if model.Username != c.Username {
+	if c.Username != "" && model.Username != c.Username {
 		updates["username"] = c.Username
 	}
-	if model.NickName != c.NickName {
+	if c.NickName != "" && model.NickName != c.NickName {
 		updates["nick_name"] = c.NickName
 	}
-	if model.Phone != c.Phone {
+	if c.Phone != "" && model.Phone != c.Phone {
+		if len(c.Phone) < 6 {
+			return false, errors.New(fmt.Sprintf("手机号格式异常%s", err))
+		}
 		updates["phone"] = c.Phone
 	}
-	if model.RoleId != c.RoleId {
+	if c.RoleId > 0 && model.RoleId != c.RoleId {
 		updates["role_id"] = c.RoleId
 	}
-	if model.Avatar != c.Avatar {
+	if c.Avatar != "" && model.Avatar != c.Avatar {
 		updates["avatar"] = c.Avatar
 	}
-	if model.Sex != c.Sex {
+	if c.Sex != "" && model.Sex != c.Sex {
 		updates["sex"] = c.Sex
 	}
-	if model.Email != c.Email {
+	if c.Email != "" && model.Email != c.Email {
+		if !strutils.VerifyEmailFormat(c.Email) {
+			return false, errors.New(fmt.Sprintf("邮箱格式异常%s", err))
+		}
 		updates["email"] = c.Email
 	}
-	if model.DeptId != c.DeptId {
+	if c.DeptId > 0 && model.DeptId != c.DeptId {
 		updates["dept_id"] = c.DeptId
 	}
-	if model.PostId != c.PostId {
+	if c.PostId > 0 && model.PostId != c.PostId {
 		updates["post_id"] = c.PostId
 	}
-	if model.Status != c.Status {
+	if c.Status != "" && model.Status != c.Status {
 		updates["status"] = c.Status
 	}
-	if model.Remark != c.Remark {
+	if c.Remark != "" && model.Remark != c.Remark {
 		updates["remark"] = c.Remark
 	}
 
-	if model.Password != c.Password {
+	if c.Password != "" && model.Password != c.Password {
 		updates["password"] = c.Remark
 	}
 
 	if len(updates) > 0 {
 		updates["update_by"] = c.CurrAdminId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysConfig{}).Where("user_id=?", c.UserId).Updates(updates).Error
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.UserId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysUserService Update error:%s", err)
 			return false, err

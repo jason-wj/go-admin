@@ -130,6 +130,7 @@ func (e SysUser) Update(c *gin.Context) {
 		return
 	}
 	req.CurrAdminId = uid
+	req.UserId = uid
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
