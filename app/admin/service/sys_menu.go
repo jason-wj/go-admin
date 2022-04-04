@@ -99,7 +99,7 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	data.SysApi = c.SysApi
 	data.Permission = c.Permission
 	data.ParentId = c.ParentId
-	data.NoCache = c.NoCache
+	data.KeepAlive = c.KeepAlive
 	data.Breadcrumb = c.Breadcrumb
 	data.Component = c.Component
 	data.Sort = c.Sort
@@ -171,7 +171,7 @@ func (e *SysMenu) Update(c *dto.SysMenuControl) error {
 	model.Action = c.Action
 	model.Permission = c.Permission
 	model.ParentId = c.ParentId
-	model.NoCache = c.NoCache
+	model.KeepAlive = c.KeepAlive
 	model.Breadcrumb = c.Breadcrumb
 	model.Component = c.Component
 	model.Sort = c.Sort
@@ -322,7 +322,7 @@ func menuCall(menuList *[]models.SysMenu, menu models.SysMenu) models.SysMenu {
 		mi.Action = list[j].Action
 		mi.Permission = list[j].Permission
 		mi.ParentId = list[j].ParentId
-		mi.NoCache = list[j].NoCache
+		mi.KeepAlive = list[j].KeepAlive
 		mi.Breadcrumb = list[j].Breadcrumb
 		mi.Component = list[j].Component
 		mi.Sort = list[j].Sort

@@ -13,7 +13,7 @@ type SysMenu struct {
 	Action     string     `json:"action" gorm:"size:16;"`
 	Permission string     `json:"permission" gorm:"size:255;"`
 	ParentId   int        `json:"parentId" gorm:"size:11;"`
-	NoCache    bool       `json:"noCache" gorm:"size:8;"`
+	KeepAlive  bool       `json:"keepAlive" gorm:"size:8;"`
 	Breadcrumb string     `json:"breadcrumb" gorm:"size:255;"`
 	Component  string     `json:"component" gorm:"size:255;"`
 	Sort       int        `json:"sort" gorm:"size:4;"`

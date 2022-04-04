@@ -311,7 +311,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	Mmenu.MenuType = "M"
 	Mmenu.Action = "无"
 	Mmenu.ParentId = 0
-	Mmenu.NoCache = false
+	Mmenu.KeepAlive = false
 	Mmenu.Component = "Layout"
 	Mmenu.Sort = 0
 	Mmenu.Hidden = false
@@ -328,7 +328,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.Action = "无"
 	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
 	Cmenu.ParentId = Mmenu.MenuId
-	Cmenu.NoCache = false
+	Cmenu.KeepAlive = false
 	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
 	Cmenu.Sort = 0
 	Cmenu.Hidden = false
@@ -346,7 +346,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MList.Action = "无"
 	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
 	MList.ParentId = Cmenu.MenuId
-	MList.NoCache = false
+	MList.KeepAlive = false
 	MList.Sort = 0
 	MList.Hidden = false
 	MList.IsFrame = "0"
@@ -363,7 +363,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.Action = "无"
 	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
 	MCreate.ParentId = Cmenu.MenuId
-	MCreate.NoCache = false
+	MCreate.KeepAlive = false
 	MCreate.Sort = 0
 	MCreate.Hidden = false
 	MCreate.IsFrame = "0"
@@ -380,7 +380,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.Action = "无"
 	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
 	MUpdate.ParentId = Cmenu.MenuId
-	MUpdate.NoCache = false
+	MUpdate.KeepAlive = false
 	MUpdate.Sort = 0
 	MUpdate.Hidden = false
 	MUpdate.IsFrame = "0"
@@ -397,7 +397,7 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 	MDelete.Action = "无"
 	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
 	MDelete.ParentId = Cmenu.MenuId
-	MDelete.NoCache = false
+	MDelete.KeepAlive = false
 	MDelete.Sort = 0
 	MDelete.Hidden = false
 	MDelete.IsFrame = "0"

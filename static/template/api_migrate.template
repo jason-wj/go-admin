@@ -22,7 +22,7 @@ type Menu struct {
 	Action     string `json:"action" gorm:"size:16;"`
 	Permission string `json:"permission" gorm:"size:255;"`
 	ParentId   int    `json:"parentId" gorm:"size:11;"`
-	NoCache    bool   `json:"noCache" gorm:"size:8;"`
+	KeepAlive    bool   `json:"keepAlive" gorm:"size:8;"`
 	Breadcrumb string `json:"breadcrumb" gorm:"size:255;"`
 	Component  string `json:"component" gorm:"size:255;"`
 	Sort       int    `json:"sort" gorm:"size:4;"`
@@ -56,7 +56,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         Mmenu.MenuType = "M"
         Mmenu.Action = "无"
         Mmenu.ParentId = 0
-        Mmenu.NoCache = false
+        Mmenu.KeepAlive = false
         Mmenu.Component = "Layout"
         Mmenu.Sort = 0
         Mmenu.Visible = "0"
@@ -79,7 +79,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         Cmenu.Action = "无"
         Cmenu.Permission = "{{.PackageName}}:{{.BusinessName}}:list"
         Cmenu.ParentId = Mmenu.MenuId
-        Cmenu.NoCache = false
+        Cmenu.KeepAlive = false
         Cmenu.Component = "/{{.BusinessName}}/index"
         Cmenu.Sort = 0
         Cmenu.Visible = "0"
@@ -103,7 +103,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         MList.Action = "无"
         MList.Permission = "{{.PackageName}}:{{.BusinessName}}:query"
         MList.ParentId = Cmenu.MenuId
-        MList.NoCache = false
+        MList.KeepAlive = false
         MList.Sort = 0
         MList.Visible = "0"
         MList.IsFrame = "0"
@@ -126,7 +126,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         MCreate.Action = "无"
         MCreate.Permission = "{{.PackageName}}:{{.BusinessName}}:add"
         MCreate.ParentId = Cmenu.MenuId
-        MCreate.NoCache = false
+        MCreate.KeepAlive = false
         MCreate.Sort = 0
         MCreate.Visible = "0"
         MCreate.IsFrame = "0"
@@ -149,7 +149,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         MUpdate.Action = "无"
         MUpdate.Permission ="{{.PackageName}}:{{.BusinessName}}:edit"
         MUpdate.ParentId = Cmenu.MenuId
-        MUpdate.NoCache = false
+        MUpdate.KeepAlive = false
         MUpdate.Sort = 0
         MUpdate.Visible = "0"
         MUpdate.IsFrame = "0"
@@ -172,7 +172,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         MDelete.Action = "无"
         MDelete.Permission = "{{.PackageName}}:{{.BusinessName}}:remove"
         MDelete.ParentId = Cmenu.MenuId
-        MDelete.NoCache = false
+        MDelete.KeepAlive = false
         MDelete.Sort = 0
         MDelete.Visible = "0"
         MDelete.IsFrame = "0"
@@ -195,7 +195,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         Amenu.MenuType = "M"
         Amenu.Action = "无"
         Amenu.ParentId = InterfaceId
-        Amenu.NoCache = false
+        Amenu.KeepAlive = false
         Amenu.Sort = 0
         Amenu.Visible = "1"
         Amenu.IsFrame = "0"
@@ -217,7 +217,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         AList.MenuType = "A"
         AList.Action = "GET"
         AList.ParentId = Amenu.MenuId
-        AList.NoCache = false
+        AList.KeepAlive = false
         AList.Sort = 0
         AList.Visible = "1"
         AList.IsFrame = "0"
@@ -239,7 +239,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         AGet.MenuType = "A"
         AGet.Action = "GET"
         AGet.ParentId = Amenu.MenuId
-        AGet.NoCache = false
+        AGet.KeepAlive = false
         AGet.Sort = 0
         AGet.Visible = "1"
         AGet.IsFrame = "0"
@@ -261,7 +261,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         ACreate.MenuType = "A"
         ACreate.Action = "POST"
         ACreate.ParentId = Amenu.MenuId
-        ACreate.NoCache = false
+        ACreate.KeepAlive = false
         ACreate.Sort = 0
         ACreate.Visible = "1"
         ACreate.IsFrame = "0"
@@ -283,7 +283,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         AUpdate.MenuType = "A"
         AUpdate.Action = "PUT"
         AUpdate.ParentId = Amenu.MenuId
-        AUpdate.NoCache = false
+        AUpdate.KeepAlive = false
         AUpdate.Sort = 0
         AUpdate.Visible = "1"
         AUpdate.IsFrame = "0"
@@ -305,7 +305,7 @@ func _{{.GenerateTime}}Test(db *gorm.DB, version string) error {
         ADelete.MenuType = "A"
         ADelete.Action = "DELETE"
         ADelete.ParentId = Amenu.MenuId
-        ADelete.NoCache = false
+        ADelete.KeepAlive = false
         ADelete.Sort = 0
         ADelete.Visible = "1"
         ADelete.IsFrame = "0"

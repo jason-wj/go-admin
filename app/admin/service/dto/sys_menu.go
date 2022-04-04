@@ -30,7 +30,7 @@ type SysMenuControl struct {
 	Action      string          `form:"action" comment:"请求方式"`      //请求方式
 	Permission  string          `form:"permission" comment:"权限编码"`  //权限编码
 	ParentId    int             `form:"parentId" comment:"上级菜单"`    //上级菜单
-	NoCache     bool            `form:"noCache" comment:"是否缓存"`     //是否缓存
+	KeepAlive   bool            `form:"keepAlive" comment:"是否缓存"`   //是否缓存
 	Breadcrumb  string          `form:"breadcrumb" comment:"是否面包屑"` //是否面包屑
 	Component   string          `form:"component" comment:"组件"`     //组件
 	Sort        int             `form:"sort" comment:"排序"`          //排序
