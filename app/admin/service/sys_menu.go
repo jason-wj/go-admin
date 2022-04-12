@@ -3,6 +3,8 @@ package service
 import (
 	"errors"
 	"fmt"
+	"go-admin/app/admin/models/tools"
+	"strings"
 	"time"
 
 	"go-admin/common/core/sdk/pkg"
@@ -112,6 +114,143 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	err = e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("SysMenuService Insert error:%s", err)
+		return err
+	}
+	return nil
+}
+
+func (e *SysMenu) InsertConf(id int) error {
+	var err error
+	tx := e.Orm.Begin()
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
+		}
+	}()
+	table := tools.SysTables{}
+
+	table.TableId = id
+	tab, _ := table.Get(e.Orm, true)
+	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
+
+	Mmenu := dto.SysMenuControl{}
+	Mmenu.Title = tab.TableComment
+	Mmenu.Icon = "pass"
+	Mmenu.Path = "/" + tab.MLTBName
+	Mmenu.MenuType = "M"
+	Mmenu.Action = "无"
+	Mmenu.ParentId = 0
+	Mmenu.KeepAlive = false
+	Mmenu.Component = "Layout"
+	Mmenu.Sort = 0
+	Mmenu.Hidden = false
+	Mmenu.IsFrame = "0"
+	Mmenu.CreateBy = 1
+	err = e.Insert(&Mmenu)
+	if err != nil {
+		return err
+	}
+
+	Cmenu := dto.SysMenuControl{}
+	Cmenu.Name = tab.ClassName + "Manage"
+	Cmenu.Title = tab.TableComment
+	Cmenu.Icon = "pass"
+	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
+	Cmenu.MenuType = "C"
+	Cmenu.Action = "无"
+	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
+	Cmenu.ParentId = Mmenu.MenuId
+	Cmenu.KeepAlive = false
+	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
+	Cmenu.Sort = 0
+	Cmenu.Hidden = false
+	Cmenu.IsFrame = "0"
+	Cmenu.CreateBy = 1
+	Cmenu.UpdateBy = 1
+	err = e.Insert(&Cmenu)
+	if err != nil {
+		return err
+	}
+
+	MList := dto.SysMenuControl{}
+	MList.Name = ""
+	MList.Title = "分页获取" + tab.TableComment
+	MList.Icon = ""
+	MList.Path = tab.TBName
+	MList.MenuType = "F"
+	MList.Action = "无"
+	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
+	MList.ParentId = Cmenu.MenuId
+	MList.KeepAlive = false
+	MList.Sort = 0
+	MList.Hidden = false
+	MList.IsFrame = "0"
+	MList.CreateBy = 1
+	MList.UpdateBy = 1
+	err = e.Insert(&MList)
+	if err != nil {
+		return err
+	}
+
+	MCreate := dto.SysMenuControl{}
+	MCreate.Name = ""
+	MCreate.Title = "创建" + tab.TableComment
+	MCreate.Icon = ""
+	MCreate.Path = tab.TBName
+	MCreate.MenuType = "F"
+	MCreate.Action = "无"
+	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
+	MCreate.ParentId = Cmenu.MenuId
+	MCreate.KeepAlive = false
+	MCreate.Sort = 0
+	MCreate.Hidden = false
+	MCreate.IsFrame = "0"
+	MCreate.CreateBy = 1
+	MCreate.UpdateBy = 1
+	err = e.Insert(&MCreate)
+	if err != nil {
+		return err
+	}
+
+	MUpdate := dto.SysMenuControl{}
+	MUpdate.Name = ""
+	MUpdate.Title = "修改" + tab.TableComment
+	MUpdate.Icon = ""
+	MUpdate.Path = tab.TBName
+	MUpdate.MenuType = "F"
+	MUpdate.Action = "无"
+	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
+	MUpdate.ParentId = Cmenu.MenuId
+	MUpdate.KeepAlive = false
+	MUpdate.Sort = 0
+	MUpdate.Hidden = false
+	MUpdate.IsFrame = "0"
+	MUpdate.CreateBy = 1
+	MUpdate.UpdateBy = 1
+	err = e.Insert(&MUpdate)
+	if err != nil {
+		return err
+	}
+
+	MDelete := dto.SysMenuControl{}
+	MDelete.Name = ""
+	MDelete.Title = "删除" + tab.TableComment
+	MDelete.Icon = ""
+	MDelete.Path = tab.TBName
+	MDelete.MenuType = "F"
+	MDelete.Action = "无"
+	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
+	MDelete.ParentId = Cmenu.MenuId
+	MDelete.KeepAlive = false
+	MDelete.Sort = 0
+	MDelete.Hidden = false
+	MDelete.IsFrame = "0"
+	MDelete.CreateBy = 1
+	MDelete.UpdateBy = 1
+	err = e.Insert(&MDelete)
+	if err != nil {
 		return err
 	}
 	return nil

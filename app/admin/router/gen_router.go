@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"go-admin/app/admin/apis"
-	tools2 "go-admin/app/admin/apis/tools"
+	"go-admin/app/admin/apis/tools"
 	"go-admin/common/middleware"
 )
 
@@ -20,12 +20,11 @@ func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
 
 	r := v1.Group("").Use(middleware.Auth())
 	{
-		gen := tools2.Gen{}
+		gen := tools.Gen{}
 		r.GET("/gen/preview/:tableId", gen.Preview)
 		r.GET("/gen/toproject/:tableId", gen.GenCode)
-		r.GET("/gen/apitofile/:tableId", gen.GenApiToFile)
 		r.GET("/gen/todb/:tableId", gen.GenMenuAndApi)
-		sysTable := tools2.SysTable{}
+		sysTable := tools.SysTable{}
 		r.GET("/gen/tabletree", sysTable.GetSysTablesTree)
 	}
 }
@@ -33,7 +32,7 @@ func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
 func registerDBRouter(v1 *gin.RouterGroup) {
 	db := v1.Group("/db").Use(middleware.Auth())
 	{
-		gen := tools2.Gen{}
+		gen := tools.Gen{}
 		db.GET("/tables/page", gen.GetDBTableList)
 		db.GET("/columns/page", gen.GetDBColumnList)
 	}
@@ -42,7 +41,7 @@ func registerDBRouter(v1 *gin.RouterGroup) {
 func registerSysTableRouter(v1 *gin.RouterGroup) {
 	tables := v1.Group("/sys/tables")
 	{
-		sysTable := tools2.SysTable{}
+		sysTable := tools.SysTable{}
 		tables.Group("").Use(middleware.Auth()).GET("/page", sysTable.GetPage)
 		tablesInfo := tables.Group("/info").Use(middleware.Auth())
 		{
