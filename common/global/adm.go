@@ -6,5 +6,6 @@ const (
 )
 
 var (
-	Driver string
+	Driver     string
+	ConfigPath string
 )

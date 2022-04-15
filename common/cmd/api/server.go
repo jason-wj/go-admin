@@ -30,9 +30,9 @@ import (
 )
 
 var (
-	configYml string
-	apiCheck  bool
-	StartCmd  *cobra.Command
+	configPath string
+	apiCheck   bool
+	StartCmd   *cobra.Command
 )
 
 var AppRouters = make([]func(), 0)
@@ -60,15 +60,15 @@ func init() {
 		},
 	}
 
-	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/settings.yml", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "config/settings.yml", "Start server with provided configuration file")
 	StartCmd.PersistentFlags().BoolVarP(&apiCheck, "api", "a", false, "Start server with check api data")
-
+	global.ConfigPath = configPath
 }
 
 func setup() {
 	//1. 读取配置
 	config.Setup(
-		file.NewSource(file.WithPath(configYml)),
+		file.NewSource(file.WithPath(configPath)),
 		database.Setup,
 		storage.Setup,
 	)

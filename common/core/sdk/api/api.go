@@ -115,6 +115,10 @@ func (e Api) Error(code int, msg string) {
 	response.Error(e.Context, code, msg)
 }
 
+func (e Api) DownloadZip(fileName string, data []byte) {
+	response.Download(e.Context, data, fileName, "application/zip")
+}
+
 // OK 通常成功数据处理
 func (e Api) OK(data interface{}, msg string) {
 	response.OK(e.Context, data, msg)

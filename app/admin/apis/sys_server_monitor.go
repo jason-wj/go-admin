@@ -86,6 +86,8 @@ func (e ServerMonitor) ServerInfo(c *gin.Context) {
 	cpuDic["cpuInfo"], _ = cpu.Info()
 	percent, _ := cpu.Percent(0, false)
 	cpuDic["Percent"] = pkg.Round(percent[0], 2)
+	cpus, _ := cpu.Percent(time.Duration(200)*time.Millisecond, true)
+	cpuDic["cpus"] = cpus
 	cpuDic["cpuNum"], _ = cpu.Counts(false)
 
 	//服务器磁盘信息

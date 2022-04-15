@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"archive/zip"
 	"bufio"
 	"bytes"
 	"context"
@@ -38,6 +39,16 @@ func FileCreate(content bytes.Buffer, name string) {
 		log.Println(err)
 	}
 	file.Close()
+}
+
+func ZipFilCreate(writer *zip.Writer, content bytes.Buffer, path string) error {
+
+	f, err := writer.Create(path)
+	if err != nil {
+		return err
+	}
+	_, err = f.Write(content.Bytes())
+	return err
 }
 
 type ReplaceHelper struct {

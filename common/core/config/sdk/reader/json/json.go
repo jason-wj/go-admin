@@ -4,7 +4,7 @@ import (
 	"errors"
 	"go-admin/common/core/config/sdk/encoder"
 	"go-admin/common/core/config/sdk/encoder/json"
-	reader2 "go-admin/common/core/config/sdk/reader"
+	"go-admin/common/core/config/sdk/reader"
 	"go-admin/common/core/config/sdk/source"
 	"time"
 
@@ -14,7 +14,7 @@ import (
 const readerTyp = "json"
 
 type jsonReader struct {
-	opts reader2.Options
+	opts reader.Options
 	json encoder.Encoder
 }
 
@@ -61,7 +61,7 @@ func (j *jsonReader) Merge(changes ...*source.ChangeSet) (*source.ChangeSet, err
 	return cs, nil
 }
 
-func (j *jsonReader) Values(ch *source.ChangeSet) (reader2.Values, error) {
+func (j *jsonReader) Values(ch *source.ChangeSet) (reader.Values, error) {
 	if ch == nil {
 		return nil, errors.New("changeset is nil")
 	}
@@ -76,8 +76,8 @@ func (j *jsonReader) String() string {
 }
 
 // NewReader creates a json reader
-func NewReader(opts ...reader2.Option) reader2.Reader {
-	options := reader2.NewOptions(opts...)
+func NewReader(opts ...reader.Option) reader.Reader {
+	options := reader.NewOptions(opts...)
 	return &jsonReader{
 		json: json.NewEncoder(),
 		opts: options,

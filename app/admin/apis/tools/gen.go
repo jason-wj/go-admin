@@ -1,6 +1,7 @@
 package tools
 
 import (
+	"archive/zip"
 	"bytes"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -126,12 +127,40 @@ func (e Gen) GenCode(c *gin.Context) {
 	table.TableId = id
 	tab, _ := table.Get(db, false)
 
-	e.NOActionsGen(c, tab)
+	_ = e.NOActionsGen(c, tab, false)
 
 	e.OK("", "Code generated successfully！")
 }
 
-func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
+func (e Gen) DownloadCode(c *gin.Context) {
+	e.Context = c
+	log := e.GetLogger()
+	table := tools.SysTables{}
+	id, err := pkg.StringToInt(c.Param("tableId"))
+	if err != nil {
+		log.Error(err)
+		e.Error(500, fmt.Sprintf("tableId参数接收失败！错误详情：%s", err.Error()))
+		return
+	}
+
+	db, err := pkg.GetOrm(c)
+	if err != nil {
+		log.Errorf("get db connection error, %s", err.Error())
+		e.Error(500, fmt.Sprintf("数据库链接获取失败！错误详情：%s", err.Error()))
+		return
+	}
+
+	table.TableId = id
+	tab, _ := table.Get(db, false)
+
+	result := e.NOActionsGen(c, tab, true)
+
+	e.DownloadZip("code.zip", result.Bytes())
+
+}
+
+// 只有压缩时，才返回结果
+func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) *bytes.Buffer {
 	e.Context = c
 	log := e.GetLogger()
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
@@ -147,55 +176,43 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("model模版读取失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 	t2, err := template.ParseFiles(basePath + "apis.go.template")
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("api模版读取失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 	t3, err := template.ParseFiles(routerFile)
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("路由模版失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 	t4, err := template.ParseFiles(basePath + "js.go.template")
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("js模版解析失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 	t5, err := template.ParseFiles(basePath + "vue.go.template")
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("vue模版解析失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 	t6, err := template.ParseFiles(basePath + "dto.go.template")
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("dto模版解析失败失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 	t7, err := template.ParseFiles(basePath + "service.go.template")
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("service模版失败！错误详情：%s", err.Error()))
-		return
-	}
-
-	_ = pkg.PathCreate("./app/" + tab.PackageName + "/apis/")
-	_ = pkg.PathCreate("./app/" + tab.PackageName + "/models/")
-	_ = pkg.PathCreate("./app/" + tab.PackageName + "/router/")
-	_ = pkg.PathCreate("./app/" + tab.PackageName + "/service/dto/")
-	_ = pkg.PathCreate(config.GenConfig.FrontPath + "/api/" + tab.PackageName + "/")
-	err = pkg.PathCreate(config.GenConfig.FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
-	if err != nil {
-		log.Error(err)
-		e.Error(500, fmt.Sprintf("views目录创建失败！错误详情：%s", err.Error()))
-		return
+		return nil
 	}
 
 	var b1 bytes.Buffer
@@ -212,6 +229,34 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 	err = t6.Execute(&b6, tab)
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
+
+	//如果是下载zpi压缩包代码
+	if isDownload {
+		buf := new(bytes.Buffer)
+		writer := zip.NewWriter(buf)
+		defer writer.Close()
+
+		_ = pkg.ZipFilCreate(writer, b1, "./app/"+tab.PackageName+"/models/"+tab.TBName+".go")
+		_ = pkg.ZipFilCreate(writer, b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
+		_ = pkg.ZipFilCreate(writer, b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
+		_ = pkg.ZipFilCreate(writer, b4, "./front/api/"+tab.PackageName+"/"+tab.MLTBName+".js")
+		_ = pkg.ZipFilCreate(writer, b5, "./front/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
+		_ = pkg.ZipFilCreate(writer, b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
+		_ = pkg.ZipFilCreate(writer, b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
+		return buf
+	}
+	_ = pkg.PathCreate("./app/" + tab.PackageName + "/apis/")
+	_ = pkg.PathCreate("./app/" + tab.PackageName + "/models/")
+	_ = pkg.PathCreate("./app/" + tab.PackageName + "/router/")
+	_ = pkg.PathCreate("./app/" + tab.PackageName + "/service/dto/")
+	_ = pkg.PathCreate(config.GenConfig.FrontPath + "/api/" + tab.PackageName + "/")
+	err = pkg.PathCreate(config.GenConfig.FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
+	if err != nil {
+		log.Error(err)
+		e.Error(500, fmt.Sprintf("views目录创建失败！错误详情：%s", err.Error()))
+		return nil
+	}
+
 	pkg.FileCreate(b1, "./app/"+tab.PackageName+"/models/"+tab.TBName+".go")
 	pkg.FileCreate(b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
 	pkg.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
@@ -219,7 +264,7 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 	pkg.FileCreate(b5, config.GenConfig.FrontPath+"/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
 	pkg.FileCreate(b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
 	pkg.FileCreate(b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
-
+	return nil
 }
 
 func (e Gen) GenMenuAndApi(c *gin.Context) {

@@ -3,7 +3,7 @@ package sdk
 import (
 	"bytes"
 	"go-admin/common/core/config/sdk/loader"
-	memory2 "go-admin/common/core/config/sdk/loader/memory"
+	"go-admin/common/core/config/sdk/loader/memory"
 	"go-admin/common/core/config/sdk/reader"
 	"go-admin/common/core/config/sdk/reader/json"
 	"go-admin/common/core/config/sdk/source"
@@ -52,7 +52,7 @@ func (c *config) Init(opts ...Option) error {
 
 	// default loader uses the configured reader
 	if c.opts.Loader == nil {
-		c.opts.Loader = memory2.NewLoader(memory2.WithReader(c.opts.Reader))
+		c.opts.Loader = memory.NewLoader(memory.WithReader(c.opts.Reader))
 	}
 
 	err := c.opts.Loader.Load(c.opts.Source...)

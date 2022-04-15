@@ -23,6 +23,7 @@ func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
 		gen := tools.Gen{}
 		r.GET("/gen/preview/:tableId", gen.Preview)
 		r.GET("/gen/toproject/:tableId", gen.GenCode)
+		r.GET("/gen/downloadCode/:tableId", gen.DownloadCode)
 		r.GET("/gen/todb/:tableId", gen.GenMenuAndApi)
 		sysTable := tools.SysTable{}
 		r.GET("/gen/tabletree", sysTable.GetSysTablesTree)

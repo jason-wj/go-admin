@@ -39,6 +39,14 @@ func OK(c *gin.Context, data interface{}, msg string) {
 	c.AbortWithStatusJSON(http.StatusOK, res)
 }
 
+func Download(c *gin.Context, data []byte, filename, contentType string) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Content-Disposition", "attachment;filename="+filename)
+	c.Header("Access-Control-Expose-Headers", "Content-Disposition") //允许获取懂啊指定header
+	c.Header("Content-Type", contentType)
+	c.Data(http.StatusOK, contentType, data)
+}
+
 // PageOK 分页数据处理
 func PageOK(c *gin.Context, result, extend interface{}, count int, pageIndex int, pageSize int, msg string) {
 	var res page

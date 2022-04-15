@@ -1,7 +1,7 @@
 package env
 
 import (
-	source2 "go-admin/common/core/config/sdk/source"
+	"go-admin/common/core/config/sdk/source"
 	"os"
 	"strconv"
 	"strings"
@@ -17,10 +17,10 @@ var (
 type env struct {
 	prefixes         []string
 	strippedPrefixes []string
-	opts             source2.Options
+	opts             source.Options
 }
 
-func (e *env) Read() (*source2.ChangeSet, error) {
+func (e *env) Read() (*source.ChangeSet, error) {
 	var changes map[string]interface{}
 
 	for _, env := range os.Environ() {
@@ -73,7 +73,7 @@ func (e *env) Read() (*source2.ChangeSet, error) {
 		return nil, err
 	}
 
-	cs := &source2.ChangeSet{
+	cs := &source.ChangeSet{
 		Format:    e.opts.Encoder.String(),
 		Data:      b,
 		Timestamp: time.Now(),
@@ -101,11 +101,11 @@ func reverse(ss []string) {
 	}
 }
 
-func (e *env) Watch() (source2.Watcher, error) {
+func (e *env) Watch() (source.Watcher, error) {
 	return newWatcher()
 }
 
-func (e *env) Write(cs *source2.ChangeSet) error {
+func (e *env) Write(cs *source.ChangeSet) error {
 	return nil
 }
 
@@ -126,8 +126,8 @@ func (e *env) String() string {
 //              }
 //          }
 //      }
-func NewSource(opts ...source2.Option) source2.Source {
-	options := source2.NewOptions(opts...)
+func NewSource(opts ...source.Option) source.Source {
+	options := source.NewOptions(opts...)
 
 	var sp []string
 	var pre []string
