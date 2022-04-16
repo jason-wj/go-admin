@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -162,46 +161,6 @@ func (e *SysTables) Update(tx *gorm.DB) (update SysTables, err error) {
 	e.UpdateBy = 0
 	if err = tx.Table("sys_tables").Where("table_id = ?", e.TableId).Updates(&e).Error; err != nil {
 		return
-	}
-
-	tableNames := make([]string, 0)
-	for i := range e.Columns {
-		if e.Columns[i].FkTableName != "" {
-			tableNames = append(tableNames, e.Columns[i].FkTableName)
-		}
-	}
-
-	tables := make([]SysTables, 0)
-	tableMap := make(map[string]*SysTables)
-	if len(tableNames) > 0 {
-		if err = tx.Table("sys_tables").Where("table_name in (?)", tableNames).Find(&tables).Error; err != nil {
-			return
-		}
-		for i := range tables {
-			tableMap[tables[i].TBName] = &tables[i]
-		}
-	}
-
-	for i := 0; i < len(e.Columns); i++ {
-		if e.Columns[i].FkTableName != "" {
-			t, ok := tableMap[e.Columns[i].FkTableName]
-			if ok {
-				e.Columns[i].FkTableNameClass = t.ClassName
-				t.MLTBName = strings.Replace(t.TBName, "_", "-", -1)
-				e.Columns[i].FkTableNamePackage = t.MLTBName
-			} else {
-				tableNameList := strings.Split(e.Columns[i].FkTableName, "_")
-				e.Columns[i].FkTableNameClass = ""
-				//e.Columns[i].FkTableNamePackage = ""
-				for a := 0; a < len(tableNameList); a++ {
-					strStart := string([]byte(tableNameList[a])[:1])
-					strEnd := string([]byte(tableNameList[a])[1:])
-					e.Columns[i].FkTableNameClass += strings.ToUpper(strStart) + strEnd
-					//e.Columns[i].FkTableNamePackage += strings.ToLower(strStart) + strings.ToLower(strEnd)
-				}
-			}
-		}
-		_, _ = e.Columns[i].Update(tx)
 	}
 	return
 }

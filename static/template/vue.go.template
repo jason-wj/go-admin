@@ -67,16 +67,15 @@
             <span>{{ "{{" }}(queryParams.pageIndex - 1) * queryParams.pageSize + scope.$index + 1{{ "}}" }}</span>
           </template>
         </el-table-column>
-
-        {{- range .Columns -}}
+        {{ range .Columns -}}
+        {{- $x := .IsList -}}
+        {{- if (eq $x "1") }}
         {{- if ne .DictType "" -}}
-
         <el-table-column width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :formatter="{{.JsonField}}Format">
           <template slot-scope="scope">
            {{ "{{" }} {{.JsonField}}Format(scope.row) {{"}}"}}
           </template>
         </el-table-column>
-
         {{- end -}}
         {{- if eq .DictType "" -}}
         {{- if eq .HtmlType "datetime" -}}
@@ -85,15 +84,12 @@
             <span>{{ "{{" }} parseTime(scope.row.{{.JsonField}}) {{"}}"}}</span>
           </template>
         </el-table-column>
-
         {{- else -}}
         <el-table-column width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true"/>
-
-        {{- end -}}
-        {{- end -}}
+        {{- end}}
+        {{- end}}
+        {{end}}
         {{- end }}
-
-
         <el-table-column width="100" fixed="right" label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-button
@@ -393,7 +389,7 @@ const handleExport = () => {
     type: 'warning'
   }).then(() => {
     export{{.ClassName}}(proxy.addDateRange(queryParams.value,'application/zip', dateRange.value)).then(response => {
-      resolveBlob(response, '{{.TableComment}}')
+      resolveBlob(response,'application/zip', '{{.TableComment}}')
     })
   }).catch(() => {
   })

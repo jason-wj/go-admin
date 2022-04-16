@@ -245,6 +245,9 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 		column.IsInsert = "1"
 		column.QueryType = "EQ"
 		column.IsPk = "0"
+		column.IsEdit = "1"
+		column.IsQuery = "1"
+		column.IsList = "1"
 
 		namelist := strings.Split(dbcolumn[i].ColumnName, "_")
 		for i := 0; i < len(namelist); i++ {
