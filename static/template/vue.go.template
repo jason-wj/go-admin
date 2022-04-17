@@ -6,10 +6,12 @@
         {{range .Columns}}
         {{- $x := .IsQuery -}}
         {{- if (eq $x "1") -}}
+        {{- if eq .GoField "UpdatedAt" -}}
+        {{- else if eq .GoField "UpdateBy" -}}
+        {{- else if eq .GoField "CreateBy" -}}
+        {{ else -}}
         <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
-          {{if eq .DictType "" -}}
-          <el-input v-model="queryParams.{{.JsonField}}" placeholder="请输入{{.ColumnComment}}" clearable size="small" @keyup.enter.native="handleQuery"/>
-          {{- else -}}
+          {{if ne .DictType "" -}}
           <el-select v-model="queryParams.{{.JsonField}}" placeholder="{{$tableComment}}{{.ColumnComment}}" clearable size="small">
             <el-option
               v-for="dict in {{.JsonField}}Options"
@@ -18,11 +20,7 @@
               :value="dict.dictValue"
             />
           </el-select>
-          {{- end}}
-        </el-form-item>
-        {{end}}
-        {{- end }}
-        <el-form-item label="创建时间">
+          {{- else if eq .GoField "CreatedAt" -}}
           <el-date-picker
             v-model="dateRange"
             size="small"
@@ -33,7 +31,13 @@
             align="right"
             value-format="yyyy-MM-dd HH:mm:ss"
           />
+          {{- else -}}
+          <el-input v-model="queryParams.{{.JsonField}}" placeholder="请输入{{.ColumnComment}}" clearable size="small" @keyup.enter.native="handleQuery"/>
+          {{- end }}
         </el-form-item>
+        {{end -}}
+        {{ end }}
+        {{- end -}}
         <el-form-item>
           <el-button type="primary" icon="search" size="small" @click="handleQuery">搜索</el-button>
           <el-button icon="refresh" size="small" @click="resetQuery">重置</el-button>
@@ -72,7 +76,7 @@
         {{- if (eq $x "1") }}
         {{- if ne .DictType "" -}}
         <el-table-column width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :formatter="{{.JsonField}}Format">
-          <template slot-scope="scope">
+          <template #default="scope">
            {{ "{{" }} {{.JsonField}}Format(scope.row) {{"}}"}}
           </template>
         </el-table-column>
@@ -80,8 +84,8 @@
         {{- if eq .DictType "" -}}
         {{- if eq .HtmlType "datetime" -}}
         <el-table-column width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true">
-          <template slot-scope="scope">
-            <span>{{ "{{" }} parseTime(scope.row.{{.JsonField}}) {{"}}"}}</span>
+          <template #default="scope">
+            <span>{{ "{{" }} formatDate(scope.row.{{.JsonField}}) {{"}}"}}</span>
           </template>
         </el-table-column>
         {{- else -}}
@@ -216,9 +220,17 @@ const rules = ref({
   {{- range .Columns -}}
   {{- $x := .IsQuery -}}
   {{- if (eq $x "1") -}}
+  {{- if eq .GoField "CreatedAt" -}}
+  {{- else if eq .GoField "Id" -}}
+  {{- else if eq .GoField "UpdatedAt" -}}
+  {{- else if eq .GoField "DeletedAt" -}}
+  {{- else if eq .GoField "UpdateBy" -}}
+  {{- else if eq .GoField "CreateBy" -}}
+    {{- else }}
   {{.JsonField}}:  [ {required: true, message: '{{.ColumnComment}}不能为空', trigger: 'blur'} ],
-  {{ end }}
   {{- end -}}
+  {{ end }}
+  {{- end }}
 })
 
 // ref form
@@ -232,8 +244,8 @@ const init = () =>{
   getDicts('{{.DictType}}').then(response => {
     {{.JsonField}}Options.value = response.data
   })
-  {{ end -}}
   {{- end -}}
+  {{- end }}
 }
 
 /** 查询参数列表 */
@@ -259,14 +271,15 @@ const reset = () => {
     {{- $x := .IsInsert -}}
     {{- if (eq $x "1") -}}
     {{- if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "Id" -}}
     {{- else if eq .GoField "UpdatedAt" -}}
     {{- else if eq .GoField "DeletedAt" -}}
     {{- else if eq .GoField "UpdateBy" -}}
     {{- else if eq .GoField "CreateBy" -}}
     {{- else }}
     {{.JsonField}}: undefined,
-    {{- end }}
     {{- end -}}
+    {{- end }}
     {{- end }}
   }
   inputform.value.resetFields()
