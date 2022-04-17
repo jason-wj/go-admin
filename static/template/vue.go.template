@@ -48,7 +48,7 @@
         <el-col :span="1.5">
           <el-button
             type="primary"
-            icon="el-icon-plus"
+            icon="plus"
             size="small"
             @click="handleAdd"
           >新增
@@ -57,7 +57,7 @@
         <el-col :span="1.5">
           <el-button
             type="success"
-            icon="el-icon-plus"
+            icon="export"
             size="small"
             @click="handleExport"
           >Excel导出
@@ -99,14 +99,14 @@
             <el-button
                 size="small"
                 type="text"
-                icon="el-icon-edit"
+                icon="edit"
                 @click="handleUpdate(scope.row)"
             >修改
             </el-button>
             <el-button
                 size="small"
                 type="text"
-                icon="el-icon-delete"
+                icon="delete"
                 @click="handleDelete(scope.row)"
             >删除
             </el-button>
