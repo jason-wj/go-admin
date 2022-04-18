@@ -74,7 +74,7 @@
         {{- end}}
         {{- end}}
         {{- end }}
-        <el-table-column min-width="120" fixed="right" label="操作" align="center" class-name="small-padding fixed-width">
+        <el-table-column min-width="130" fixed="right" label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-button size="small" type="text" icon="edit" @click="handleUpdate(scope.row)">修改</el-button>
             <el-button size="small" type="text" icon="delete" @click="handleDelete(scope.row)">删除</el-button>
