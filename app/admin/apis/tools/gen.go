@@ -168,10 +168,6 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) 
 	basePath := "static/template/"
 	routerFile := basePath + "router_check_role.go.template"
 
-	if tab.IsAuth == 2 {
-		routerFile = basePath + "router_no_check_role.go.template"
-	}
-
 	t1, err := template.ParseFiles(basePath + "model.go.template")
 	if err != nil {
 		log.Error(err)
@@ -230,17 +226,20 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) 
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
 
+	pluginPath := ""
+	if tab.IsPlugin == "1" {
+		pluginPath = "plugins/"
+	}
 	//如果是下载zpi压缩包代码
 	if isDownload {
 		buf := new(bytes.Buffer)
 		writer := zip.NewWriter(buf)
 		defer writer.Close()
-
 		_ = pkg.ZipFilCreate(writer, b1, "./app/"+tab.PackageName+"/models/"+tab.TBName+".go")
 		_ = pkg.ZipFilCreate(writer, b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
 		_ = pkg.ZipFilCreate(writer, b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
-		_ = pkg.ZipFilCreate(writer, b4, "./front/api/"+tab.PackageName+"/"+tab.BusinessName+".js")
-		_ = pkg.ZipFilCreate(writer, b5, "./front/views/"+tab.PackageName+"/"+tab.BusinessName+"/index.vue")
+		_ = pkg.ZipFilCreate(writer, b4, "./front/api/"+pluginPath+tab.PackageName+"/"+tab.BusinessName+".js")
+		_ = pkg.ZipFilCreate(writer, b5, "./front/views/"+pluginPath+tab.PackageName+"/"+tab.BusinessName+"/index.vue")
 		_ = pkg.ZipFilCreate(writer, b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
 		_ = pkg.ZipFilCreate(writer, b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
 		return buf
@@ -249,8 +248,8 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) 
 	_ = pkg.PathCreate("./app/" + tab.PackageName + "/models/")
 	_ = pkg.PathCreate("./app/" + tab.PackageName + "/router/")
 	_ = pkg.PathCreate("./app/" + tab.PackageName + "/service/dto/")
-	_ = pkg.PathCreate(config.GenConfig.FrontPath + "/api/" + tab.PackageName + "/")
-	err = pkg.PathCreate(config.GenConfig.FrontPath + "/views/" + tab.PackageName + "/" + tab.BusinessName + "/")
+	_ = pkg.PathCreate(config.GenConfig.FrontPath + "/api/" + pluginPath + tab.PackageName + "/")
+	err = pkg.PathCreate(config.GenConfig.FrontPath + "/views/" + pluginPath + tab.PackageName + "/" + tab.BusinessName + "/")
 	if err != nil {
 		log.Error(err)
 		e.Error(500, fmt.Sprintf("views目录创建失败！错误详情：%s", err.Error()))

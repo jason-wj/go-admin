@@ -1,7 +1,7 @@
 package tools
 
 import (
-	tools2 "go-admin/app/admin/models/tools"
+	"go-admin/app/admin/models/tools"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,7 @@ type SysTable struct {
 func (e SysTable) GetPage(c *gin.Context) {
 	e.Context = c
 	log := e.GetLogger()
-	var data tools2.SysTables
+	var data tools.SysTables
 	var err error
 	var pageSize = 10
 	var pageIndex = 1
@@ -76,7 +76,7 @@ func (e SysTable) Get(c *gin.Context) {
 		return
 	}
 
-	var data tools2.SysTables
+	var data tools.SysTables
 	data.TableId, _ = pkg.StringToInt(c.Param("tableId"))
 	result, err := data.Get(db, true)
 	if err != nil {
@@ -101,7 +101,7 @@ func (e SysTable) GetSysTablesInfo(c *gin.Context) {
 		return
 	}
 
-	var data tools2.SysTables
+	var data tools.SysTables
 	if c.Request.FormValue("tableName") != "" {
 		data.TBName = c.Request.FormValue("tableName")
 	}
@@ -130,7 +130,7 @@ func (e SysTable) GetSysTablesTree(c *gin.Context) {
 		return
 	}
 
-	var data tools2.SysTables
+	var data tools.SysTables
 	result, err := data.GetTree(db)
 	if err != nil {
 		log.Errorf("GetTree error, %s", err.Error())
@@ -183,10 +183,10 @@ func (e SysTable) Insert(c *gin.Context) {
 
 }
 
-func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tools2.SysTables, error) {
-	var data tools2.SysTables
-	var dbTable tools2.DBTables
-	var dbColumn tools2.DBColumns
+func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tools.SysTables, error) {
+	var data tools.SysTables
+	var dbTable tools.DBTables
+	var dbColumn tools.DBColumns
 	data.TBName = tablesList[i]
 	data.CreateBy = 0
 
@@ -212,10 +212,8 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 		//data.PackageName += strings.ToLower(strStart) + strings.ToLower(strend)
 		//data.ModuleName += strings.ToLower(strStart) + strings.ToLower(strend)
 	}
-	//data.ModuleFrontName = strings.ReplaceAll(data.ModuleName, "_", "-")
 	data.PackageName = "admin"
 	data.TplCategory = "crud"
-	data.Crud = true
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
 	data.ModuleName = strings.Replace(data.TBName, "_", "-", -1)
 	dbcolumn, err := dbColumn.GetList(tx)
@@ -227,16 +225,10 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 
 	data.FunctionName = data.TableComment
 	//data.BusinessName = data.ModuleName
-	data.IsLogicalDelete = "1"
-	data.LogicalDelete = true
-	data.LogicalDeleteColumn = "is_del"
-	data.IsActions = 2
-	data.IsDataScope = 1
-	data.IsAuth = 1
 
 	data.FunctionAuthor = "Jason"
 	for i := 0; i < len(dbcolumn); i++ {
-		var column tools2.SysColumns
+		var column tools.SysColumns
 		column.ColumnComment = dbcolumn[i].ColumnComment
 		column.ColumnName = dbcolumn[i].ColumnName
 		column.ColumnType = dbcolumn[i].ColumnType
@@ -245,9 +237,15 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 		column.IsInsert = "1"
 		column.QueryType = "EQ"
 		column.IsPk = "0"
-		column.IsEdit = "1"
-		column.IsQuery = "1"
-		column.IsList = "1"
+		if column.IsEdit == "" {
+			column.IsEdit = "1"
+		}
+		if column.IsQuery == "" {
+			column.IsQuery = "1"
+		}
+		if column.IsList == "" {
+			column.IsList = "1"
+		}
 
 		namelist := strings.Split(dbcolumn[i].ColumnName, "_")
 		for i := 0; i < len(namelist); i++ {
@@ -309,7 +307,7 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 // @Router /admin-api/v1/sys/tables/info [put]
 // @Security Bearer
 func (e SysTable) Update(c *gin.Context) {
-	var data tools2.SysTables
+	var data tools.SysTables
 	err := c.Bind(&data)
 	pkg.HasError(err, "数据解析失败", 500)
 
@@ -350,7 +348,7 @@ func (e SysTable) Delete(c *gin.Context) {
 		return
 	}
 
-	var data tools2.SysTables
+	var data tools.SysTables
 	IDS := pkg.IdsStrToIdsIntGroup("tableId", c)
 	_, err = data.BatchDelete(db, IDS)
 	if err != nil {

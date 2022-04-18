@@ -129,8 +129,8 @@ func (e Api) PageOK(result, extend interface{}, count int, pageIndex int, pageSi
 	response.PageOK(e.Context, result, extend, count, pageIndex, pageSize, msg)
 }
 
-func (e Api) ExportExcelOk(data []byte) {
-	response.ExportExcelOk(e.Context, data)
+func (e Api) DownloadExcel(fileName string, data []byte) {
+	response.Download(e.Context, data, fileName, "application/vnd.ms-excel")
 }
 
 // Custom 兼容函数

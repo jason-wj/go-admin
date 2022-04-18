@@ -93,6 +93,8 @@ func ConvertToStr(dateTime time.Time, flag int) string {
 		return dateTime.Format("2006-01-02")
 	case 2:
 		return dateTime.Format("2006-01-02 15:04")
+	case 3:
+		return dateTime.Format("2006_01_02_15_04_05")
 	}
 	return dateTime.Format("2006-01-02 15:04:05")
 }

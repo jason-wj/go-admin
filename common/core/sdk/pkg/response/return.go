@@ -58,11 +58,6 @@ func PageOK(c *gin.Context, result, extend interface{}, count int, pageIndex int
 	OK(c, res, msg)
 }
 
-// PageOK 分页数据处理
-func ExportExcelOk(c *gin.Context, data []byte) {
-	c.Data(http.StatusOK, "application/vnd.ms-excel", data)
-}
-
 // Custum 兼容函数
 func Custum(c *gin.Context, data gin.H) {
 	data["requestId"] = pkg.GenerateMsgIDFromContext(c)
