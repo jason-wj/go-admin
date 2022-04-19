@@ -3,10 +3,11 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/google/uuid"
 	adminService "go-admin/app/admin/service"
-	"go-admin/app/plugins/appmanager/models"
-	"go-admin/app/plugins/appmanager/service/dto"
+	"go-admin/app/plugins/filemgr/models"
+	"go-admin/app/plugins/filemgr/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/core/config"
 	"go-admin/common/core/sdk/service"
@@ -31,22 +32,22 @@ const (
 	AppPlatformIOS     = "1" //IOS
 )
 
-type AppManager struct {
+type App struct {
 	service.Service
 }
 
-func NewAppManagerService(s *service.Service) *AppManager {
-	var srv = new(AppManager)
+func NewAppService(s *service.Service) *App {
+	var srv = new(App)
 	srv.Orm = s.Orm
 	srv.Log = s.Log
 	return srv
 }
 
-// GetPage 获取AppManager列表
-func (e *AppManager) GetPage(c *dto.AppManagerQueryReq, p *actions.DataPermission) ([]models.AppManager, int64, error) {
+// GetPage 获取App列表
+func (e *App) GetPage(c *dto.AppQueryReq, p *actions.DataPermission) ([]models.App, int64, error) {
 
-	var list []models.AppManager
-	var data models.AppManager
+	var list []models.App
+	var data models.App
 	var count int64
 
 	err := e.Orm.Order("created_at desc").Model(&data).
@@ -56,7 +57,7 @@ func (e *AppManager) GetPage(c *dto.AppManagerQueryReq, p *actions.DataPermissio
 			actions.Permission(data.TableName(), p),
 		).Find(&list).Limit(-1).Offset(-1).Count(&count).Error
 	if err != nil {
-		e.Log.Errorf("AppManagerService GetPage error:%s", err)
+		e.Log.Errorf("AppService GetPage error:%s", err)
 		return nil, 0, err
 	}
 
@@ -74,12 +75,12 @@ func (e *AppManager) GetPage(c *dto.AppManagerQueryReq, p *actions.DataPermissio
 	return list, count, nil
 }
 
-// Get 获取AppManager对象
-func (e *AppManager) Get(id int64, p *actions.DataPermission) (*models.AppManager, error) {
+// Get 获取App对象
+func (e *App) Get(id int64, p *actions.DataPermission) (*models.App, error) {
 	if id <= 0 {
 		return nil, errors.New("参数错误")
 	}
-	model := &models.AppManager{}
+	model := &models.App{}
 	err := e.Orm.Scopes(
 		actions.Permission(model.TableName(), p),
 	).First(model, id).Error
@@ -90,24 +91,24 @@ func (e *AppManager) Get(id int64, p *actions.DataPermission) (*models.AppManage
 }
 
 // QueryOne 通过自定义条件获取一条记录
-func (e *AppManager) QueryOne(queryCondition *dto.AppManagerQueryReq) (*models.AppManager, error) {
-	model := &models.AppManager{}
-	err := e.Orm.Model(&models.AppManager{}).
+func (e *App) QueryOne(queryCondition *dto.AppQueryReq) (*models.App, error) {
+	model := &models.App{}
+	err := e.Orm.Model(&models.App{}).
 		Scopes(
 			cDto.MakeCondition(queryCondition.GetNeedSearch()),
 		).First(model).Error
 	if err != nil {
-		e.Log.Errorf("AppManagerService QueryOne error:%s", err)
+		e.Log.Errorf("AppService QueryOne error:%s", err)
 		return nil, err
 	}
 	return model, nil
 }
 
 // Count 获取条数
-func (e *AppManager) Count(c *dto.AppManagerQueryReq) (int64, error) {
+func (e *App) Count(c *dto.AppQueryReq) (int64, error) {
 	var err error
 	var count int64
-	err = e.Orm.Model(&models.AppManager{}).
+	err = e.Orm.Model(&models.App{}).
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 		).Limit(-1).Offset(-1).Count(&count).Error
@@ -115,14 +116,14 @@ func (e *AppManager) Count(c *dto.AppManagerQueryReq) (int64, error) {
 		return 0, nil
 	}
 	if err != nil {
-		e.Log.Errorf("AppManagerService Count error:%s", err)
+		e.Log.Errorf("AppService Count error:%s", err)
 		return 0, err
 	}
 	return count, nil
 }
 
-// Insert 创建AppManager对象
-func (e *AppManager) Insert(c *dto.AppManagerInsertReq) error {
+// Insert 创建App对象
+func (e *App) Insert(c *dto.AppInsertReq) error {
 	if c.CurrAdminId <= 0 {
 		return errors.New("参数错误")
 	}
@@ -146,7 +147,7 @@ func (e *AppManager) Insert(c *dto.AppManagerInsertReq) error {
 	if c.Remark == "" {
 		return errors.New("更新内容不得为空")
 	}
-	query := dto.AppManagerQueryReq{}
+	query := dto.AppQueryReq{}
 	query.Platform = c.Platform
 	query.Type = c.Type
 	query.Version = c.Version
@@ -172,7 +173,7 @@ func (e *AppManager) Insert(c *dto.AppManagerInsertReq) error {
 	}
 
 	now := time.Now()
-	data := models.AppManager{}
+	data := models.App{}
 	data.Version = c.Version
 	data.Platform = c.Platform
 	data.Type = c.Type
@@ -196,8 +197,8 @@ func (e *AppManager) Insert(c *dto.AppManagerInsertReq) error {
 	return nil
 }
 
-// Update 修改AppManager对象
-func (e *AppManager) Update(c *dto.AppManagerUpdateReq, p *actions.DataPermission) (bool, error) {
+// Update 修改App对象
+func (e *App) Update(c *dto.AppUpdateReq, p *actions.DataPermission) (bool, error) {
 	if c.Id <= 0 || c.CurrAdminId <= 0 {
 		return false, errors.New("参数错误")
 	}
@@ -219,7 +220,7 @@ func (e *AppManager) Update(c *dto.AppManagerUpdateReq, p *actions.DataPermissio
 	if len(updates) > 0 {
 		updates["update_by"] = c.CurrAdminId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.AppManager{}).Where("id=?", c.Id).Updates(updates).Error
+		err = e.Orm.Model(&models.App{}).Where("id=?", c.Id).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysConfigService Update error:%s", err)
 			return false, err
@@ -229,8 +230,8 @@ func (e *AppManager) Update(c *dto.AppManagerUpdateReq, p *actions.DataPermissio
 	return false, nil
 }
 
-// Remove 删除AppManager
-func (e *AppManager) Remove(ids []int64, p *actions.DataPermission) error {
+// Remove 删除App
+func (e *App) Remove(ids []int64, p *actions.DataPermission) error {
 	if len(ids) <= 0 {
 		return errors.New("参数错误")
 	}
@@ -241,7 +242,7 @@ func (e *AppManager) Remove(ids []int64, p *actions.DataPermission) error {
 		}
 
 		//同一个完全相同的版本，可能因为网路有多条记录，但这些记录都指向一个oss资源，此时只有最后一条记录，才能删除oss资源
-		query := dto.AppManagerQueryReq{}
+		query := dto.AppQueryReq{}
 		query.Platform = result.Platform
 		query.Type = result.Type
 		query.Version = result.Version
@@ -261,7 +262,7 @@ func (e *AppManager) Remove(ids []int64, p *actions.DataPermission) error {
 	}
 
 	//删除记录
-	var data models.AppManager
+	var data models.App
 	err := e.Orm.Model(&data).
 		Scopes(
 			actions.Permission(data.TableName(), p),
@@ -281,7 +282,7 @@ func (e *AppManager) Remove(ids []int64, p *actions.DataPermission) error {
 //  @param dst
 //  @return error
 //
-func (e *AppManager) GetSingleUploadFileInfo(form *multipart.Form, file *multipart.FileHeader, dst *string) error {
+func (e *App) GetSingleUploadFileInfo(form *multipart.Form, file *multipart.FileHeader, dst *string) error {
 	if len(form.File) != 1 {
 		return errors.New("每次仅可上传一个文件")
 
@@ -307,15 +308,15 @@ func (e *AppManager) GetSingleUploadFileInfo(form *multipart.Form, file *multipa
 //  @param version
 //  @param platform
 //  @param localAddress
-//  @return *models.AppManager
+//  @return *models.App
 //  @return error
 //
-func (e *AppManager) uploadOssFile(appType, version, platform, localAddress string) (*models.AppManager, error) {
-	appManager := models.AppManager{}
-	appManager.Type = appType
-	appManager.Version = version
-	appManager.Platform = platform
-	key, err := e.generateAppOssObjectKey(&appManager)
+func (e *App) uploadOssFile(appType, version, platform, localAddress string) (*models.App, error) {
+	App := models.App{}
+	App.Type = appType
+	App.Version = version
+	App.Platform = platform
+	key, err := e.generateAppOssObjectKey(&App)
 	if err != nil {
 		return nil, err
 	}
@@ -328,21 +329,21 @@ func (e *AppManager) uploadOssFile(appType, version, platform, localAddress stri
 		e.Log.Errorf("上传失败，失败原因:%s \r\n", err)
 		return nil, err
 	}
-	appManager.BucketName = client.BucketName
-	appManager.OssKey = key
-	return &appManager, nil
+	App.BucketName = client.BucketName
+	App.OssKey = key
+	return &App, nil
 }
 
 //
 //  generateAppOssUrl
 //  @Description: 获取app下载链接
 //  @receiver e
-//  @param appManager
+//  @param App
 //  @return string
 //  @return error
 //
-func (e *AppManager) generateAppOssUrl(appManager *models.AppManager) (string, error) {
-	appPath, err := e.generateAppOssObjectKey(appManager)
+func (e *App) generateAppOssUrl(App *models.App) (string, error) {
+	appPath, err := e.generateAppOssObjectKey(App)
 	if err != nil {
 		return "", err
 	}
@@ -357,11 +358,11 @@ func (e *AppManager) generateAppOssUrl(appManager *models.AppManager) (string, e
 //  getOssClient
 //  @Description: 获取oss客户端
 //  @receiver e
-//  @param appManager
+//  @param App
 //  @return *ossUtils.ALiYunOSS
 //  @return error
 //
-func (e *AppManager) getOssClient() (*ossUtils.ALiYunOSS, error) {
+func (e *App) getOssClient() (*ossUtils.ALiYunOSS, error) {
 	var sysConfService = adminService.NewSysConfigService(&e.Service)
 	endPoint := sysConfService.GetWithKeyStr("app_oss_endpoint", "")
 	key := sysConfService.GetWithKeyStr("app_oss_access_key_id", "")
@@ -379,19 +380,19 @@ func (e *AppManager) getOssClient() (*ossUtils.ALiYunOSS, error) {
 //  generateAppOssObjectKey
 //  @Description: 生成oss key
 //  @receiver e
-//  @param appManager
+//  @param App
 //  @return string
 //  @return error
 //
-func (e *AppManager) generateAppOssObjectKey(appManager *models.AppManager) (string, error) {
+func (e *App) generateAppOssObjectKey(App *models.App) (string, error) {
 	var sysConfService = adminService.NewSysConfigService(&e.Service)
 
 	//app目录
 	appPath := sysConfService.GetWithKeyStr("app_oss_root_path", "")
-	appPath += appManager.Type
-	appPath += "_" + appManager.Version
+	appPath += App.Type
+	appPath += "_" + App.Version
 
-	switch appManager.Platform {
+	switch App.Platform {
 	case AppPlatformAndroid:
 		appPath += ".apk"
 	case AppPlatformIOS:
@@ -401,4 +402,30 @@ func (e *AppManager) generateAppOssObjectKey(appManager *models.AppManager) (str
 	}
 
 	return appPath, nil
+}
+
+// GetExcel 导出App
+func (e *App) GetExcel(list []models.App) ([]byte, error) {
+	//sheet名称
+	sheetName := "App"
+	xlsx := excelize.NewFile()
+	no := xlsx.NewSheet(sheetName)
+	//各列间隔
+	xlsx.SetColWidth(sheetName, "A", "P", 25)
+	//头部描述
+	xlsx.SetSheetRow(sheetName, "A1", &[]interface{}{
+		"", "", "", "", "", "", "", "",
+		"", "", "", "", "", "", ""})
+
+	/*for i, item := range list {
+		axis := fmt.Sprintf("A%d", i+2)
+
+		//todo 数据导入逻辑
+
+		//按标签对应输入数据
+		xlsx.SetSheetRow(sheetName, axis, &[]interface{}{})
+	}*/
+	xlsx.SetActiveSheet(no)
+	data, _ := xlsx.WriteToBuffer()
+	return data.Bytes(), nil
 }

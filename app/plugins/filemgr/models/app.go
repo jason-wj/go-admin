@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type AppManager struct {
+type App struct {
 	Id int64 `json:"id" gorm:"primaryKey;autoIncrement;comment:主键编码"`
 
 	Version      string     `json:"version" gorm:"column:version;type:varchar(100);comment:版本号"`
@@ -24,6 +24,6 @@ type AppManager struct {
 	UpdatedAt    *time.Time `json:"updatedAt" gorm:"comment:最后更新时间"`
 }
 
-func (AppManager) TableName() string {
-	return "app_manager"
+func (App) TableName() string {
+	return "filemgr_app"
 }

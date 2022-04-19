@@ -4,8 +4,8 @@ package app
 
 import (
 	adminRouter "go-admin/app/admin/router"
-	appManagerRouter "go-admin/app/plugins/appmanager/router"
 	contentRouter "go-admin/app/plugins/content/router"
+	filemgrRouter "go-admin/app/plugins/filemgr/router"
 )
 
 //
@@ -19,7 +19,7 @@ func AllRouter() []func() {
 	routers = append(routers, adminRouter.InitRouter)
 	//内容板块
 	routers = append(routers, contentRouter.InitRouter)
-	//app管理
-	routers = append(routers, appManagerRouter.InitRouter)
+	//文件管理
+	routers = append(routers, filemgrRouter.InitRouter)
 	return routers
 }

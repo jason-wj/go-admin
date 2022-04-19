@@ -14,7 +14,7 @@ func init() {
 // registerCategoryRouter
 func registerCategoryRouter(v1 *gin.RouterGroup) {
 	api := apis.Category{}
-	r := v1.Group("/category").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
+	r := v1.Group("/content/category").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
 	{
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)

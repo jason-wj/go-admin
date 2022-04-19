@@ -14,7 +14,7 @@ func init() {
 // registerAnnouncementRouter
 func registerAnnouncementRouter(v1 *gin.RouterGroup) {
 	api := apis.Announcement{}
-	r := v1.Group("/announcement").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
+	r := v1.Group("/content/announcement").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
 	{
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)

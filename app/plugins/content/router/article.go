@@ -14,7 +14,7 @@ func init() {
 // registerArticleRouter
 func registerArticleRouter(v1 *gin.RouterGroup) {
 	api := apis.Article{}
-	r := v1.Group("/article").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
+	r := v1.Group("/content/article").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
 	{
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)

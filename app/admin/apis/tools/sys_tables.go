@@ -215,7 +215,8 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 	data.PackageName = "admin"
 	data.TplCategory = "crud"
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
-	data.ModuleName = strings.Replace(data.TBName, "_", "-", -1)
+	//data.ModuleName = strings.Replace(data.TBName, "_", "-", -1)
+	data.ModuleName = data.BusinessName
 	dbcolumn, err := dbColumn.GetList(tx)
 	data.CreateBy = 0
 	data.TableComment = dbtable.TableComment

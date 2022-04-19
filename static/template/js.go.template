@@ -3,7 +3,7 @@ import service from '@/utils/request'
 // 查询{{.ClassName}}列表
 export function list{{.ClassName}}(query) {
   return service({
-    url: '/v1/{{.ModuleName}}',
+    url: '/v1/{{.PackageName}}/{{.ModuleName}}',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function list{{.ClassName}}(query) {
 // 查询{{.ClassName}}详细
 export function get{{.ClassName}}({{.PkJsonField}}) {
   return service({
-    url: '/v1/{{.ModuleName}}/' + {{.PkJsonField}},
+    url: '/v1/{{.PackageName}}/{{.ModuleName}}/' + {{.PkJsonField}},
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function get{{.ClassName}}({{.PkJsonField}}) {
 // 新增{{.ClassName}}
 export function add{{.ClassName}}(data) {
   return service({
-    url: '/v1/{{.ModuleName}}',
+    url: '/v1/{{.PackageName}}/{{.ModuleName}}',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function add{{.ClassName}}(data) {
 // 修改{{.ClassName}}
 export function update{{.ClassName}}(data) {
   return service({
-    url: '/v1/{{.ModuleName}}/' + data.{{.PkJsonField}},
+    url: '/v1/{{.PackageName}}/{{.ModuleName}}/' + data.{{.PkJsonField}},
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function update{{.ClassName}}(data) {
 // 删除{{.ClassName}}
 export function del{{.ClassName}}(data) {
   return service({
-    url: '/v1/{{.ModuleName}}',
+    url: '/v1/{{.PackageName}}/{{.ModuleName}}',
     method: 'delete',
     data: data
   })
@@ -47,7 +47,7 @@ export function del{{.ClassName}}(data) {
 // 导出{{.ClassName}}列表
 export function export{{.ClassName}}(query) {
   return service({
-    url: '/v1/{{.ModuleName}}/export',
+    url: '/v1/{{.PackageName}}/{{.ModuleName}}/export',
     method: 'get',
     responseType: 'blob',
     params: query
