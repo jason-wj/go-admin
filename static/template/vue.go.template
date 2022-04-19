@@ -171,8 +171,15 @@ const queryParams = ref({
   pageIndex: 1,
   pageSize: 10,
   {{- range .Columns }}
-  {{- if (.IsQuery) }}
+  {{- if eq .GoField "UpdatedAt" }}
+  {{- else if eq .GoField "CreatedAt" }}
+  {{- else if eq .GoField "UpdateBy" }}
+  {{- else if eq .GoField "CreateBy" }}
+  {{- else }}
+  {{- $x := .IsQuery }}
+  {{- if (eq $x "1") }}
   {{.JsonField}}: undefined,
+  {{- end }}
   {{- end }}
   {{- end }}
 })
@@ -294,31 +301,27 @@ const submitForm = () => {
     if (valid) {
       if (form.value.{{.PkJsonField}} !== undefined) {
         update{{.ClassName}}(form.value).then(response => {
-          let respType = 'error'
           if (response.code === 200) {
-            respType = 'success'
             open.value = false
             getList()
+            ElMessage({
+              type: 'success',
+              message: response.msg,
+              showClose: true,
+            })
           }
-          ElMessage({
-            type: respType,
-            message: response.msg,
-            showClose: true,
-          })
         })
       } else {
         add{{.ClassName}}(form.value).then(response => {
-          let respType = 'error'
           if (response.code === 200) {
-            respType = 'success'
             open.value = false
             getList()
+            ElMessage({
+              type: 'success',
+              message: response.msg,
+              showClose: true,
+            })
           }
-          ElMessage({
-            type: respType,
-            message: response.msg,
-            showClose: true,
-          })
         })
       }
     }
@@ -336,17 +339,15 @@ const handleDelete = (row) => {
   }).then(() => {
     return del{{.ClassName}}({ 'ids': ids })
   }).then((response) => {
-    let respType = 'error'
     if (response.code === 200) {
-      respType = 'success'
       open.value = false
       getList()
+      ElMessage({
+        type: 'success',
+        message: response.msg,
+        showClose: true,
+      })
     }
-    ElMessage({
-      type: respType,
-      message: response.msg,
-      showClose: true,
-    })
   }).catch(() => {
     ElMessage({
       type: 'info',
