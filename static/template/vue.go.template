@@ -160,9 +160,9 @@ const isEdit = ref(false)
 const dateRange = ref([])
 // 数据列表
 const {{.BusinessName}}List = ref([])
-// 类型数据字典
 {{- range .Columns}}
 {{- if ne .DictType "" }}
+// 类型数据字典
 const {{.JsonField}}Options = ref([])
 {{- end }}
 {{- end }}
@@ -362,7 +362,7 @@ const handleExport = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    export{{.ClassName}}(proxy.addDateRange(queryParams.value, 'application/zip', dateRange.value)).then(response => {
+    export{{.ClassName}}(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
       resolveBlob(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '{{.TableComment}}')
     })
   }).catch(() => {
