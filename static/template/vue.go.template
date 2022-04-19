@@ -12,7 +12,7 @@
         {{- else if eq .GoField "CreateBy" }}
         {{- else }}
         <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
-          {{- if ne .DictType "" -}}
+          {{- if ne .DictType "" }}
           <el-select v-model="queryParams.{{.JsonField}}" placeholder="{{$tableComment}}{{.ColumnComment}}" clearable size="small">
             <el-option
               v-for="dict in {{.JsonField}}Options"

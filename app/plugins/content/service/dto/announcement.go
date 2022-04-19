@@ -7,6 +7,7 @@ import (
 
 type AnnouncementQueryReq struct {
 	dto.Pagination `search:"-"`
+	Id             int64  `form:"id"  search:"type:exact;column:id;table:content_announcement" comment:"编号"`
 	BeginTime      string `form:"beginTime" search:"type:gte;column:created_at;table:content_announcement" comment:"创建时间"`
 	EndTime        string `form:"endTime" search:"type:lte;column:created_at;table:content_announcement" comment:"创建时间"`
 	Title          string `form:"title"  search:"type:contains;column:title;table:content_announcement" comment:"标题"`

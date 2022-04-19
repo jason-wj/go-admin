@@ -7,6 +7,7 @@ import (
 
 type CategoryQueryReq struct {
 	dto.Pagination `search:"-"`
+	Id             int64  `form:"id"  search:"type:exact;column:id;table:content_category" comment:"编号"`
 	BeginTime      string `form:"beginTime" search:"type:gte;column:created_at;table:content_category" comment:"创建时间"`
 	EndTime        string `form:"endTime" search:"type:lte;column:created_at;table:content_category" comment:"创建时间"`
 	Name           string `form:"name"  search:"type:contains;column:name;table:content_category" comment:"分类名称"`

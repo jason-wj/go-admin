@@ -21,5 +21,6 @@ func registerAnnouncementRouter(v1 *gin.RouterGroup) {
 		r.POST("", api.Insert)
 		r.PUT("/:id", api.Update)
 		r.DELETE("", api.Delete)
+		r.GET("/export", api.Export)
 	}
 }

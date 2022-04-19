@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"go-admin/app/plugins/content/models"
 	"go-admin/app/plugins/content/service/dto"
 	"go-admin/common/core/sdk/service"
@@ -94,7 +95,7 @@ func (e *Announcement) Count(c *dto.AnnouncementQueryReq) (int64, error) {
 }
 
 // Insert 创建Announcement对象
-func (e *Announcement) Insert(c *dto.AnnouncementInsertReq, createUserId int64) error {
+func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) error {
 	if c.CurrAdminId <= 0 {
 		return errors.New("参数错误")
 	}
@@ -183,4 +184,30 @@ func (e *Announcement) Remove(ids []int64, p *actions.DataPermission) error {
 		return errors.New(fmt.Sprintf("无权删除该数据%s", err))
 	}
 	return nil
+}
+
+// GetExcel 导出Announcement
+func (e *Announcement) GetExcel(list []models.Announcement) ([]byte, error) {
+	//sheet名称
+	sheetName := "Announcement"
+	xlsx := excelize.NewFile()
+	no := xlsx.NewSheet(sheetName)
+	//各列间隔
+	xlsx.SetColWidth(sheetName, "A", "P", 25)
+	//头部描述
+	xlsx.SetSheetRow(sheetName, "A1", &[]interface{}{
+		"", "", "", "", "", "", "", "",
+		"", "", "", "", "", "", ""})
+
+	/*for i, item := range list {
+		axis := fmt.Sprintf("A%d", i+2)
+
+		//todo 数据导入逻辑
+
+		//按标签对应输入数据
+		xlsx.SetSheetRow(sheetName, axis, &[]interface{}{})
+	}*/
+	xlsx.SetActiveSheet(no)
+	data, _ := xlsx.WriteToBuffer()
+	return data.Bytes(), nil
 }
