@@ -27,6 +27,7 @@ func registerDictRouter(v1 *gin.RouterGroup) {
 		dicts.GET("/type", dictApi.GetPage)
 		dicts.GET("/type/:id", dictApi.Get)
 		dicts.POST("/type", dictApi.Insert)
+		dicts.GET("/type/export", dictApi.Export)
 		dicts.PUT("/type/:id", dictApi.Update)
 		dicts.DELETE("/type", dictApi.Delete)
 	}

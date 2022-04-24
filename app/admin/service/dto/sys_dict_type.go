@@ -21,10 +21,10 @@ func (m *SysDictTypeSearch) GetNeedSearch() interface{} {
 }
 
 type SysDictTypeControl struct {
-	Id          int    `uri:"id"`
+	DictId      int    `uri:"dictId"`
 	DictName    string `json:"dictName"`
 	DictType    string `json:"dictType"`
-	Status      int    `json:"status"`
+	Status      string `json:"status"`
 	Remark      string `json:"remark"`
 	CurrAdminId int64  `json:"-" comment:""`
 }

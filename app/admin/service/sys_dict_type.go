@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"go-admin/app/admin/models"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/core/sdk/service"
@@ -78,12 +79,12 @@ func (e *SysDictType) Insert(c *dto.SysDictTypeControl) error {
 
 // Update 修改对象
 func (e *SysDictType) Update(c *dto.SysDictTypeControl) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.DictId <= 0 || c.CurrAdminId <= 0 {
 		return false, errors.New("参数错误")
 	}
 
 	var model = models.SysDictType{}
-	err := e.Orm.Debug().First(&model, c.Id).Error
+	err := e.Orm.Debug().First(&model, c.DictId).Error
 	if err != nil {
 		return false, errors.New(fmt.Sprintf("无权更新该数据%s", err))
 	}
@@ -93,9 +94,10 @@ func (e *SysDictType) Update(c *dto.SysDictTypeControl) (bool, error) {
 	if model.DictName != c.DictName {
 		updates["dict_name"] = c.DictName
 	}
-	if model.DictType != c.DictType {
+	//不得修改类型
+	/*if model.DictType != c.DictType {
 		updates["dict_type"] = c.DictType
-	}
+	}*/
 	if model.Status != c.Status {
 		updates["status"] = c.Status
 	}
@@ -106,7 +108,7 @@ func (e *SysDictType) Update(c *dto.SysDictTypeControl) (bool, error) {
 	if len(updates) > 0 {
 		updates["update_by"] = c.CurrAdminId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysDictType{}).Where("dict_id=?", c.Id).Updates(updates).Error
+		err = e.Orm.Model(&models.SysDictType{}).Where("dict_id=?", c.DictId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysDictTypeService Update error:%s", err)
 			return false, err
@@ -146,4 +148,30 @@ func (e *SysDictType) GetAll(c *dto.SysDictTypeSearch) ([]models.SysDictType, er
 		return nil, err
 	}
 	return list, nil
+}
+
+// GetExcel 导出Category
+func (e *SysDictType) GetExcel(list []models.SysDictType) ([]byte, error) {
+	//sheet名称
+	sheetName := "DictType"
+	xlsx := excelize.NewFile()
+	no := xlsx.NewSheet(sheetName)
+	//各列间隔
+	xlsx.SetColWidth(sheetName, "A", "P", 25)
+	//头部描述
+	xlsx.SetSheetRow(sheetName, "A1", &[]interface{}{
+		"", "", "", "", "", "", "", "",
+		"", "", "", "", "", "", ""})
+
+	/*for i, item := range list {
+		axis := fmt.Sprintf("A%d", i+2)
+
+		//todo 数据导入逻辑
+
+		//按标签对应输入数据
+		xlsx.SetSheetRow(sheetName, axis, &[]interface{}{})
+	}*/
+	xlsx.SetActiveSheet(no)
+	data, _ := xlsx.WriteToBuffer()
+	return data.Bytes(), nil
 }

@@ -80,8 +80,8 @@
           <el-button size="small" type="text" icon="delete" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table
-    <Pagination v-show="total>0" v-model:page="queryParams.pageIndex" v-model:limit="queryParams.pageSize" :total="total" @pagination="getList" /
+    </el-table>
+    <Pagination v-show="total>0" v-model:page="queryParams.pageIndex" v-model:limit="queryParams.pageSize" :total="total" @pagination="getList" />
     <!-- 添加或修改对话框 -->
     <el-dialog v-model="open" :close-on-click-modal="false" :title="title" width="500px" append-to-body>
       <el-form ref="inputform" :model="form" :rules="rules" label-width="80px">
