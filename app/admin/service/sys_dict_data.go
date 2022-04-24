@@ -102,7 +102,7 @@ func (e *SysDictData) Update(c *dto.SysDictDataControl) (bool, error) {
 	if model.DictSort != c.DictSort {
 		updates["dict_sort"] = c.DictSort
 	}
-	if model.DictLabel != c.DictLabel {
+	/*if model.DictLabel != c.DictLabel {
 		updates["dict_label"] = c.DictLabel
 	}
 	if model.DictValue != c.DictValue {
@@ -122,7 +122,7 @@ func (e *SysDictData) Update(c *dto.SysDictDataControl) (bool, error) {
 	}
 	if model.Default != c.Default {
 		updates["default"] = c.Default
-	}
+	}*/
 	if model.Remark != c.Remark {
 		updates["remark"] = c.Remark
 	}

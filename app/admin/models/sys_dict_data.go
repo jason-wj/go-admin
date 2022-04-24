@@ -11,7 +11,7 @@ type SysDictData struct {
 	CssClass  string     `json:"cssClass" gorm:"size:128;comment:CssClass"`
 	ListClass string     `json:"listClass" gorm:"size:128;comment:ListClass"`
 	IsDefault string     `json:"isDefault" gorm:"size:8;comment:IsDefault"`
-	Status    int        `json:"status" gorm:"size:4;comment:Status"`
+	Status    string     `json:"status" gorm:"size:4;comment:Status"`
 	Default   string     `json:"default" gorm:"size:8;comment:Default"`
 	Remark    string     `json:"remark" gorm:"size:255;comment:Remark"`
 	CreateBy  int64      `json:"createBy" gorm:"index;comment:创建者"`
