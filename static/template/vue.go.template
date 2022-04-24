@@ -44,91 +44,88 @@
           <el-button type="success" icon="download" size="small" @click="handleExport">Excel导出</el-button>
         </el-col>
       </el-row>
-
-      <el-table v-loading="loading" stripe border :data="{{.BusinessName}}List">
-        <el-table-column label="序号" type="index" align="center" width="60">
-          <template #default="scope">
-            <span>{{ "{{" }} (queryParams.pageIndex - 1) * queryParams.pageSize + scope.$index + 1 {{ "}}" }}</span>
-          </template>
-        </el-table-column>
-        {{- range .Columns }}
-        {{- $x := .IsList }}
-        {{- if (eq $x "1") }}
-        {{- if ne .DictType "" }}
-        <el-table-column min-width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :formatter="{{.JsonField}}Format">
-          <template #default="scope">
-           {{ "{{" }} {{.JsonField}}Format(scope.row) {{"}}"}}
-          </template>
-        </el-table-column>
-        {{- end }}
-        {{- if eq .DictType "" }}
-        {{- if eq .HtmlType "datetime" }}
-        <el-table-column min-width="130" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true">
-          <template #default="scope">
-            <span>{{ "{{" }} formatDate(scope.row.{{.JsonField}}) {{"}}"}}</span>
-          </template>
-        </el-table-column>
-        {{- else }}
-        <el-table-column min-width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true" />
-        {{- end}}
-        {{- end}}
-        {{- end}}
-        {{- end }}
-        <el-table-column min-width="130" fixed="right" label="操作" align="center" class-name="small-padding fixed-width">
-          <template #default="scope">
-            <el-button size="small" type="text" icon="edit" @click="handleUpdate(scope.row)">修改</el-button>
-            <el-button size="small" type="text" icon="delete" @click="handleDelete(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <Pagination v-show="total>0" v-model:page="queryParams.pageIndex" v-model:limit="queryParams.pageSize" :total="total" @pagination="getList" />
-
-      <!-- 添加或修改对话框 -->
-      <el-dialog v-model="open" :close-on-click-modal="false" :title="title" width="500px" append-to-body>
-        <el-form ref="inputform" :model="form" :rules="rules" label-width="80px">
-          {{- range .Columns }}
-          {{- $x := .IsInsert }}
-          {{- if (eq $x "1") }}
-          {{- if (.Pk) }}
-          {{- else if eq .GoField "CreatedAt" }}
-          {{- else if eq .GoField "UpdatedAt" }}
-          {{- else if eq .GoField "DeletedAt" }}
-          {{- else if eq .GoField "UpdateBy" }}
-          {{- else if eq .GoField "CreateBy" }}
-          {{- else }}
-          <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
-            {{- if eq "input" .HtmlType }}
-            <el-input v-model="form.{{.JsonField}}" placeholder="{{.ColumnComment}}" {{if eq .IsEdit "false" -}}:disabled="isEdit" {{- end}}/>
-            {{- else if eq "select" .HtmlType }}
-            <el-select v-model="form.{{.JsonField}}" placeholder="请选择" {{- if eq .IsEdit "false" }} :disabled="isEdit" {{- end }}>
-            <el-option
-                v-for="dict in {{.JsonField}}Options"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-            />
-            </el-select>
-            {{- else if eq "datetime" .HtmlType }}
-            <el-date-picker
-                v-model="form.{{.JsonField}}"
-                type="datetime"
-                placeholder="选择日期">
-            </el-date-picker>
-            {{- else if eq "textarea" .HtmlType }}
-            <el-input v-model="form.{{.JsonField}}" type="textarea" :rows="2"placeholder="请输入内容"></el-inpu>
-            {{- end }}
-          </el-form-item>
-          {{- end }}
-          {{- end }}
-          {{- end }}
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
-      </el-dialog>
     </div>
+    <el-table v-loading="loading" stripe border :data="{{.BusinessName}}List">
+      <el-table-column label="序号" type="index" align="center" width="60">
+        <template #default="scope">
+          <span>{{ "{{" }} (queryParams.pageIndex - 1) * queryParams.pageSize + scope.$index + 1 {{ "}}" }}</span>
+        </template>
+      </el-table-column>
+      {{- range .Columns }}
+      {{- $x := .IsList }}
+      {{- if (eq $x "1") }}
+      {{- if ne .DictType "" }}
+      <el-table-column min-width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :formatter="{{.JsonField}}Format">
+        <template #default="scope">
+         {{ "{{" }} {{.JsonField}}Format(scope.row) {{"}}"}}
+        </template>
+      </el-table-column>
+      {{- end }}
+      {{- if eq .DictType "" }}
+      {{- if eq .HtmlType "datetime" }}
+      <el-table-column min-width="130" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true">
+        <template #default="scope">
+          <span>{{ "{{" }} formatDate(scope.row.{{.JsonField}}) {{"}}"}}</span>
+        </template>
+      </el-table-column>
+      {{- else }}
+      <el-table-column min-width="100" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true" />
+      {{- end}}
+      {{- end}}
+      {{- end}}
+      {{- end }}
+      <el-table-column min-width="130" fixed="right" label="操作" align="center" class-name="small-padding fixed-width">
+        <template #default="scope">
+          <el-button size="small" type="text" icon="edit" @click="handleUpdate(scope.row)">修改</el-button>
+          <el-button size="small" type="text" icon="delete" @click="handleDelete(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table
+    <Pagination v-show="total>0" v-model:page="queryParams.pageIndex" v-model:limit="queryParams.pageSize" :total="total" @pagination="getList" /
+    <!-- 添加或修改对话框 -->
+    <el-dialog v-model="open" :close-on-click-modal="false" :title="title" width="500px" append-to-body>
+      <el-form ref="inputform" :model="form" :rules="rules" label-width="80px">
+        {{- range .Columns }}
+        {{- $x := .IsInsert }}
+        {{- if (eq $x "1") }}
+        {{- if (.Pk) }}
+        {{- else if eq .GoField "CreatedAt" }}
+        {{- else if eq .GoField "UpdatedAt" }}
+        {{- else if eq .GoField "DeletedAt" }}
+        {{- else if eq .GoField "UpdateBy" }}
+        {{- else if eq .GoField "CreateBy" }}
+        {{- else }}
+        <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
+          {{- if eq "input" .HtmlType }}
+          <el-input v-model="form.{{.JsonField}}" placeholder="{{.ColumnComment}}" {{if eq .IsEdit "false" -}}:disabled="isEdit" {{- end}}/>
+          {{- else if eq "select" .HtmlType }}
+          <el-select v-model="form.{{.JsonField}}" placeholder="请选择" {{- if eq .IsEdit "false" }} :disabled="isEdit" {{- end }}>
+          <el-option
+              v-for="dict in {{.JsonField}}Options"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+          />
+          </el-select>
+          {{- else if eq "datetime" .HtmlType }}
+          <el-date-picker
+              v-model="form.{{.JsonField}}"
+              type="datetime"
+              placeholder="选择日期">
+          </el-date-picker>
+          {{- else if eq "textarea" .HtmlType }}
+          <el-input v-model="form.{{.JsonField}}" type="textarea" :rows="2"placeholder="请输入内容"></el-inpu>
+          {{- end }}
+        </el-form-item>
+        {{- end }}
+        {{- end }}
+        {{- end }}
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
