@@ -21,6 +21,7 @@ func registerDictRouter(v1 *gin.RouterGroup) {
 		dicts.GET("/data/:dictCode", dataApi.Get)
 		dicts.POST("/data", dataApi.Insert)
 		dicts.PUT("/data/:dictCode", dataApi.Update)
+		dicts.GET("/data/export", dataApi.Export)
 		dicts.DELETE("/data", dataApi.Delete)
 
 		dicts.GET("/type-option-select", dictApi.GetAll)

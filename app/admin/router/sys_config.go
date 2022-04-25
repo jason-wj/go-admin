@@ -21,6 +21,7 @@ func registerSysConfigRouter(v1 *gin.RouterGroup) {
 		r.POST("", api.Insert)
 		r.PUT("/:id", api.Update)
 		r.DELETE("", api.Delete)
+		r.GET("/export", api.Export)
 	}
 
 	r1 := v1.Group("/configKey").Use(middleware.Auth())

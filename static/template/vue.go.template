@@ -63,7 +63,7 @@
       {{- end }}
       {{- if eq .DictType "" }}
       {{- if eq .HtmlType "datetime" }}
-      <el-table-column min-width="130" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true">
+      <el-table-column min-width="180" label="{{.ColumnComment}}" align="center" prop="{{.JsonField}}" :show-overflow-tooltip="true">
         <template #default="scope">
           <span>{{ "{{" }} formatDate(scope.row.{{.JsonField}}) {{"}}"}}</span>
         </template>

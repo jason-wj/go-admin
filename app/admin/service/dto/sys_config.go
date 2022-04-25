@@ -33,7 +33,7 @@ type SysConfigControl struct {
 	ConfigKey   string `uri:"configKey" json:"configKey" comment:""`
 	ConfigValue string `json:"configValue" comment:""`
 	ConfigType  string `json:"configType" comment:""`
-	IsFrontend  int    `json:"isFrontend"`
+	IsFrontend  string `json:"isFrontend"`
 	Remark      string `json:"remark" comment:""`
 	CurrAdminId int64  `json:"-" comment:""`
 }

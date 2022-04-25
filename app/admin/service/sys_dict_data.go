@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"go-admin/common/core/sdk"
 	"go-admin/common/core/sdk/service"
 	"time"
@@ -201,4 +202,30 @@ func (e *SysDictData) GetLabel(dict, value string) string {
 	//添加缓存
 	_ = sdk.Runtime.GetCacheAdapter().Set("", key, label, -1)
 	return label
+}
+
+// GetExcel 导出SysDictData
+func (e *SysDictData) GetExcel(list []models.SysDictData) ([]byte, error) {
+	//sheet名称
+	sheetName := "DictData"
+	xlsx := excelize.NewFile()
+	no := xlsx.NewSheet(sheetName)
+	//各列间隔
+	xlsx.SetColWidth(sheetName, "A", "P", 25)
+	//头部描述
+	xlsx.SetSheetRow(sheetName, "A1", &[]interface{}{
+		"", "", "", "", "", "", "", "",
+		"", "", "", "", "", "", ""})
+
+	/*for i, item := range list {
+		axis := fmt.Sprintf("A%d", i+2)
+
+		//todo 数据导入逻辑
+
+		//按标签对应输入数据
+		xlsx.SetSheetRow(sheetName, axis, &[]interface{}{})
+	}*/
+	xlsx.SetActiveSheet(no)
+	data, _ := xlsx.WriteToBuffer()
+	return data.Bytes(), nil
 }
