@@ -116,7 +116,7 @@ func SetDBOperLog(c *gin.Context, clientIP string, statusCode int, reqUri string
 	l["latencyTime"] = latencyTime.String()
 	l["statusCode"] = statusCode
 	if status == http.StatusOK {
-		l["status"] = "2"
+		l["status"] = "0"
 	} else {
 		l["status"] = "1"
 	}

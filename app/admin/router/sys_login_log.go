@@ -20,5 +20,6 @@ func registerSysLoginLogRouter(v1 *gin.RouterGroup) {
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)
 		r.DELETE("", api.Delete)
+		r.GET("/export", api.Export)
 	}
 }

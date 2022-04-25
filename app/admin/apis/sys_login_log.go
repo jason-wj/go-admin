@@ -1,10 +1,15 @@
 package apis
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"go-admin/app/admin/models"
+	adminService "go-admin/app/admin/service"
 	"go-admin/common/core/sdk/api"
+	"go-admin/common/utils/dateUtils"
+	"strconv"
+	"time"
 
 	"go-admin/app/admin/service"
 	"go-admin/app/admin/service/dto"
@@ -80,4 +85,43 @@ func (e SysLoginLog) Delete(c *gin.Context) {
 		return
 	}
 	e.OK(req.Ids, "删除成功")
+}
+
+// Export 导出日志
+func (e SysLoginLog) Export(c *gin.Context) {
+	req := dto.SysLoginLogSearch{}
+	s := service.SysLoginLog{}
+	err := e.MakeContext(c).
+		MakeOrm().
+		Bind(&req).
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		e.Logger.Error(err)
+		e.Error(500, err.Error())
+		return
+	}
+
+	var sysConfService = new(adminService.SysConfig)
+	sysConfService.Orm = s.Orm
+	sysConfService.Log = s.Log
+
+	//最小导出数据量
+	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("max_export_size", "1000"))
+	if err != nil {
+		e.Error(500, fmt.Sprintf("配置读取异常：%s", err.Error()))
+		return
+	}
+
+	list := make([]models.SysLoginLog, 0)
+	req.PageIndex = 1
+	req.PageSize = maxSize
+	list, _, err = s.GetPage(&req)
+	if err != nil {
+		e.Error(500, err.Error())
+		return
+	}
+	data, _ := s.GetExcel(list)
+	fileName := "loginlog_" + dateUtils.ConvertToStr(time.Now(), 3) + ".xlsx"
+	e.DownloadExcel(fileName, data)
 }
