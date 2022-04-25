@@ -19,5 +19,6 @@ func registerSysApiRouter(v1 *gin.RouterGroup) {
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)
 		r.PUT("/:id", api.Update)
+		r.GET("/export", api.Export)
 	}
 }

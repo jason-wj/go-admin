@@ -6,11 +6,15 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"go-admin/app/admin/models"
 	"go-admin/app/admin/service"
+	adminService "go-admin/app/admin/service"
 	"go-admin/app/admin/service/dto"
 	"go-admin/common/actions"
 	"go-admin/common/core/sdk/api"
 	_ "go-admin/common/core/sdk/pkg/response"
 	"go-admin/common/middleware/auth"
+	"go-admin/common/utils/dateUtils"
+	"strconv"
+	"time"
 )
 
 type SysApi struct {
@@ -121,4 +125,44 @@ func (e SysApi) DeleteSysApi(c *gin.Context) {
 		return
 	}
 	e.OK(req.Ids, "删除成功")
+}
+
+// Export 导出接口
+func (e SysApi) Export(c *gin.Context) {
+	req := dto.SysApiQueryReq{}
+	s := service.SysApi{}
+	err := e.MakeContext(c).
+		MakeOrm().
+		Bind(&req).
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		e.Logger.Error(err)
+		e.Error(500, err.Error())
+		return
+	}
+
+	var sysConfService = new(adminService.SysConfig)
+	sysConfService.Orm = s.Orm
+	sysConfService.Log = s.Log
+
+	//最小导出数据量
+	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("max_export_size", "1000"))
+	if err != nil {
+		e.Error(500, fmt.Sprintf("配置读取异常：%s", err.Error()))
+		return
+	}
+	//数据权限检查
+	p := actions.GetPermissionFromContext(c)
+	list := make([]models.SysApi, 0)
+	req.PageIndex = 1
+	req.PageSize = maxSize
+	list, _, err = s.GetPage(&req, p)
+	if err != nil {
+		e.Error(500, err.Error())
+		return
+	}
+	data, _ := s.GetExcel(list)
+	fileName := "api_" + dateUtils.ConvertToStr(time.Now(), 3) + ".xlsx"
+	e.DownloadExcel(fileName, data)
 }
