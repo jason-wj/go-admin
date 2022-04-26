@@ -25,7 +25,7 @@ type SysPostInsertReq struct {
 	PostName    string `form:"postName"  comment:"名称"`
 	PostCode    string `form:"postCode" comment:"编码"`
 	Sort        int    `form:"sort" comment:"排序"`
-	Status      int    `form:"status"   comment:"状态"`
+	Status      string `form:"status"   comment:"状态"`
 	Remark      string `form:"remark"   comment:"备注"`
 	CurrAdminId int64  `json:"-" comment:""`
 }
@@ -36,9 +36,9 @@ type SysPostUpdateReq struct {
 	PostName    string `form:"postName"  comment:"名称"`
 	PostCode    string `form:"postCode" comment:"编码"`
 	Sort        int    `form:"sort" comment:"排序"`
-	Status      int    `form:"status"   comment:"状态"`
+	Status      string `form:"status"   comment:"状态"`
 	Remark      string `form:"remark"   comment:"备注"`
-	CurrAdminId int64  `json:"-" comment:""`
+	CurrAdminId int64  `form:"-" comment:""`
 }
 
 // SysPostGetReq 获取单个的结构体

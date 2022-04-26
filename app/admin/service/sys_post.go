@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"time"
 
 	"go-admin/app/admin/models"
@@ -112,7 +113,7 @@ func (e *SysPost) Update(c *dto.SysPostUpdateReq) (bool, error) {
 	if len(updates) > 0 {
 		updates["update_by"] = c.CurrAdminId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysConfig{}).Where("post_id=?", c.PostId).Updates(updates).Error
+		err = e.Orm.Model(&models.SysPost{}).Where("post_id=?", c.PostId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysPostService Update error:%s", err)
 			return false, err
@@ -135,4 +136,30 @@ func (e *SysPost) Remove(ids []int64) error {
 		return errors.New(fmt.Sprintf("无权删除该数据%s", err))
 	}
 	return nil
+}
+
+// GetExcel 导出SysPost
+func (e *SysPost) GetExcel(list []models.SysPost) ([]byte, error) {
+	//sheet名称
+	sheetName := "Post"
+	xlsx := excelize.NewFile()
+	no := xlsx.NewSheet(sheetName)
+	//各列间隔
+	xlsx.SetColWidth(sheetName, "A", "P", 25)
+	//头部描述
+	xlsx.SetSheetRow(sheetName, "A1", &[]interface{}{
+		"", "", "", "", "", "", "", "",
+		"", "", "", "", "", "", ""})
+
+	/*for i, item := range list {
+		axis := fmt.Sprintf("A%d", i+2)
+
+		//todo 数据导入逻辑
+
+		//按标签对应输入数据
+		xlsx.SetSheetRow(sheetName, axis, &[]interface{}{})
+	}*/
+	xlsx.SetActiveSheet(no)
+	data, _ := xlsx.WriteToBuffer()
+	return data.Bytes(), nil
 }
