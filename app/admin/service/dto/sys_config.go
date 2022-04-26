@@ -38,15 +38,6 @@ type SysConfigControl struct {
 	CurrAdminId int64  `json:"-" comment:""`
 }
 
-// GetSetSysConfigReq 增、改使用的结构体
-type GetSetSysConfigReq struct {
-	ConfigKey   string `json:"configKey" comment:""`
-	ConfigValue string `json:"configValue" comment:""`
-	CurrAdminId int64  `json:"-" gorm:"-" comment:""`
-}
-
-type UpdateSetSysConfigReq map[string]string
-
 // SysConfigByKeyReq 根据Key获取配置
 type SysConfigByKeyReq struct {
 	ConfigKey string `uri:"configKey" search:"type:contains;column:config_key;table:sys_config"`

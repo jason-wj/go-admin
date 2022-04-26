@@ -172,50 +172,6 @@ func (e *SysConfig) SetSysConfig(c *[]dto.GetSetSysConfigReq) error {
 	return nil
 }
 
-func (e *SysConfig) GetForSet(c *[]dto.GetSetSysConfigReq) error {
-	var err error
-	var data models.SysConfig
-
-	err = e.Orm.Model(&data).Find(c).Error
-	if err != nil {
-		e.Log.Errorf("SysConfigService GetForSet error:%s", err)
-		return err
-	}
-	return nil
-}
-
-func (e *SysConfig) UpdateForSet(c *[]dto.GetSetSysConfigReq) error {
-	m := *c
-	for _, req := range m {
-		var data models.SysConfig
-		if err := e.Orm.Where("config_key = ?", req.ConfigKey).First(&data).Error; err != nil {
-			e.Log.Errorf("SysConfigService UpdateForSet error:%s", err)
-			return errors.New(fmt.Sprintf("无权查看该数据%s", err))
-		}
-		if data.ConfigValue != req.ConfigValue {
-			updates := map[string]interface{}{}
-			if data.ConfigKey != req.ConfigKey {
-				updates["config_key"] = req.ConfigKey
-			}
-			if data.ConfigValue != req.ConfigValue {
-				updates["config_value"] = req.ConfigValue
-			}
-
-			if len(updates) > 0 {
-				updates["update_by"] = req.CurrAdminId
-				updates["updated_at"] = time.Now()
-				err := e.Orm.Model(&models.SysConfig{}).Where("id=?", data.Id).Updates(updates).Error
-				if err != nil {
-					e.Log.Errorf("SysConfigService Update error:%s", err)
-					return err
-				}
-			}
-		}
-
-	}
-	return nil
-}
-
 // GetWithKey 根据Key获取SysConfig
 func (e *SysConfig) GetWithKey(c *dto.SysConfigByKeyReq) (*dto.GetSysConfigByKEYForServiceResp, error) {
 	var err error

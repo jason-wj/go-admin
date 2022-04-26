@@ -34,10 +34,4 @@ func registerSysConfigRouter(v1 *gin.RouterGroup) {
 		r2.GET("", api.GetSysConfigBySysApp)
 	}
 
-	r3 := v1.Group("/set-config").Use(middleware.Auth())
-	{
-		r3.PUT("", api.Update2Set)
-		r3.GET("", api.Get2Set)
-	}
-
 }

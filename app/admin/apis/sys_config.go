@@ -180,58 +180,6 @@ func (e SysConfig) GetSysConfigBySysApp(c *gin.Context) {
 	e.OK(mp, "查询成功")
 }
 
-// Get2Set 获取配置
-func (e SysConfig) Get2Set(c *gin.Context) {
-	s := service.SysConfig{}
-	req := make([]dto.GetSetSysConfigReq, 0)
-	err := e.MakeContext(c).
-		MakeOrm().
-		MakeService(&s.Service).
-		Errors
-	if err != nil {
-		e.Logger.Error(err)
-		e.Error(500, err.Error())
-		return
-	}
-	err = s.GetForSet(&req)
-	if err != nil {
-		e.Error(500, "查询失败")
-		return
-	}
-	m := make(map[string]interface{}, 0)
-	for _, v := range req {
-		m[v.ConfigKey] = v.ConfigValue
-	}
-	e.OK(m, "查询成功")
-}
-
-// Update2Set 设置配置
-// @Summary 设置配置
-// @Description 界面操作设置配置值
-// @Tags 配置管理
-func (e SysConfig) Update2Set(c *gin.Context) {
-	s := service.SysConfig{}
-	req := make([]dto.GetSetSysConfigReq, 0)
-	err := e.MakeContext(c).
-		MakeOrm().
-		Bind(&req).
-		MakeService(&s.Service).
-		Errors
-	if err != nil {
-		e.Logger.Error(err)
-		e.Error(500, err.Error())
-		return
-	}
-
-	err = s.UpdateForSet(&req)
-	if err != nil {
-		e.Error(500, err.Error())
-		return
-	}
-
-	e.OK("", "更新成功")
-}
-
 // GetSysConfigByKEYForService 根据Key获取SysConfig的Service
 func (e SysConfig) GetSysConfigByKEYForService(c *gin.Context) {
 	var s = new(service.SysConfig)
