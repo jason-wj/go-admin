@@ -139,39 +139,6 @@ func (e *SysConfig) Remove(ids []int64) error {
 	return nil
 }
 
-// SetSysConfig 修改SysConfig对象
-func (e *SysConfig) SetSysConfig(c *[]dto.GetSetSysConfigReq) error {
-	var err error
-	for _, req := range *c {
-		var model = models.SysConfig{}
-		err = e.Orm.Debug().Where("config_key = ?", req.ConfigKey).First(&model).Error
-		if err != nil {
-			return errors.New(fmt.Sprintf("无权更新该数据%s", err))
-		}
-
-		if model.Id > 0 {
-			updates := map[string]interface{}{}
-			if model.ConfigKey != req.ConfigKey {
-				updates["config_key"] = req.ConfigKey
-			}
-			if model.ConfigValue != req.ConfigValue {
-				updates["config_value"] = req.ConfigValue
-			}
-
-			if len(updates) > 0 {
-				updates["update_by"] = req.CurrAdminId
-				updates["updated_at"] = time.Now()
-				err = e.Orm.Model(&models.SysConfig{}).Where("id=?", model.Id).Updates(updates).Error
-				if err != nil {
-					e.Log.Errorf("SysConfigService Update error:%s", err)
-					return err
-				}
-			}
-		}
-	}
-	return nil
-}
-
 // GetWithKey 根据Key获取SysConfig
 func (e *SysConfig) GetWithKey(c *dto.SysConfigByKeyReq) (*dto.GetSysConfigByKEYForServiceResp, error) {
 	var err error
