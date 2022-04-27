@@ -14,7 +14,7 @@ func init() {
 func registerSysDeptRouter(v1 *gin.RouterGroup) {
 	api := apis.SysDept{}
 
-	r := v1.Group("/dept").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
+	r := v1.Group("/sys/dept").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
 	{
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)
