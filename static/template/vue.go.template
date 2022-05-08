@@ -248,6 +248,7 @@ const reset = () => {
     {{- end }}
     {{- end }}
   }
+  inputform.value.resetFields()
 }
 
 // 字典
