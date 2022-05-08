@@ -233,22 +233,24 @@ const cancel = () => {
 
 // 表单重置
 const reset = () => {
-  form.value = {
-    {{- range .Columns}}
-    {{- $x := .IsInsert }}
-    {{- if (eq $x "1") }}
-    {{- if eq .GoField "CreatedAt" }}
-    {{- else if eq .GoField "UpdatedAt" }}
-    {{- else if eq .GoField "DeletedAt" }}
-    {{- else if eq .GoField "UpdateBy" }}
-    {{- else if eq .GoField "CreateBy" }}
-    {{- else }}
-    {{.JsonField}}: undefined,
-    {{- end }}
-    {{- end }}
-    {{- end }}
-  }
-  inputform.value.resetFields()
+  nextTick(() => {
+    form.value = {
+      {{- range .Columns}}
+      {{- $x := .IsInsert }}
+      {{- if (eq $x "1") }}
+      {{- if eq .GoField "CreatedAt" }}
+      {{- else if eq .GoField "UpdatedAt" }}
+      {{- else if eq .GoField "DeletedAt" }}
+      {{- else if eq .GoField "UpdateBy" }}
+      {{- else if eq .GoField "CreateBy" }}
+      {{- else }}
+      {{.JsonField}}: undefined,
+      {{- end }}
+      {{- end }}
+      {{- end }}
+    }
+    inputform.value.resetFields()
+  })
 }
 
 // 字典
@@ -275,21 +277,21 @@ const resetQuery = () => {
 
 /** 新增按钮操作 */
 const handleAdd = () => {
-  reset()
   open.value = true
   title.value = '添加{{.TableComment}}'
   isEdit.value = false
+  reset()
 }
 
 /** 修改按钮操作 */
 const handleUpdate = (row) => {
-  reset()
   const {{.PkJsonField}} = row.{{.PkJsonField}}
   get{{.ClassName}}({{.PkJsonField}}).then(response => {
-    form.value = response.data
     open.value = true
     title.value = '修改{{.TableComment}}'
     isEdit.value = true
+    reset()
+    form.value = response.data
   })
 }
 
