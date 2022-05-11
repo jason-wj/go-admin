@@ -346,12 +346,10 @@ func (e *SysMenu) Remove(ids []int64) error {
 func (e *SysMenu) GetList(c *dto.SysMenuSearch) ([]models.SysMenu, error) {
 	var list []models.SysMenu
 	var err error
-
 	err = e.Orm.Model(&models.SysMenu{}).
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
-		).
-		Find(list).Error
+		).Find(&list).Error
 	if err != nil {
 		e.Log.Errorf("SysConfigService GetList error:%s", err)
 		return nil, err
