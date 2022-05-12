@@ -61,7 +61,8 @@ type SysRoleByName struct {
 
 // SysRoleById 获取单个或者删除的结构体
 type SysRoleById struct {
-	dto.ObjectById
+	Id  int64   `uri:"id"`
+	Ids []int64 `json:"ids"`
 }
 
 // RoleDataScopeReq 角色数据权限修改
@@ -77,5 +78,5 @@ type DeptIdList struct {
 
 // SysRoleDeleteReq 功能删除请求参数
 type SysRoleDeleteReq struct {
-	Ids int64 `json:"ids"`
+	Ids []int64 `json:"ids"`
 }

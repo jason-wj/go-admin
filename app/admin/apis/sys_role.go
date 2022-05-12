@@ -150,7 +150,7 @@ func (e SysRole) Update(c *gin.Context) {
 // Delete 删除用户角色
 func (e SysRole) Delete(c *gin.Context) {
 	s := new(service.SysRole)
-	req := dto.SysRoleById{}
+	req := dto.SysRoleDeleteReq{}
 	err := e.MakeContext(c).
 		MakeOrm().
 		Bind(&req).
@@ -170,10 +170,10 @@ func (e SysRole) Delete(c *gin.Context) {
 	}
 	_, err = global.LoadPolicy(c)
 	if err != nil {
-		e.Error(500, fmt.Sprintf("删除角色 %v 失败，失败信息 %s", req.Id, err.Error()))
+		e.Error(500, fmt.Sprintf("删除角色 %v 失败，失败信息 %s", req.Ids, err.Error()))
 		return
 	}
-	e.OK(req.Id, fmt.Sprintf("删除角色角色 %v 状态成功！", req.Id))
+	e.OK(req.Ids, fmt.Sprintf("删除角色角色 %v 状态成功！", req.Ids))
 }
 
 // Update2Status 修改用户角色状态

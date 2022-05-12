@@ -233,23 +233,25 @@ const cancel = () => {
 
 // 表单重置
 const reset = () => {
+  form.value = {
+    {{- range .Columns}}
+    {{- $x := .IsInsert }}
+    {{- if (eq $x "1") }}
+    {{- if eq .GoField "CreatedAt" }}
+    {{- else if eq .GoField "UpdatedAt" }}
+    {{- else if eq .GoField "DeletedAt" }}
+    {{- else if eq .GoField "UpdateBy" }}
+    {{- else if eq .GoField "CreateBy" }}
+    {{- else }}
+    {{.JsonField}}: undefined,
+    {{- end }}
+    {{- end }}
+    {{- end }}
+  }
   nextTick(() => {
-    form.value = {
-      {{- range .Columns}}
-      {{- $x := .IsInsert }}
-      {{- if (eq $x "1") }}
-      {{- if eq .GoField "CreatedAt" }}
-      {{- else if eq .GoField "UpdatedAt" }}
-      {{- else if eq .GoField "DeletedAt" }}
-      {{- else if eq .GoField "UpdateBy" }}
-      {{- else if eq .GoField "CreateBy" }}
-      {{- else }}
-      {{.JsonField}}: undefined,
-      {{- end }}
-      {{- end }}
-      {{- end }}
+    if (inputform.value != null) {
+      inputform.value.resetFields()
     }
-    inputform.value.resetFields()
   })
 }
 

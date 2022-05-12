@@ -116,7 +116,7 @@ func sysCheckRoleRouterInit(r *gin.RouterGroup) {
 func registerBaseRouter(v1 *gin.RouterGroup) {
 	api := apis.SysMenu{}
 	api2 := apis.SysDept{}
-	v1auth := v1.Group("").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
+	v1auth := v1.Group("sys").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
 	{
 		v1auth.GET("/roleMenuTreeselect/:roleId", api.GetMenuTreeSelect)
 		//v1.GET("/menuTreeselect", api.GetMenuTreeSelect)
