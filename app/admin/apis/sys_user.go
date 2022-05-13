@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/coreos/etcd/pkg/fileutil"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/google/uuid"
 	"go-admin/app/admin/models"
 	"go-admin/app/admin/service"
@@ -331,39 +330,6 @@ func (e SysUser) InsetAvatar(c *gin.Context) {
 		return
 	}
 	e.OK(filPath, "修改成功")
-}
-
-// UpdateStatus 修改用户状态
-func (e SysUser) UpdateStatus(c *gin.Context) {
-	s := service.SysUser{}
-	req := dto.UpdateSysUserStatusReq{}
-	err := e.MakeContext(c).
-		MakeOrm().
-		Bind(&req, binding.JSON, nil).
-		MakeService(&s.Service).
-		Errors
-	if err != nil {
-		e.Logger.Error(err)
-		e.Error(500, err.Error())
-		return
-	}
-
-	uid, rCode, err := auth.GetUserId(c)
-	if err != nil {
-		e.Error(rCode, err.Error())
-		return
-	}
-	req.CurrAdminId = uid
-
-	//数据权限检查
-	p := actions.GetPermissionFromContext(c)
-
-	err = s.UpdateStatus(&req, p)
-	if err != nil {
-		e.Logger.Error(err)
-		return
-	}
-	e.OK(req.UserId, "更新成功")
 }
 
 // ResetPwd 重置用户密码

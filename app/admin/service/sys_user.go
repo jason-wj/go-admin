@@ -445,37 +445,6 @@ func (e *SysUser) UpdateAvatar(c *dto.UpdateSysUserAvatarReq, p *actions.DataPer
 	return nil
 }
 
-// UpdateStatus 更新用户状态
-func (e *SysUser) UpdateStatus(c *dto.UpdateSysUserStatusReq, p *actions.DataPermission) error {
-	if c.UserId <= 0 || c.CurrAdminId <= 0 {
-		return errors.New("参数错误")
-	}
-	var err error
-	var model models.SysUser
-	err = e.Orm.Scopes(
-		actions.Permission(model.TableName(), p),
-	).First(&model, c.UserId).Error
-	if err != nil {
-		return errors.New(fmt.Sprintf("无权更新该数据%s", err))
-	}
-
-	updates := map[string]interface{}{}
-	if model.Status != c.Status {
-		updates["status"] = c.Status
-	}
-
-	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
-		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysConfig{}).Where("user_id=?", c.UserId).Updates(updates).Error
-		if err != nil {
-			e.Log.Errorf("SysUserService UpdateStatus error:%s", err)
-			return err
-		}
-	}
-	return nil
-}
-
 // ResetPwd 重置用户密码
 func (e *SysUser) ResetPwd(c *dto.ResetSysUserPwdReq, p *actions.DataPermission) error {
 	if c.UserId <= 0 || c.CurrAdminId <= 0 {
@@ -498,7 +467,7 @@ func (e *SysUser) ResetPwd(c *dto.ResetSysUserPwdReq, p *actions.DataPermission)
 	if len(updates) > 0 {
 		updates["update_by"] = c.CurrAdminId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysConfig{}).Where("user_id=?", c.UserId).Updates(updates).Error
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.UserId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysUserService ResetPwd error:%s", err)
 			return err

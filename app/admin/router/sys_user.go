@@ -33,7 +33,6 @@ func registerSysUserRouter(v1 *gin.RouterGroup) {
 		user.POST("/avatar", api.InsetAvatar)
 		user.PUT("/pwd/set", api.UpdatePwd)
 		user.PUT("/pwd/reset", api.ResetPwd)
-		user.PUT("/status", api.UpdateStatus)
 	}
 	v1auth := v1.Group("").Use(middleware.Auth())
 	{

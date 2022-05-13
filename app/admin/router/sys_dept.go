@@ -23,7 +23,7 @@ func registerSysDeptRouter(v1 *gin.RouterGroup) {
 		r.DELETE("/:id", api.Delete)
 	}
 
-	r1 := v1.Group("").Use(middleware.Auth())
+	r1 := v1.Group("sys").Use(middleware.Auth())
 	{
 		r1.GET("/deptTree", api.Get2Tree)
 	}
