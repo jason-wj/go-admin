@@ -19,3 +19,9 @@ config/settings.b.dev.yml
 
 # go sum
 go.sum
+
+node_modules/*
+package-lock.json
+yarn.lock
+node_modules
+

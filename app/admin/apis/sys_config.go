@@ -224,7 +224,7 @@ func (e SysConfig) Export(c *gin.Context) {
 	sysConfService.Log = s.Log
 
 	//最小导出数据量
-	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("max_export_size", "1000"))
+	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("sys_max_export_size", "1000"))
 	if err != nil {
 		e.Error(500, fmt.Sprintf("配置读取异常：%s", err.Error()))
 		return
