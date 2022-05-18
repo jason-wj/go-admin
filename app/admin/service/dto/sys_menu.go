@@ -47,7 +47,7 @@ type SysMenuById struct {
 }
 
 type SysMenuByGetId struct {
-	Id int64 `json:"id"`
+	Id int64 `uri:"id"`
 }
 
 type MenuLabel struct {
