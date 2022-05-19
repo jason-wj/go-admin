@@ -7,18 +7,18 @@
         </el-tab-pane>
         <el-tab-pane label="字段信息" name="cloum">
           <el-alert
-            title="⚠️表字段中的id、create_by、update_by、created_at、updated_at的字段在此列表中已经隐藏"
-            type="warning"
-            show-icon
+              title="⚠️表字段中的id、create_by、update_by、created_at、updated_at的字段在此列表中已经隐藏"
+              type="warning"
+              show-icon
           />
           <el-table v-loading="dataLoading" :data="columns" :max-height="tableHeight" style="width: 100%">
             <el-table-column fixed label="序号" type="index" width="50" />
             <el-table-column
-              fixed
-              label="字段列名"
-              prop="columnName"
-              width="150"
-              :show-overflow-tooltip="true"
+                fixed
+                label="字段列名"
+                prop="columnName"
+                width="150"
+                :show-overflow-tooltip="true"
             />
             <el-table-column fixed label="字段描述" width="150">
               <template #default="scope">
@@ -26,10 +26,10 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="物理类型"
-              prop="columnType"
-              width="120"
-              :show-overflow-tooltip="true"
+                label="物理类型"
+                prop="columnType"
+                width="120"
+                :show-overflow-tooltip="true"
             />
             <el-table-column label="go类型" width="120">
               <template #default="scope">
@@ -38,8 +38,8 @@
                   <el-option label="string" value="string" />
                   <el-option label="decimal" value="decimal.Decimal" />
                   <el-option label="time" value="time.Time" />
-                <!-- <el-option label="int" value="int" />
-                <el-option label="bool" value="bool" /> -->
+                  <!-- <el-option label="int" value="int" />
+                  <el-option label="bool" value="bool" /> -->
                 </el-select>
               </template>
             </el-table-column>
@@ -84,7 +84,7 @@
                   <el-option label="<" value="LT" />
                   <el-option label="<=" value="LTE" />
                   <el-option label="LIKE" value="LIKE" />
-                <!-- <el-option label="BETWEEN" value="BETWEEN" /> -->
+                  <!-- <el-option label="BETWEEN" value="BETWEEN" /> -->
                 </el-select>
               </template>
             </el-table-column>
@@ -111,10 +111,10 @@
               <template #default="scope">
                 <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
                   <el-option
-                    v-for="dict in dictOptions"
-                    :key="dict.dictType"
-                    :label="dict.dictName"
-                    :value="dict.dictType"
+                      v-for="dict in dictOptions"
+                      :key="dict.dictType"
+                      :label="dict.dictName"
+                      :value="dict.dictType"
                   >
                     <span style="float: left">{{ dict.dictName }}</span>
                     <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictType }}</span>
@@ -222,12 +222,12 @@ const renderHeadeList = (h, { column, $index }) => {
   return h('div', [
     h('span', column.label + '  ', { align: 'center', marginTop: '0px' }),
     h(
-      'el-popover',
-      { props: { placement: 'top-start', width: '260', trigger: 'hover' }},
-      [
-        h('p', '是否在列表中展示，打√表示需要展示', { class: 'text-align: center; margin: 0' }),
-        h('i', { class: 'el-icon-question', style: 'color:#ccc,padding-top:5px', slot: 'reference' })
-      ]
+        'el-popover',
+        { props: { placement: 'top-start', width: '260', trigger: 'hover' }},
+        [
+          h('p', '是否在列表中展示，打√表示需要展示', { class: 'text-align: center; margin: 0' }),
+          h('i', { class: 'el-icon-question', style: 'color:#ccc,padding-top:5px', slot: 'reference' })
+        ]
     )
   ])
 }
@@ -236,12 +236,12 @@ const renderHeadeSearch = (h, { column, $index }) => {
   return h('div', [
     h('span', column.label + '  ', { align: 'center', marginTop: '0px' }),
     h(
-      'el-popover',
-      { props: { placement: 'top-start', width: '270', trigger: 'hover' }},
-      [
-        h('p', '是都当做搜索条件，打√表示做为搜索条件', { class: 'text-align: center; margin: 0' }),
-        h('i', { class: 'el-icon-question', style: 'color:#ccc,padding-top:5px', slot: 'reference' })
-      ]
+        'el-popover',
+        { props: { placement: 'top-start', width: '270', trigger: 'hover' }},
+        [
+          h('p', '是都当做搜索条件，打√表示做为搜索条件', { class: 'text-align: center; margin: 0' }),
+          h('i', { class: 'el-icon-question', style: 'color:#ccc,padding-top:5px', slot: 'reference' })
+        ]
     )
   ])
 }
@@ -282,6 +282,7 @@ const submitForm = () => {
         })
       })
     } else {
+      loading.value = false
       ElMessage({
         type: 'error',
         message: '表单校验未通过，请重新检查提交内容'

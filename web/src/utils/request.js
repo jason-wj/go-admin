@@ -79,7 +79,7 @@ service.interceptors.response.use(
         localStorage.clear()
         router.push({ name: 'Login', replace: true })
       }
-      return response.data.msg ? response.data : response
+      return response.data
     }
   },
   error => {
