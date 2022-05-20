@@ -92,7 +92,7 @@ func (e SysRole) Insert(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	if req.Status == "" {
 		req.Status = "2"
 	}
@@ -132,7 +132,7 @@ func (e SysRole) Update(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	err = s.Update(&req, cb)
 	if err != nil {
@@ -195,7 +195,7 @@ func (e SysRole) Update2Status(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	err = s.UpdateStatus(&req)
 	if err != nil {
 		e.Error(500, fmt.Sprintf("更新角色状态失败，失败原因：%s ", err.Error()))

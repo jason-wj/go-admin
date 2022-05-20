@@ -18,18 +18,18 @@ func (m *SysDictDataSearch) GetNeedSearch() interface{} {
 }
 
 type SysDictDataControl struct {
-	Id          int    `uri:"dictCode" comment:""`
-	DictSort    int    `json:"dictSort" comment:""`
-	DictLabel   string `json:"dictLabel" comment:""`
-	DictValue   string `json:"dictValue" comment:""`
-	DictType    string `json:"dictType" comment:""`
-	CssClass    string `json:"cssClass" comment:""`
-	ListClass   string `json:"listClass" comment:""`
-	IsDefault   string `json:"isDefault" comment:""`
-	Status      string `json:"status" comment:""`
-	Default     string `json:"default" comment:""`
-	Remark      string `json:"remark" comment:""`
-	CurrAdminId int64  `json:"-" comment:""`
+	Id         int    `uri:"dictCode" comment:""`
+	DictSort   int    `json:"dictSort" comment:""`
+	DictLabel  string `json:"dictLabel" comment:""`
+	DictValue  string `json:"dictValue" comment:""`
+	DictType   string `json:"dictType" comment:""`
+	CssClass   string `json:"cssClass" comment:""`
+	ListClass  string `json:"listClass" comment:""`
+	IsDefault  string `json:"isDefault" comment:""`
+	Status     string `json:"status" comment:""`
+	Default    string `json:"default" comment:""`
+	Remark     string `json:"remark" comment:""`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type SysDictDataById struct {

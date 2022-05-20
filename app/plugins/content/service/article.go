@@ -94,7 +94,7 @@ func (e *Article) Count(c *dto.ArticleQueryReq) (int64, error) {
 
 // Insert 创建Article对象
 func (e *Article) Insert(c *dto.ArticleInsertReq) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 
@@ -105,8 +105,8 @@ func (e *Article) Insert(c *dto.ArticleInsertReq) error {
 	data.Name = c.Name
 	data.Status = "0"
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err := e.Orm.Create(&data).Error
@@ -119,7 +119,7 @@ func (e *Article) Insert(c *dto.ArticleInsertReq) error {
 
 // Update 修改Article对象
 func (e *Article) Update(c *dto.ArticleUpdateReq, p *actions.DataPermission) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 
@@ -149,7 +149,7 @@ func (e *Article) Update(c *dto.ArticleUpdateReq, p *actions.DataPermission) (bo
 
 	if len(updates) > 0 {
 		updates["updated_at"] = time.Now()
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		err = e.Orm.Model(&data).Where("id=?", data.Id).Updates(&updates).Error
 		if err != nil {
 			e.Log.Errorf("ArticleService Update error:%s", err)
@@ -177,7 +177,14 @@ func (e *Article) Remove(ids []int64, p *actions.DataPermission) error {
 	return nil
 }
 
-// GetExcel 导出Article
+//
+// GetExcel
+// @Description: GetExcel 导出{{.ClassName}} excel数据
+// @receiver e
+// @param list
+// @return []byte
+// @return error
+//
 func (e *Article) GetExcel(list []models.Article) ([]byte, error) {
 	//sheet名称
 	sheetName := "Article"
@@ -190,14 +197,14 @@ func (e *Article) GetExcel(list []models.Article) ([]byte, error) {
 		"", "", "", "", "", "", "", "",
 		"", "", "", "", "", "", ""})
 
-	/*for i, item := range list {
+	for i, _ := range list {
 		axis := fmt.Sprintf("A%d", i+2)
 
 		//todo 数据导入逻辑
 
 		//按标签对应输入数据
 		xlsx.SetSheetRow(sheetName, axis, &[]interface{}{})
-	}*/
+	}
 	xlsx.SetActiveSheet(no)
 	data, _ := xlsx.WriteToBuffer()
 	return data.Bytes(), nil

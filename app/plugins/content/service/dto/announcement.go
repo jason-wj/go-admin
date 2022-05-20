@@ -33,21 +33,21 @@ func (m *AnnouncementQueryReq) GetNeedSearch() interface{} {
 }
 
 type AnnouncementInsertReq struct {
-	Title       string `json:"title" comment:"标题"`
-	Content     string `json:"content" comment:"内容"`
-	Num         int    `json:"num" comment:"阅读次数"`
-	Remark      string `json:"remark" comment:"备注信息"`
-	CurrAdminId int64  `json:"-" comment:""`
+	Title      string `json:"title" comment:"标题"`
+	Content    string `json:"content" comment:"内容"`
+	Num        int    `json:"num" comment:"阅读次数"`
+	Remark     string `json:"remark" comment:"备注信息"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type AnnouncementUpdateReq struct {
-	Id          int64  `uri:"id" comment:"主键编码"` // 主键编码
-	Title       string `json:"title" comment:"标题"`
-	Content     string `json:"content" comment:"内容"`
-	Num         int    `json:"num" comment:"阅读次数"`
-	Remark      string `json:"remark" comment:"备注信息"`
-	Status      string `json:"status" comment:"状态（0正常 1删除 2停用 3冻结）"`
-	CurrAdminId int64  `json:"-" comment:""`
+	Id         int64  `uri:"id" comment:"主键编码"` // 主键编码
+	Title      string `json:"title" comment:"标题"`
+	Content    string `json:"content" comment:"内容"`
+	Num        int    `json:"num" comment:"阅读次数"`
+	Remark     string `json:"remark" comment:"备注信息"`
+	Status     string `json:"status" comment:"状态（0正常 1删除 2停用 3冻结）"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 // AnnouncementGetReq 功能获取请求参数

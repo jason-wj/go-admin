@@ -55,7 +55,7 @@ func (e *SysConfig) Get(id int64) (*models.SysConfig, error) {
 
 // Insert 创建SysConfig对象
 func (e *SysConfig) Insert(c *dto.SysConfigControl) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -67,8 +67,8 @@ func (e *SysConfig) Insert(c *dto.SysConfigControl) error {
 	data.ConfigType = c.ConfigType
 	data.IsFrontend = c.IsFrontend
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -81,7 +81,7 @@ func (e *SysConfig) Insert(c *dto.SysConfigControl) error {
 
 // Update 修改SysConfig对象
 func (e *SysConfig) Update(c *dto.SysConfigControl) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	var model = models.SysConfig{}
@@ -112,7 +112,7 @@ func (e *SysConfig) Update(c *dto.SysConfigControl) (bool, error) {
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysConfig{}).Where("id=?", c.Id).Updates(updates).Error
 		if err != nil {

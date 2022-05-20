@@ -21,17 +21,17 @@ func (m *SysDictTypeSearch) GetNeedSearch() interface{} {
 }
 
 type SysDictTypeControl struct {
-	DictId      int    `uri:"dictId"`
-	DictName    string `json:"dictName"`
-	DictType    string `json:"dictType"`
-	Status      string `json:"status"`
-	Remark      string `json:"remark"`
-	CurrAdminId int64  `json:"-" comment:""`
+	DictId     int    `uri:"dictId"`
+	DictName   string `json:"dictName"`
+	DictType   string `json:"dictType"`
+	Status     string `json:"status"`
+	Remark     string `json:"remark"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type SysDictTypeById struct {
 	dto.ObjectById
-	CurrAdminId int64 `json:"-" comment:""`
+	CurrUserId int64 `json:"-" comment:""`
 }
 
 // SysDictDeleteReq 功能删除请求参数

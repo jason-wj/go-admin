@@ -65,7 +65,7 @@ func (e *SysRole) Get(id int64) (*models.SysRole, error) {
 
 // Insert 创建SysRole对象
 func (e *SysRole) Insert(c *dto.SysRoleControl, cb *casbin.SyncedEnforcer) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -88,8 +88,8 @@ func (e *SysRole) Insert(c *dto.SysRoleControl, cb *casbin.SyncedEnforcer) error
 	data.DataScope = c.DataScope
 	data.SysMenu = &c.SysMenu
 	data.SysDept = c.SysDept
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 
@@ -129,7 +129,7 @@ func (e *SysRole) Insert(c *dto.SysRoleControl, cb *casbin.SyncedEnforcer) error
 
 // Update 修改SysRole对象
 func (e *SysRole) Update(c *dto.SysRoleControl, cb *casbin.SyncedEnforcer) error {
-	if c.RoleId <= 0 || c.CurrAdminId <= 0 {
+	if c.RoleId <= 0 || c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -165,7 +165,7 @@ func (e *SysRole) Update(c *dto.SysRoleControl, cb *casbin.SyncedEnforcer) error
 	model.DataScope = c.DataScope
 	model.SysMenu = &c.SysMenu
 	model.UpdatedAt = &now
-	model.UpdateBy = c.CurrAdminId
+	model.UpdateBy = c.CurrUserId
 	model.SysDept = c.SysDept
 
 	model.SysMenu = &mlist

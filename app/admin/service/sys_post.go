@@ -56,7 +56,7 @@ func (e *SysPost) Get(id int64) (*models.SysPost, error) {
 
 // Insert 创建SysPost对象
 func (e *SysPost) Insert(c *dto.SysPostInsertReq) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -67,8 +67,8 @@ func (e *SysPost) Insert(c *dto.SysPostInsertReq) error {
 	data.Sort = c.Sort
 	data.Status = c.Status
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -81,7 +81,7 @@ func (e *SysPost) Insert(c *dto.SysPostInsertReq) error {
 
 // Update 修改SysPost对象
 func (e *SysPost) Update(c *dto.SysPostUpdateReq) (bool, error) {
-	if c.PostId <= 0 || c.CurrAdminId <= 0 {
+	if c.PostId <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	var model = models.SysPost{}
@@ -111,7 +111,7 @@ func (e *SysPost) Update(c *dto.SysPostUpdateReq) (bool, error) {
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysPost{}).Where("post_id=?", c.PostId).Updates(updates).Error
 		if err != nil {

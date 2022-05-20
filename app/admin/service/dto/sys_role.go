@@ -33,26 +33,26 @@ func (m *SysRoleSearch) GetNeedSearch() interface{} {
 }
 
 type SysRoleControl struct {
-	RoleId      int64            `uri:"id" comment:"角色编码"`        // 角色编码
-	RoleName    string           `form:"roleName" comment:"角色名称"` // 角色名称
-	Status      string           `form:"status" comment:"状态"`     // 状态
-	RoleKey     string           `form:"roleKey" comment:"角色代码"`  // 角色代码
-	RoleSort    int              `form:"roleSort" comment:"角色排序"` // 角色排序
-	Flag        string           `form:"flag" comment:"标记"`       // 标记
-	Remark      string           `form:"remark" comment:"备注"`     // 备注
-	Admin       bool             `form:"admin" comment:"是否管理员"`
-	DataScope   string           `form:"dataScope"`
-	SysMenu     []models.SysMenu `form:"sysMenu"`
-	MenuIds     []int            `form:"menuIds"`
-	SysDept     []models.SysDept `form:"sysDept"`
-	DeptIds     []int            `form:"deptIds"`
-	CurrAdminId int64            `json:"-" comment:""`
+	RoleId     int64            `uri:"id" comment:"角色编码"`        // 角色编码
+	RoleName   string           `form:"roleName" comment:"角色名称"` // 角色名称
+	Status     string           `form:"status" comment:"状态"`     // 状态
+	RoleKey    string           `form:"roleKey" comment:"角色代码"`  // 角色代码
+	RoleSort   int              `form:"roleSort" comment:"角色排序"` // 角色排序
+	Flag       string           `form:"flag" comment:"标记"`       // 标记
+	Remark     string           `form:"remark" comment:"备注"`     // 备注
+	Admin      bool             `form:"admin" comment:"是否管理员"`
+	DataScope  string           `form:"dataScope"`
+	SysMenu    []models.SysMenu `form:"sysMenu"`
+	MenuIds    []int            `form:"menuIds"`
+	SysDept    []models.SysDept `form:"sysDept"`
+	DeptIds    []int            `form:"deptIds"`
+	CurrUserId int64            `json:"-" comment:""`
 }
 
 type UpdateStatusReq struct {
-	RoleId      int64  `form:"roleId" comment:"角色编码"` // 角色编码
-	Status      string `form:"status" comment:"状态"`   // 状态
-	CurrAdminId int64  `json:"-" comment:""`
+	RoleId     int64  `form:"roleId" comment:"角色编码"` // 角色编码
+	Status     string `form:"status" comment:"状态"`   // 状态
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type SysRoleByName struct {

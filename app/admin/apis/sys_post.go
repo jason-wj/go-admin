@@ -90,7 +90,7 @@ func (e SysPost) Insert(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	err = s.Insert(&req)
 	if err != nil {
 		e.Error(500, fmt.Sprintf("新建岗位失败！错误详情：%s", err.Error()))
@@ -119,7 +119,7 @@ func (e SysPost) Update(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	b, err := s.Update(&req)
 	if err != nil {

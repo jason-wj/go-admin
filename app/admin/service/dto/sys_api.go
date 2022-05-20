@@ -26,24 +26,24 @@ func (m *SysApiQueryReq) GetNeedSearch() interface{} {
 
 // SysApiInsertReq 功能创建请求参数
 type SysApiInsertReq struct {
-	Id          int    `json:"-" comment:"编码"` // 编码
-	Handle      string `json:"handle" comment:"handle"`
-	Title       string `json:"title" comment:"标题"`
-	Path        string `json:"path" comment:"地址"`
-	Type        string `json:"type" comment:""`
-	Action      string `json:"action" comment:"类型"`
-	CurrAdminId int64  `json:"-" comment:""`
+	Id         int    `json:"-" comment:"编码"` // 编码
+	Handle     string `json:"handle" comment:"handle"`
+	Title      string `json:"title" comment:"标题"`
+	Path       string `json:"path" comment:"地址"`
+	Type       string `json:"type" comment:""`
+	Action     string `json:"action" comment:"类型"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 // SysApiUpdateReq 功能更新请求参数
 type SysApiUpdateReq struct {
-	Id          int    `uri:"id" comment:"编码"` // 编码
-	Handle      string `json:"handle" comment:"handle"`
-	Title       string `json:"title" comment:"标题"`
-	Path        string `json:"path" comment:"地址"`
-	Type        string `json:"type" comment:""`
-	Action      string `json:"action" comment:"类型"`
-	CurrAdminId int64  `json:"-" comment:"更新者管理员"`
+	Id         int    `uri:"id" comment:"编码"` // 编码
+	Handle     string `json:"handle" comment:"handle"`
+	Title      string `json:"title" comment:"标题"`
+	Path       string `json:"path" comment:"地址"`
+	Type       string `json:"type" comment:""`
+	Action     string `json:"action" comment:"类型"`
+	CurrUserId int64  `json:"-" comment:"更新者管理员"`
 }
 
 // SysApiGetReq 功能获取请求参数

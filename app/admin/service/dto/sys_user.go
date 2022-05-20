@@ -35,75 +35,75 @@ func (m *SysUserQueryReq) GetNeedSearch() interface{} {
 }
 
 type ResetSysUserPwdReq struct {
-	UserId      int64  `json:"userId" comment:"用户ID" binding:"required"` // 用户ID
-	Password    string `json:"password" comment:"密码" binding:"required"`
-	CurrAdminId int64  `json:"-" comment:""`
+	UserId     int64  `json:"userId" comment:"用户ID" binding:"required"` // 用户ID
+	Password   string `json:"password" comment:"密码" binding:"required"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type UpdateSysUserAvatarReq struct {
-	UserId      int64  `json:"userId" comment:"用户ID" vd:"len($)>0"` // 用户ID
-	Avatar      string `json:"avatar" comment:"头像" vd:"len($)>0"`
-	CurrAdminId int64  `json:"-" comment:""`
+	UserId     int64  `json:"userId" comment:"用户ID" vd:"len($)>0"` // 用户ID
+	Avatar     string `json:"avatar" comment:"头像" vd:"len($)>0"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type UpdateSysUserStatusReq struct {
-	UserId      int64  `json:"userId" comment:"用户ID" vd:"$>0"` // 用户ID
-	Status      string `json:"status" comment:"状态" vd:"len($)>0"`
-	CurrAdminId int64  `json:"-" comment:""`
+	UserId     int64  `json:"userId" comment:"用户ID" vd:"$>0"` // 用户ID
+	Status     string `json:"status" comment:"状态" vd:"len($)>0"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type SysUserInsertReq struct {
-	UserId      int64  `json:"userId" comment:"用户ID"` // 用户ID
-	Username    string `json:"username" comment:"用户名" vd:"len($)>0"`
-	Password    string `json:"password" comment:"密码"`
-	NickName    string `json:"nickName" comment:"昵称" vd:"len($)>0"`
-	Phone       string `json:"phone" comment:"手机号" vd:"len($)>0"`
-	RoleId      int    `json:"roleId" comment:"角色ID"`
-	Avatar      string `json:"avatar" comment:"头像"`
-	Sex         string `json:"sex" comment:"性别"`
-	Email       string `json:"email" comment:"邮箱" vd:"len($)>0,email"`
-	DeptId      int    `json:"deptId" comment:"部门" vd:"$>0"`
-	PostId      int    `json:"postId" comment:"岗位"`
-	Remark      string `json:"remark" comment:"备注"`
-	Status      string `json:"status" comment:"状态" vd:"len($)>0" default:"1"`
-	CurrAdminId int64  `json:"-" comment:""`
+	UserId     int64  `json:"userId" comment:"用户ID"` // 用户ID
+	Username   string `json:"username" comment:"用户名" vd:"len($)>0"`
+	Password   string `json:"password" comment:"密码"`
+	NickName   string `json:"nickName" comment:"昵称" vd:"len($)>0"`
+	Phone      string `json:"phone" comment:"手机号" vd:"len($)>0"`
+	RoleId     int    `json:"roleId" comment:"角色ID"`
+	Avatar     string `json:"avatar" comment:"头像"`
+	Sex        string `json:"sex" comment:"性别"`
+	Email      string `json:"email" comment:"邮箱" vd:"len($)>0,email"`
+	DeptId     int    `json:"deptId" comment:"部门" vd:"$>0"`
+	PostId     int    `json:"postId" comment:"岗位"`
+	Remark     string `json:"remark" comment:"备注"`
+	Status     string `json:"status" comment:"状态" vd:"len($)>0" default:"1"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type SysUserUpdateReq struct {
-	UserId      int64  `json:"userId" comment:"用户ID"` // 用户ID
-	Username    string `json:"username" comment:"用户名"`
-	NickName    string `json:"nickName" comment:"昵称"`
-	Phone       string `json:"phone" comment:"手机号"`
-	RoleId      int    `json:"roleId" comment:"角色ID"`
-	Avatar      string `json:"avatar" comment:"头像"`
-	Sex         string `json:"sex" comment:"性别"`
-	Email       string `json:"email" comment:"邮箱"`
-	DeptId      int    `json:"deptId" comment:"部门"`
-	PostId      int    `json:"postId" comment:"岗位"`
-	Remark      string `json:"remark" comment:"备注"`
-	Status      string `json:"status" comment:"状态" default:"1"`
-	CurrAdminId int64  `json:"-" comment:""`
-	Password    string `json:"password" comment:""`
+	UserId     int64  `json:"userId" comment:"用户ID"` // 用户ID
+	Username   string `json:"username" comment:"用户名"`
+	NickName   string `json:"nickName" comment:"昵称"`
+	Phone      string `json:"phone" comment:"手机号"`
+	RoleId     int    `json:"roleId" comment:"角色ID"`
+	Avatar     string `json:"avatar" comment:"头像"`
+	Sex        string `json:"sex" comment:"性别"`
+	Email      string `json:"email" comment:"邮箱"`
+	DeptId     int    `json:"deptId" comment:"部门"`
+	PostId     int    `json:"postId" comment:"岗位"`
+	Remark     string `json:"remark" comment:"备注"`
+	Status     string `json:"status" comment:"状态" default:"1"`
+	CurrUserId int64  `json:"-" comment:""`
+	Password   string `json:"password" comment:""`
 }
 
 type SysUserUpdatePhoneReq struct {
-	CurrAdminId int64  `json:"-" comment:""`
-	Phone       string `json:"phone" comment:"手机号"`
+	CurrUserId int64  `json:"-" comment:""`
+	Phone      string `json:"phone" comment:"手机号"`
 }
 
 type SysUserUpdateNickNameReq struct {
-	CurrAdminId int64  `json:"-" comment:""`
-	NickName    string `json:"nickName" comment:"昵称"`
+	CurrUserId int64  `json:"-" comment:""`
+	NickName   string `json:"nickName" comment:"昵称"`
 }
 
 type SysUserUpdateEmailReq struct {
-	CurrAdminId int64  `json:"-" comment:""`
-	Email       string `json:"email" comment:"邮箱号"`
+	CurrUserId int64  `json:"-" comment:""`
+	Email      string `json:"email" comment:"邮箱号"`
 }
 
 type SysUserById struct {
 	dto.ObjectById
-	CurrAdminId int64 `json:"-" comment:""`
+	CurrUserId int64 `json:"-" comment:""`
 }
 
 // PassWord 密码

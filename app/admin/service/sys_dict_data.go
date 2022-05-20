@@ -57,7 +57,7 @@ func (e *SysDictData) Get(id int64) (*models.SysDictData, error) {
 
 // Insert 创建对象
 func (e *SysDictData) Insert(c *dto.SysDictDataControl) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 
@@ -74,8 +74,8 @@ func (e *SysDictData) Insert(c *dto.SysDictDataControl) error {
 	data.Status = c.Status
 	data.Default = c.Default
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -88,7 +88,7 @@ func (e *SysDictData) Insert(c *dto.SysDictDataControl) error {
 
 // Update 修改对象
 func (e *SysDictData) Update(c *dto.SysDictDataControl) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 
@@ -129,7 +129,7 @@ func (e *SysDictData) Update(c *dto.SysDictDataControl) (bool, error) {
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysDictData{}).Where("dict_code=?", c.Id).Updates(updates).Error
 		if err != nil {

@@ -57,7 +57,7 @@ func (e *SysOperaLog) Get(id int64) (*models.SysOperaLog, error) {
 
 // Insert 创建SysOperaLog对象
 func (e *SysOperaLog) Insert(c *dto.SysOperaLogInsertReq) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -82,8 +82,8 @@ func (e *SysOperaLog) Insert(c *dto.SysOperaLogInsertReq) error {
 	data.LatencyTime = c.LatencyTime
 	data.UserAgent = c.UserAgent
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = data.CreatedAt
 	err = e.Orm.Create(&data).Error

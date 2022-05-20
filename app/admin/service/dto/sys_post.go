@@ -21,24 +21,24 @@ func (m *SysPostPageReq) GetNeedSearch() interface{} {
 
 // SysPostInsertReq 增使用的结构体
 type SysPostInsertReq struct {
-	PostId      int    `uri:"id"  comment:"id"`
-	PostName    string `form:"postName"  comment:"名称"`
-	PostCode    string `form:"postCode" comment:"编码"`
-	Sort        int    `form:"sort" comment:"排序"`
-	Status      string `form:"status"   comment:"状态"`
-	Remark      string `form:"remark"   comment:"备注"`
-	CurrAdminId int64  `json:"-" comment:""`
+	PostId     int    `uri:"id"  comment:"id"`
+	PostName   string `form:"postName"  comment:"名称"`
+	PostCode   string `form:"postCode" comment:"编码"`
+	Sort       int    `form:"sort" comment:"排序"`
+	Status     string `form:"status"   comment:"状态"`
+	Remark     string `form:"remark"   comment:"备注"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 // SysPostUpdateReq 改使用的结构体
 type SysPostUpdateReq struct {
-	PostId      int    `uri:"id"  comment:"id"`
-	PostName    string `form:"postName"  comment:"名称"`
-	PostCode    string `form:"postCode" comment:"编码"`
-	Sort        int    `form:"sort" comment:"排序"`
-	Status      string `form:"status"   comment:"状态"`
-	Remark      string `form:"remark"   comment:"备注"`
-	CurrAdminId int64  `form:"-" comment:""`
+	PostId     int    `uri:"id"  comment:"id"`
+	PostName   string `form:"postName"  comment:"名称"`
+	PostCode   string `form:"postCode" comment:"编码"`
+	Sort       int    `form:"sort" comment:"排序"`
+	Status     string `form:"status"   comment:"状态"`
+	Remark     string `form:"remark"   comment:"备注"`
+	CurrUserId int64  `form:"-" comment:""`
 }
 
 // SysPostGetReq 获取单个的结构体

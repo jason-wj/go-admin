@@ -53,13 +53,13 @@ type AppInsertReq struct {
 	Remark       string          `json:"remark" comment:"备注信息"`
 	DownloadType string          `json:"downloadType" comment:"下载类型(0-oss 1-外链)"`
 	DownloadUrl  string          `json:"downloadUrl" comment:"下载地址(download_type=1使用)"`
-	CurrAdminId  int64           `json:"-" comment:""`
+	CurrUserId   int64           `json:"-" comment:""`
 }
 
 type AppUpdateReq struct {
-	Id          int64  `uri:"id" comment:"主键"` // 主键
-	Status      string `json:"status" comment:"状态（0正常 1删除 2停用 3冻结）"`
-	CurrAdminId int64  `json:"-" comment:""`
+	Id         int64  `uri:"id" comment:"主键"` // 主键
+	Status     string `json:"status" comment:"状态（0正常 1删除 2停用 3冻结）"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 // AppGetReq 功能获取请求参数

@@ -97,7 +97,7 @@ func (e SysUser) Insert(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	err = s.Insert(&req)
 	if err != nil {
 		e.Logger.Error(err)
@@ -128,7 +128,7 @@ func (e SysUser) Update(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)
@@ -170,7 +170,7 @@ func (e SysUser) UpdateSelfPhone(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	b, err := s.UpdateSelfPhone(&req)
 	if err != nil {
@@ -178,10 +178,10 @@ func (e SysUser) UpdateSelfPhone(c *gin.Context) {
 		return
 	}
 	if !b {
-		e.OK(req.CurrAdminId, "未修改任何信息")
+		e.OK(req.CurrUserId, "未修改任何信息")
 		return
 	}
-	e.OK(req.CurrAdminId, "修改成功")
+	e.OK(req.CurrUserId, "修改成功")
 }
 
 func (e SysUser) UpdateSelfNickName(c *gin.Context) {
@@ -203,7 +203,7 @@ func (e SysUser) UpdateSelfNickName(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	b, err := s.UpdateSelfNickName(&req)
 	if err != nil {
@@ -211,10 +211,10 @@ func (e SysUser) UpdateSelfNickName(c *gin.Context) {
 		return
 	}
 	if !b {
-		e.OK(req.CurrAdminId, "未修改任何信息")
+		e.OK(req.CurrUserId, "未修改任何信息")
 		return
 	}
-	e.OK(req.CurrAdminId, "修改成功")
+	e.OK(req.CurrUserId, "修改成功")
 }
 
 //
@@ -242,7 +242,7 @@ func (e SysUser) UpdateSelfEmail(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	b, err := s.UpdateSelfEmail(&req)
 	if err != nil {
@@ -250,10 +250,10 @@ func (e SysUser) UpdateSelfEmail(c *gin.Context) {
 		return
 	}
 	if !b {
-		e.OK(req.CurrAdminId, "未修改任何信息")
+		e.OK(req.CurrUserId, "未修改任何信息")
 		return
 	}
-	e.OK(req.CurrAdminId, "修改成功")
+	e.OK(req.CurrUserId, "修改成功")
 }
 
 // Delete
@@ -352,7 +352,7 @@ func (e SysUser) ResetPwd(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 
 	//数据权限检查
 	p := actions.GetPermissionFromContext(c)

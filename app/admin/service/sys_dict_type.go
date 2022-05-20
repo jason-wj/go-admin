@@ -54,7 +54,7 @@ func (e *SysDictType) Get(id int64) (*models.SysDictType, error) {
 
 // Insert 创建对象
 func (e *SysDictType) Insert(c *dto.SysDictTypeControl) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -64,8 +64,8 @@ func (e *SysDictType) Insert(c *dto.SysDictTypeControl) error {
 	data.DictType = c.DictType
 	data.Status = c.Status
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 
@@ -79,7 +79,7 @@ func (e *SysDictType) Insert(c *dto.SysDictTypeControl) error {
 
 // Update 修改对象
 func (e *SysDictType) Update(c *dto.SysDictTypeControl) (bool, error) {
-	if c.DictId <= 0 || c.CurrAdminId <= 0 {
+	if c.DictId <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 
@@ -106,7 +106,7 @@ func (e *SysDictType) Update(c *dto.SysDictTypeControl) (bool, error) {
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysDictType{}).Where("dict_id=?", c.DictId).Updates(updates).Error
 		if err != nil {

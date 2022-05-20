@@ -96,7 +96,7 @@ func (e *Announcement) Count(c *dto.AnnouncementQueryReq) (int64, error) {
 
 // Insert 创建Announcement对象
 func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	if c.Num < 0 {
@@ -110,8 +110,8 @@ func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) error {
 	data.Num = c.Num
 	data.Status = "0"
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err := e.Orm.Create(&data).Error
@@ -124,7 +124,7 @@ func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) error {
 
 // Update 修改Announcement对象
 func (e *Announcement) Update(c *dto.AnnouncementUpdateReq, p *actions.DataPermission) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	if c.Num < 0 {
@@ -157,7 +157,7 @@ func (e *Announcement) Update(c *dto.AnnouncementUpdateReq, p *actions.DataPermi
 
 	if len(update) > 0 {
 		update["updated_at"] = time.Now()
-		update["update_by"] = c.CurrAdminId
+		update["update_by"] = c.CurrUserId
 		err = e.Orm.Model(&data).Where("id=?", data.Id).Updates(&update).Error
 		if err != nil {
 			e.Log.Errorf("SysConfigService Update error:%s", err)

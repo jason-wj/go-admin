@@ -85,7 +85,7 @@ func (e *SysMenu) Get(id int64) (*models.SysMenu, error) {
 
 // Insert 创建SysMenu对象
 func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -107,8 +107,8 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	data.Sort = c.Sort
 	data.Hidden = c.Hidden
 	data.IsFrame = c.IsFrame
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -275,7 +275,7 @@ func (e *SysMenu) initPaths(menu *models.SysMenu) error {
 
 // Update 修改SysMenu对象
 func (e *SysMenu) Update(c *dto.SysMenuControl) error {
-	if c.MenuId <= 0 || c.CurrAdminId <= 0 {
+	if c.MenuId <= 0 || c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -316,7 +316,7 @@ func (e *SysMenu) Update(c *dto.SysMenuControl) error {
 	model.Sort = c.Sort
 	model.Hidden = c.Hidden
 	model.IsFrame = c.IsFrame
-	model.UpdateBy = c.CurrAdminId
+	model.UpdateBy = c.CurrUserId
 	model.UpdatedAt = &now
 	model.SysApi = alist
 	err = tx.Model(&model).Session(&gorm.Session{FullSaveAssociations: true}).Debug().Save(&model).Error

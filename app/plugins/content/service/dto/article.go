@@ -34,21 +34,21 @@ func (m *ArticleQueryReq) GetNeedSearch() interface{} {
 }
 
 type ArticleInsertReq struct {
-	CateId      int64  `json:"cateId" comment:"分类编号"`
-	Name        string `json:"name" comment:"标题"`
-	Content     string `json:"content" comment:"文本内容"`
-	Remark      string `json:"remark" comment:"备注信息"`
-	CurrAdminId int64  `json:"-" comment:""`
+	CateId     int64  `json:"cateId" comment:"分类编号"`
+	Name       string `json:"name" comment:"标题"`
+	Content    string `json:"content" comment:"文本内容"`
+	Remark     string `json:"remark" comment:"备注信息"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 type ArticleUpdateReq struct {
-	Id          int64  `uri:"id" comment:"主键编码"` // 主键编码
-	CateId      int64  `json:"cateId" comment:"分类编号"`
-	Name        string `json:"name" comment:"标题"`
-	Content     string `json:"content" comment:"文本内容"`
-	Remark      string `json:"remark" comment:"备注信息"`
-	Status      string `json:"status" comment:"状态（0正常 1删除 2停用 3冻结）"`
-	CurrAdminId int64  `json:"-" comment:""`
+	Id         int64  `uri:"id" comment:"主键编码"` // 主键编码
+	CateId     int64  `json:"cateId" comment:"分类编号"`
+	Name       string `json:"name" comment:"标题"`
+	Content    string `json:"content" comment:"文本内容"`
+	Remark     string `json:"remark" comment:"备注信息"`
+	Status     string `json:"status" comment:"状态（0正常 1删除 2停用 3冻结）"`
+	CurrUserId int64  `json:"-" comment:""`
 }
 
 // ArticleGetReq 功能获取请求参数

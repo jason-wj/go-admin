@@ -73,7 +73,7 @@ type SysOperaLogInsertReq struct {
 	Remark        string     `json:"remark"`
 	LatencyTime   string     `json:"latencyTime"`
 	UserAgent     string     `json:"userAgent"`
-	CurrAdminId   int64      `json:"-" comment:""`
+	CurrUserId    int64      `json:"-" comment:""`
 }
 
 // SysOperaLogDeleteReq 功能删除请求参数

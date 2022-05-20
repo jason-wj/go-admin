@@ -103,7 +103,7 @@ func (e *SysUser) Get(id int64, p *actions.DataPermission) (*models.SysUser, err
 
 // Insert 创建SysUser对象
 func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -176,8 +176,8 @@ func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
 	data.PostId = c.PostId
 	data.Status = c.Status
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -190,7 +190,7 @@ func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
 
 // Update 修改SysUser对象
 func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bool, error) {
-	if c.UserId <= 0 || c.CurrAdminId <= 0 {
+	if c.UserId <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	var err error
@@ -285,7 +285,7 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.UserId).Updates(updates).Error
 		if err != nil {
@@ -299,11 +299,11 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq, p *actions.DataPermission) (bo
 
 // UpdateSelfPhone 修改手机号
 func (e *SysUser) UpdateSelfPhone(c *dto.SysUserUpdatePhoneReq) (bool, error) {
-	if c.CurrAdminId <= 0 || len(c.Phone) < 6 {
+	if c.CurrUserId <= 0 || len(c.Phone) < 6 {
 		return false, errors.New("参数错误")
 	}
 	var err error
-	u, err := e.Get(c.CurrAdminId, nil)
+	u, err := e.Get(c.CurrUserId, nil)
 	if err != nil {
 		return false, err
 	}
@@ -319,16 +319,16 @@ func (e *SysUser) UpdateSelfPhone(c *dto.SysUserUpdatePhoneReq) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		if result != nil && result.UserId != c.CurrAdminId {
+		if result != nil && result.UserId != c.CurrUserId {
 			return false, errors.New("手机号已存在")
 		}
 		updates["phone"] = c.Phone
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrAdminId).Updates(updates).Error
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrUserId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysUserService UpdateSelfPhone error:%s", err)
 			return false, err
@@ -340,11 +340,11 @@ func (e *SysUser) UpdateSelfPhone(c *dto.SysUserUpdatePhoneReq) (bool, error) {
 
 // UpdateSelfNickName 更新昵称
 func (e *SysUser) UpdateSelfNickName(c *dto.SysUserUpdateNickNameReq) (bool, error) {
-	if c.CurrAdminId <= 0 || c.NickName == "" {
+	if c.CurrUserId <= 0 || c.NickName == "" {
 		return false, errors.New("参数错误")
 	}
 	var err error
-	u, err := e.Get(c.CurrAdminId, nil)
+	u, err := e.Get(c.CurrUserId, nil)
 	if err != nil {
 		return false, err
 	}
@@ -357,16 +357,16 @@ func (e *SysUser) UpdateSelfNickName(c *dto.SysUserUpdateNickNameReq) (bool, err
 		if err != nil {
 			return false, err
 		}
-		if result != nil && result.UserId != c.CurrAdminId {
+		if result != nil && result.UserId != c.CurrUserId {
 			return false, errors.New("昵称已存在")
 		}
 		updates["nick_name"] = c.NickName
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrAdminId).Updates(updates).Error
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrUserId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysUserService UpdateSelfNickName error:%s", err)
 			return false, err
@@ -378,11 +378,11 @@ func (e *SysUser) UpdateSelfNickName(c *dto.SysUserUpdateNickNameReq) (bool, err
 
 // UpdateSelfEmail 修改邮箱号
 func (e *SysUser) UpdateSelfEmail(c *dto.SysUserUpdateEmailReq) (bool, error) {
-	if c.CurrAdminId <= 0 || !strutils.VerifyEmailFormat(c.Email) {
+	if c.CurrUserId <= 0 || !strutils.VerifyEmailFormat(c.Email) {
 		return false, errors.New("邮箱格式错误")
 	}
 	var err error
-	u, err := e.Get(c.CurrAdminId, nil)
+	u, err := e.Get(c.CurrUserId, nil)
 	if err != nil {
 		return false, err
 	}
@@ -395,16 +395,16 @@ func (e *SysUser) UpdateSelfEmail(c *dto.SysUserUpdateEmailReq) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		if result != nil && result.UserId != c.CurrAdminId {
+		if result != nil && result.UserId != c.CurrUserId {
 			return false, errors.New("邮箱已存在")
 		}
 		updates["email"] = c.Email
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
-		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrAdminId).Updates(updates).Error
+		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.CurrUserId).Updates(updates).Error
 		if err != nil {
 			e.Log.Errorf("SysUserService UpdateSelfEmail error:%s", err)
 			return false, err
@@ -416,7 +416,7 @@ func (e *SysUser) UpdateSelfEmail(c *dto.SysUserUpdateEmailReq) (bool, error) {
 
 // UpdateAvatar 更新用户头像
 func (e *SysUser) UpdateAvatar(c *dto.UpdateSysUserAvatarReq, p *actions.DataPermission) error {
-	if c.UserId <= 0 || c.CurrAdminId <= 0 {
+	if c.UserId <= 0 || c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -434,7 +434,7 @@ func (e *SysUser) UpdateAvatar(c *dto.UpdateSysUserAvatarReq, p *actions.DataPer
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysConfig{}).Where("user_id=?", c.UserId).Updates(updates).Error
 		if err != nil {
@@ -447,7 +447,7 @@ func (e *SysUser) UpdateAvatar(c *dto.UpdateSysUserAvatarReq, p *actions.DataPer
 
 // ResetPwd 重置用户密码
 func (e *SysUser) ResetPwd(c *dto.ResetSysUserPwdReq, p *actions.DataPermission) error {
-	if c.UserId <= 0 || c.CurrAdminId <= 0 {
+	if c.UserId <= 0 || c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -465,7 +465,7 @@ func (e *SysUser) ResetPwd(c *dto.ResetSysUserPwdReq, p *actions.DataPermission)
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysUser{}).Where("user_id=?", c.UserId).Updates(updates).Error
 		if err != nil {

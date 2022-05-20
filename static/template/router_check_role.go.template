@@ -2,8 +2,6 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-
-
 	"go-admin/app/{{.PackageName}}/apis"
 	"go-admin/common/middleware"
 )
@@ -15,7 +13,7 @@ func init() {
 // register{{.ClassName}}Router
 func register{{.ClassName}}Router(v1 *gin.RouterGroup) {
 	api := apis.{{.ClassName}}{}
-	r := v1.Group("/{{.MLTBName}}").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
+	r := v1.Group("/{{.PackageName}}/{{.ModuleName}}").Use(middleware.Auth()).Use(middleware.AuthCheckRole())
 	{
 		r.GET("", api.GetPage)
 		r.GET("/:id", api.Get)

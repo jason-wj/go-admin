@@ -20,20 +20,12 @@ type App struct {
 	api.Api
 }
 
-// GetPage 获取App管理列表
-// @Summary 获取App管理列表
-// @Description 获取App管理列表
-// @Tags App管理
-// @Param version query string false "版本号"
-// @Param platform query string false "平台 ( 0:安卓 1:苹果 )"
-// @Param type query string false "App类型"
-// @Param downloadType query string false "下载类型(0-oss 1-外链)"
-// @Param downloadUrl query string false "下载地址(download_type=1使用)"
-// @Param pageSize query int false "页条数"
-// @Param pageIndex query int false "页码"
-// @Success 200 {object} response.Response{data=response.Page{list=[]models.App}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/app-manager [get]
-// @Security Bearer
+//
+// GetPage
+// @Description: 获取App管理列表
+// @receiver e
+// @param c
+//
 func (e App) GetPage(c *gin.Context) {
 	req := dto.AppQueryReq{}
 	s := service.App{}
@@ -61,14 +53,12 @@ func (e App) GetPage(c *gin.Context) {
 	e.PageOK(list, nil, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
 }
 
-// Get 获取App管理
-// @Summary 获取App管理
-// @Description 获取App管理
-// @Tags App管理
-// @Param id path string false "id"
-// @Success 200 {object} response.Response{data=models.App} "{"code": 200, "data": [...]}"
-// @Router /api/v1/app-manager/{id} [get]
-// @Security Bearer
+//
+// Get
+// @Description: 获取App管理
+// @receiver e
+// @param c
+//
 func (e App) Get(c *gin.Context) {
 	req := dto.AppGetReq{}
 	s := service.App{}
@@ -92,16 +82,12 @@ func (e App) Get(c *gin.Context) {
 	e.OK(result, "查询成功")
 }
 
-// Insert 创建App管理
-// @Summary 创建App管理
-// @Description 创建App管理
-// @Tags App管理
-// @Accept application/json
-// @Product application/json
-// @Param data body dto.AppInsertReq true "data"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "添加成功"}"
-// @Router /api/v1/app-manager [post]
-// @Security Bearer
+//
+// Insert
+// @Description: 创建App管理
+// @receiver e
+// @param c
+//
 func (e App) Insert(c *gin.Context) {
 	req := dto.AppInsertReq{}
 	s := service.App{}
@@ -120,7 +106,7 @@ func (e App) Insert(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	err = s.Insert(&req)
 	if err != nil {
 		e.Error(500, err.Error())
@@ -130,14 +116,12 @@ func (e App) Insert(c *gin.Context) {
 	e.OK(nil, "创建成功")
 }
 
-// Delete 删除App管理
-// @Summary 删除App管理
-// @Description 删除App管理
-// @Tags App管理
-// @Param id body int false "id"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "删除成功"}"
-// @Router /api/v1/app-manager [delete]
-// @Security Bearer
+//
+// Delete
+// @Description: 删除App管理
+// @receiver e
+// @param c
+//
 func (e App) Delete(c *gin.Context) {
 	s := service.App{}
 	req := dto.AppDeleteReq{}
@@ -205,16 +189,12 @@ func (e App) Upload(c *gin.Context) {
 	e.OK(filePath, "上传成功")
 }
 
-// Update 修改App信息
-// @Summary 修改App信息
-// @Description 修改App信息
-// @Tags App管理
-// @Accept application/json
-// @Product application/json
-// @Param data body dto.FullSlProductUpdateReq true "body"
-// @Success 200 {object} response.Response	"{"code": 200, "message": "修改成功"}"
-// @Router /admin-api/v1/app-manager/{id} [put]
-// @Security Bearer
+//
+// Update
+// @Description: 修改App信息
+// @receiver e
+// @param c
+//
 func (e App) Update(c *gin.Context) {
 	req := dto.AppUpdateReq{}
 	s := service.App{}
@@ -235,7 +215,7 @@ func (e App) Update(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	b, err := s.Update(&req, p)
 	if err != nil {
 		e.Error(500, fmt.Sprintf("%s", err.Error()))
@@ -248,7 +228,12 @@ func (e App) Update(c *gin.Context) {
 	e.OK(req.Id, "修改成功")
 }
 
-// Export 导出App
+//
+// Export
+// @Description: 导出App
+// @receiver e
+// @param c
+//
 func (e App) Export(c *gin.Context) {
 	req := dto.AppQueryReq{}
 	s := service.App{}

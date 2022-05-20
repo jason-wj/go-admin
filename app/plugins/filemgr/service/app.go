@@ -124,7 +124,7 @@ func (e *App) Count(c *dto.AppQueryReq) (int64, error) {
 
 // Insert 创建App对象
 func (e *App) Insert(c *dto.AppInsertReq) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	if c.Platform == "" {
@@ -185,8 +185,8 @@ func (e *App) Insert(c *dto.AppInsertReq) error {
 	data.DownloadType = c.DownloadType
 	data.DownloadUrl = c.DownloadUrl
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -199,7 +199,7 @@ func (e *App) Insert(c *dto.AppInsertReq) error {
 
 // Update 修改App对象
 func (e *App) Update(c *dto.AppUpdateReq, p *actions.DataPermission) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	if c.Status == "" {
@@ -218,7 +218,7 @@ func (e *App) Update(c *dto.AppUpdateReq, p *actions.DataPermission) (bool, erro
 	}
 
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.App{}).Where("id=?", c.Id).Updates(updates).Error
 		if err != nil {

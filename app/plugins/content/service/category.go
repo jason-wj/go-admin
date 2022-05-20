@@ -18,7 +18,16 @@ type Category struct {
 	service.Service
 }
 
-// GetPage 获取Category列表
+//
+// GetPage
+// @Description: 获取{{.ClassName}}列表
+// @receiver e
+// @param c
+// @param p
+// @return []models.Category
+// @return int64
+// @return error
+//
 func (e *Category) GetPage(c *dto.CategoryQueryReq, p *actions.DataPermission) ([]models.Category, int64, error) {
 	var list []models.Category
 	var data models.Category
@@ -38,7 +47,14 @@ func (e *Category) GetPage(c *dto.CategoryQueryReq, p *actions.DataPermission) (
 	return list, count, nil
 }
 
-// Count 获取条数
+//
+// Count
+// @Description: 获取{{.ClassName}}对象
+// @receiver e
+// @param c
+// @return int64
+// @return error
+//
 func (e *Category) Count(c *dto.CategoryQueryReq) (int64, error) {
 	var err error
 	var count int64
@@ -58,7 +74,15 @@ func (e *Category) Count(c *dto.CategoryQueryReq) (int64, error) {
 	return count, nil
 }
 
-// Get 获取Category对象
+//
+// Get
+// @Description: 获取{{.ClassName}}对象
+// @receiver e
+// @param id
+// @param p
+// @return *models.Category
+// @return error
+//
 func (e *Category) Get(id int64, p *actions.DataPermission) (*models.Category, error) {
 	if id <= 0 {
 		return nil, errors.New("参数错误")
@@ -73,7 +97,14 @@ func (e *Category) Get(id int64, p *actions.DataPermission) (*models.Category, e
 	return model, nil
 }
 
-// QueryOne 通过自定义条件获取一条记录
+//
+// QueryOne
+// @Description: 通过自定义条件获取{{.ClassName}}一条记录
+// @receiver e
+// @param queryCondition
+// @return *models.Category
+// @return error
+//
 func (e *Category) QueryOne(queryCondition *dto.CategoryQueryReq) (*models.Category, error) {
 	model := &models.Category{}
 	err := e.Orm.Model(&models.Category{}).
@@ -87,15 +118,21 @@ func (e *Category) QueryOne(queryCondition *dto.CategoryQueryReq) (*models.Categ
 	return model, nil
 }
 
-// Insert 创建Category对象
+//
+// Insert
+// @Description: 创建{{.ClassName}}对象
+// @receiver e
+// @param c
+// @return error
+//
 func (e *Category) Insert(c *dto.CategoryInsertReq) error {
 	now := time.Now()
 	data := models.Category{}
 	data.Name = c.Name
 	data.Status = "0"
 	data.Remark = c.Remark
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err := e.Orm.Create(&data).Error
@@ -106,9 +143,17 @@ func (e *Category) Insert(c *dto.CategoryInsertReq) error {
 	return nil
 }
 
-// Update 修改Category对象
+//
+// Update
+// @Description: 修改{{.ClassName}}对象
+// @receiver e
+// @param c
+// @param p
+// @return bool 是否有数据更新
+// @return error
+//
 func (e *Category) Update(c *dto.CategoryUpdateReq, p *actions.DataPermission) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	data, err := e.Get(c.Id, p)
@@ -136,7 +181,7 @@ func (e *Category) Update(c *dto.CategoryUpdateReq, p *actions.DataPermission) (
 		}
 
 		updates["updated_at"] = time.Now()
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		err = e.Orm.Model(&data).Where("id=?", data.Id).Updates(&updates).Error
 		if err != nil {
 			e.Log.Errorf("CategoryService Update error:%s", err)
@@ -147,7 +192,14 @@ func (e *Category) Update(c *dto.CategoryUpdateReq, p *actions.DataPermission) (
 	return false, nil
 }
 
-// Remove 删除Category
+//
+// Remove
+// @Description: 删除{{.ClassName}}
+// @receiver e
+// @param ids
+// @param p
+// @return error
+//
 func (e *Category) Remove(ids []int64, p *actions.DataPermission) error {
 	if len(ids) <= 0 {
 		return errors.New("参数错误")

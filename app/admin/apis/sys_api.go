@@ -91,7 +91,7 @@ func (e SysApi) Update(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	p := actions.GetPermissionFromContext(c)
 	b, err := s.Update(&req, p)
 	if err != nil {

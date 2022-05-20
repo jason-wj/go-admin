@@ -35,7 +35,7 @@ type SysConfigControl struct {
 	ConfigType  string `json:"configType" comment:""`
 	IsFrontend  string `json:"isFrontend"`
 	Remark      string `json:"remark" comment:""`
-	CurrAdminId int64  `json:"-" comment:""`
+	CurrUserId  int64  `json:"-" comment:""`
 }
 
 // SysConfigByKeyReq 根据Key获取配置

@@ -64,7 +64,7 @@ func (e *SysDept) Get(id int64, p *actions.DataPermission) (*models.SysDept, err
 
 // Insert 创建SysDept对象
 func (e *SysDept) Insert(c *dto.SysDeptControl) error {
-	if c.CurrAdminId <= 0 {
+	if c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var err error
@@ -78,8 +78,8 @@ func (e *SysDept) Insert(c *dto.SysDeptControl) error {
 	data.Phone = c.Phone
 	data.Email = c.Email
 	data.Status = c.Status
-	data.CreateBy = c.CurrAdminId
-	data.UpdateBy = c.CurrAdminId
+	data.CreateBy = c.CurrUserId
+	data.UpdateBy = c.CurrUserId
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	tx := e.Orm.Debug().Begin()
@@ -118,7 +118,7 @@ func (e *SysDept) Insert(c *dto.SysDeptControl) error {
 // Update 修改SysDept对象
 func (e *SysDept) Update(c *dto.SysDeptControl) error {
 	var err error
-	if c.DeptId <= 0 || c.CurrAdminId <= 0 {
+	if c.DeptId <= 0 || c.CurrUserId <= 0 {
 		return errors.New("参数错误")
 	}
 	var model = models.SysDept{}
@@ -162,7 +162,7 @@ func (e *SysDept) Update(c *dto.SysDeptControl) error {
 	model.Email = c.Email
 	model.Status = c.Status
 	model.UpdatedAt = &now
-	model.UpdateBy = c.CurrAdminId
+	model.UpdateBy = c.CurrUserId
 
 	err = tx.Save(&model).Error
 	if err != nil {

@@ -62,7 +62,7 @@ func (e *SysApi) Get(id int64, p *actions.DataPermission) (*models.SysApi, error
 
 // Update 修改SysApi对象
 func (e *SysApi) Update(c *dto.SysApiUpdateReq, p *actions.DataPermission) (bool, error) {
-	if c.Id <= 0 || c.CurrAdminId <= 0 {
+	if c.Id <= 0 || c.CurrUserId <= 0 {
 		return false, errors.New("参数错误")
 	}
 	var model = models.SysApi{}
@@ -95,7 +95,7 @@ func (e *SysApi) Update(c *dto.SysApiUpdateReq, p *actions.DataPermission) (bool
 		updates["action"] = c.Action
 	}
 	if len(updates) > 0 {
-		updates["update_by"] = c.CurrAdminId
+		updates["update_by"] = c.CurrUserId
 		updates["updated_at"] = time.Now()
 		err = e.Orm.Model(&models.SysApi{}).Where("id=?", c.Id).Updates(updates).Error
 		if err != nil {

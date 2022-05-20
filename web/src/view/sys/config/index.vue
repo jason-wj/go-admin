@@ -13,20 +13,20 @@
         <el-form-item label="系统内置" prop="configType">
           <el-select v-model="queryParams.configType" placeholder="系统配置" clearable size="small">
             <el-option
-              v-for="dict in configTypeOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+                v-for="dict in configTypeOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
             />
           </el-select>
         </el-form-item>
         <el-form-item label="是否前台" prop="isFrontend">
           <el-select v-model="queryParams.isFrontend" placeholder="系统配置是否前台" clearable size="small">
             <el-option
-              v-for="dict in isFrontendOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+                v-for="dict in isFrontendOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
             />
           </el-select>
         </el-form-item>
@@ -104,20 +104,20 @@
         <el-form-item label="系统内置" prop="configType">
           <el-select v-model="form.configType" placeholder="请选择">
             <el-option
-              v-for="dict in configTypeOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+                v-for="dict in configTypeOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
             />
           </el-select>
         </el-form-item>
         <el-form-item label="是否前台" prop="isFrontend">
           <el-select v-model="form.isFrontend" placeholder="请选择">
             <el-option
-              v-for="dict in isFrontendOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
+                v-for="dict in isFrontendOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
             />
           </el-select>
         </el-form-item>
@@ -175,7 +175,6 @@ const queryParams = ref({
   configKey: undefined,
   configType: undefined,
   isFrontend: undefined,
-  deletedAt: undefined,
 })
 // 表单参数
 const form = ref({})

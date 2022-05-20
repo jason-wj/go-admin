@@ -85,7 +85,7 @@ func (e SysDictType) Insert(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	err = s.Insert(&req)
 	if err != nil {
 		e.Logger.Error(err)
@@ -114,7 +114,7 @@ func (e SysDictType) Update(c *gin.Context) {
 		e.Error(rCode, err.Error())
 		return
 	}
-	req.CurrAdminId = uid
+	req.CurrUserId = uid
 	b, err := s.Update(&req)
 	if err != nil {
 		e.Error(500, fmt.Sprintf("%s", err.Error()))
