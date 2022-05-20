@@ -1,29 +1,14 @@
 package dto
 
 import (
-	"go-admin/app/{{.PackageName}}/models"
 	"go-admin/common/dto"
 	"github.com/shopspring/decimal"
-	common "go-admin/common/models"
-
-	 {{- $bb := false -}}
-	  {{- range .Columns -}}
-     {{$z := .IsQuery}}
-     {{- if ($z) }}
-     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
-     {{- end -}}
-     {{- end -}}
-     {{- range .Columns -}}
-     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
-     {{- end -}}
-     {{- if eq $bb true -}}
-     "time"
-     {{- end }}
+	"time"
 )
 
 type {{.ClassName}}QueryReq struct {
 	dto.Pagination     `search:"-"`
-    {{- $tablename := .TBName -}}
+    {{- $tablename := .TBName }}
     BeginTime           string `form:"beginTime" search:"type:gte;column:created_at;table:{{$tablename}}" comment:"创建时间"`
     EndTime             string `form:"endTime" search:"type:lte;column:created_at;table:{{$tablename}}" comment:"创建时间"`
     {{- range .Columns -}}

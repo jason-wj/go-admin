@@ -1,17 +1,19 @@
 package apis
 
 import (
-    "fmt"
-    "strconv"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	adminService "go-admin/app/admin/service"
-	"go-admin/common/core/sdk/api"
-	"go-admin/common/middleware/handler/user"
-	_ "go-admin/common/core/sdk/pkg/response"
-	"go-admin/app/{{.PackageName}}/models"
-	"go-admin/app/{{.PackageName}}/service"
-	"go-admin/app/{{.PackageName}}/service/dto"
+	"go-admin/app/pha/models"
+	"go-admin/app/pha/service"
+	"go-admin/app/pha/service/dto"
 	"go-admin/common/actions"
+	"go-admin/common/core/sdk/api"
+	_ "go-admin/common/core/sdk/pkg/response"
+	"go-admin/common/middleware/auth"
+	"go-admin/common/utils/dateUtils"
+	"strconv"
+	"time"
 )
 
 type {{.ClassName}} struct {
@@ -37,17 +39,14 @@ func (e {{.ClassName}}) GetPage(c *gin.Context) {
    		e.Error(500,  err.Error())
    		return
    	}
-
 	p := actions.GetPermissionFromContext(c)
 	list := make([]models.{{.ClassName}}, 0)
 	var count int64
-
-	err = s.GetPage(&req, p, &list, &count)
+	list, count, err = s.GetPage(&req, p)
 	if err != nil {
 		e.Error(500,  fmt.Sprintf("获取{{.TableComment}} 失败，\r\n失败信息 %s", err.Error()))
         return
 	}
-
 	e.PageOK(list,nil, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
 }
 
@@ -70,15 +69,12 @@ func (e {{.ClassName}}) Get(c *gin.Context) {
 		e.Error(500,  err.Error())
 		return
 	}
-	var object models.{{.ClassName}}
-
 	p := actions.GetPermissionFromContext(c)
-	err = s.Get(req.Id, p, &object)
+	object,err := s.Get(req.Id, p)
 	if err != nil {
 		e.Error(500,  fmt.Sprintf("获取{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
         return
 	}
-
 	e.OK( object, "查询成功")
 }
 
@@ -101,7 +97,6 @@ func (e {{.ClassName}}) Insert(c *gin.Context) {
         e.Error(500,  err.Error())
         return
     }
-
     uid, rCode, err := auth.GetUserId(c)
     if err != nil {
         e.Error(rCode,  err.Error())
@@ -113,7 +108,6 @@ func (e {{.ClassName}}) Insert(c *gin.Context) {
 		e.Error(500,  err.Error())
         return
 	}
-
 	e.OK(req.Id, "创建成功")
 }
 
@@ -137,7 +131,6 @@ func (e {{.ClassName}}) Update(c *gin.Context) {
         return
     }
 	p := actions.GetPermissionFromContext(c)
-
     uid, rCode, err := auth.GetUserId(c)
     if err != nil {
         e.Error(rCode,  err.Error())
@@ -175,15 +168,13 @@ func (e {{.ClassName}}) Delete(c *gin.Context) {
         e.Error(500,  err.Error())
         return
     }
-
 	p := actions.GetPermissionFromContext(c)
-
-	err = s.Remove(req.Id, p)
+	err = s.Remove(req.Ids, p)
 	if err != nil {
 		e.Error(500,  err.Error())
         return
 	}
-	e.OK( req.Id, "删除成功")
+	e.OK(req.Ids, "删除成功")
 }
 
 //
@@ -205,9 +196,7 @@ func (e {{.ClassName}}) Export(c *gin.Context) {
    		e.Error(500,  err.Error())
    		return
    	}
-
-	var sysConfService = adminService.NewSysConfigService(&e.Service)
-
+	var sysConfService = adminService.NewSysConfigService(&s.Service)
 	//最小规格数
 	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("test_sys_max_export_size","1000"))
 	if err != nil {
@@ -215,15 +204,14 @@ func (e {{.ClassName}}) Export(c *gin.Context) {
 		return
 	}
     p := actions.GetPermissionFromContext(c)
-    list := make([]models.{{.ClassName}}, 0)
-    var count int64
 	req.PageIndex = 1
 	req.PageSize = maxSize
-	err = s.GetPage(&req, p, &list, &count)
+	list,_,err := s.GetPage(&req, p)
     if err != nil {
         e.Error(500,  err.Error())
         return
     }
 	data, _ := s.GetExcel(list)
-	e.ExportExcelOk(data)
+	fileName := "{{.PackageName}}_{{.ModuleName}}_" + dateUtils.ConvertToStr(time.Now(), 3) + ".xlsx"
+	e.DownloadExcel(fileName, data)
 }

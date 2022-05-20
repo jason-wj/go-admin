@@ -2,17 +2,16 @@ package service
 
 import (
 	"errors"
-    "time"
     "fmt"
+    "github.com/360EntSecGroup-Skylar/excelize"
+    adminService "go-admin/app/admin/service"
     "go-admin/common/core/sdk/service"
-     adminService "go-admin/app/admin/service"
 	"gorm.io/gorm"
-
 	"go-admin/app/{{.PackageName}}/models"
 	"go-admin/app/{{.PackageName}}/service/dto"
 	"go-admin/common/actions"
-	"github.com/360EntSecGroup-Skylar/excelize"
 	cDto "go-admin/common/dto"
+	"time"
 )
 
 type {{.ClassName}} struct {
@@ -20,10 +19,10 @@ type {{.ClassName}} struct {
 }
 
 //
-// NewArticleService
+// New{{.ClassName}}Service
 // @Description: 实例化{{.ClassName}}
 // @param s
-// @return *Article
+// @return *{{.ClassName}}
 //
 func New{{.ClassName}}Service(s *service.Service) *{{.ClassName}} {
 	var srv = new({{.ClassName}})
@@ -38,21 +37,21 @@ func New{{.ClassName}}Service(s *service.Service) *{{.ClassName}} {
 // @receiver e
 // @param c
 // @param p
-// @return []models.{{.ClassName}}
-// @return int64 数量
+// @return []models.User
+// @return int64
 // @return error
 //
 func (e *{{.ClassName}}) GetPage(c *dto.{{.ClassName}}QueryReq, p *actions.DataPermission) ([]models.{{.ClassName}},int64,error) {
-	var err error
 	var data models.{{.ClassName}}
     var list []models.{{.ClassName}}
+    var count int64
 
-	err = e.Orm.Order("created_at desc").Model(&data).
+	err := e.Orm.Order("created_at desc").Model(&data).
 		Scopes(
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
 			actions.Permission(data.TableName(), p),
-		).Find(list).Limit(-1).Offset(-1).Count(count).Error
+		).Find(list).Limit(-1).Offset(-1).Count(&count).Error
 	if err != nil {
 		e.Log.Errorf("{{.ClassName}}Service GetPage error:%s \r\n", err)
 		return nil, 0, err
@@ -69,13 +68,12 @@ func (e *{{.ClassName}}) GetPage(c *dto.{{.ClassName}}QueryReq, p *actions.DataP
 // @return *models.{{.ClassName}}
 // @return error
 //
-func (e *{{.ClassName}}) Get(id int64, p *actions.DataPermission, model *models.{{.ClassName}}) (*models.{{.ClassName}}, error) {
+func (e *{{.ClassName}}) Get(id int64, p *actions.DataPermission) (*models.{{.ClassName}}, error) {
     if id<=0 {
-		return errors.New("编号不得为空！")
+		return nil,errors.New("编号不得为空！")
 	}
-	var data models.{{.ClassName}}
-	var err error
-    err = e.Orm.Model(&data).
+	model := &models.{{.ClassName}}
+    err := e.Orm.Model(&data).
         Scopes(
             actions.Permission(data.TableName(), p),
         ).First(model, id).Error
@@ -94,16 +92,16 @@ func (e *{{.ClassName}}) Get(id int64, p *actions.DataPermission, model *models.
 // @return error
 //
 func (e *{{.ClassName}}) QueryOne(queryCondition *dto.{{.ClassName}}QueryReq, p *actions.DataPermission) (*models.{{.ClassName}}, error) {
-	var data models.{{.ClassName}}
-	err := e.Orm.Model(&data).
+	model := &models.{{.ClassName}}{}
+	err := e.Orm.Model(&models.{{.ClassName}}{}).
 		Scopes(
 			cDto.MakeCondition(queryCondition.GetNeedSearch()),
-			actions.Permission(data.TableName(), p),
+			actions.Permission(model.TableName(), p),
 		).First(model).Error
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("数据不存在或无权查看该数据%s", err))
 	}
-	return nil
+	return model,nil
 }
 
 //
@@ -117,12 +115,19 @@ func (e *{{.ClassName}}) Insert(c *dto.{{.ClassName}}InsertReq) error {
     now := time.Now()
     var data models.{{.ClassName}}
     {{- range .Columns }}
-    data.{{.GoField}} = c.{{.GoField}}
-    {{- end }}
-    data.CreateBy = c.CurrUserId
-    data.UpdateBy = c.CurrUserId
+    {{- if eq .GoField "Id" -}}
+    {{- else if eq .GoField "CreatedAt" -}}
     data.CreatedAt = &now
+    {{- else if eq .GoField "UpdatedAt" -}}
     data.UpdatedAt = &now
+    {{- else if eq .GoField "CreateBy" -}}
+    data.CreateBy = c.CurrUserId
+    {{- else if eq .GoField "UpdateBy" -}}
+    data.UpdateBy = c.CurrUserId
+    {{- else }}
+    data.{{.GoField}} = c.{{.GoField}}
+    {{- end -}}
+    {{- end }}
 	err := e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("{{.ClassName}}Service Insert error:%s \r\n", err)
@@ -168,7 +173,7 @@ func (e *{{.ClassName}}) Update(c *dto.{{.ClassName}}UpdateReq, p *actions.DataP
 	if len(updates)>0 {
         updates["updated_at"] = time.Now()
         updates["update_by"] = c.CurrUserId
-        db := e.Orm.Model(&data).Where("id=?",data.Id).Updates(&updates)
+        err = e.Orm.Model(&data).Where("id=?",data.Id).Updates(&updates).Error
         if err != nil {
             e.Log.Errorf("{{.ClassName}}Service Update error:%s", err)
             return false, err
@@ -194,7 +199,7 @@ func (e *{{.ClassName}}) Remove(ids []int64, p *actions.DataPermission) error {
 	err := e.Orm.Model(&data).
 		Scopes(
 			actions.Permission(data.TableName(), p),
-		).Delete(&data, id).Error
+		).Delete(&data, ids).Error
 	if err != nil {
 		return errors.New(fmt.Sprintf("数据不存在或无权删除该数据%s", err))
 	}
