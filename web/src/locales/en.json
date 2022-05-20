@@ -106,7 +106,7 @@
 		"entFieldName": "Please enter field name",
 		"float": "Float",
 		"integer": "Integer",
-		"note": "id, created_at, updated_at, deleted_at will be automatically generated. Please do not create it repeatedly. If the condition is LIKE when searching, only strings are supported",
+		"note": "id, created_at, updated_at will be automatically generated. Please do not create it repeatedly. If the condition is LIKE when searching, only strings are supported",
 		"selectDataType": "Please select datatype",
 		"selectDictionary": "Please select dictionary",
 		"selectSearchType": "Please select field search condition",

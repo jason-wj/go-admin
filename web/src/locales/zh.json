@@ -106,7 +106,7 @@
 		"entFieldName": "请输入field英文名",
 		"float": "浮点型",
 		"integer": "整型",
-		"note": "id , created_at , updated_at , deleted_at 会自动生成请勿重复创建。搜索时如果条件为LIKE只支持字符串",
+		"note": "id , created_at , updated_at , 会自动生成请勿重复创建。搜索时如果条件为LIKE只支持字符串",
 		"selectDataType": "请选择field数据类型",
 		"selectDictionary": "请选择字典",
 		"selectSearchType": "请选择Field查询条件",

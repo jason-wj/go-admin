@@ -57,7 +57,6 @@ func (e *SysColumns) GetList(tx *gorm.DB, exclude bool) ([]SysColumns, error) {
 		notIn = append(notIn, "update_by")
 		notIn = append(notIn, "created_at")
 		notIn = append(notIn, "updated_at")
-		notIn = append(notIn, "deleted_at")
 		table = table.Where(" column_name not in(?)", notIn)
 	}
 
