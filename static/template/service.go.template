@@ -6,7 +6,6 @@ import (
     "github.com/360EntSecGroup-Skylar/excelize"
     adminService "go-admin/app/admin/service"
     "go-admin/common/core/sdk/service"
-	"gorm.io/gorm"
 	"go-admin/app/{{.PackageName}}/models"
 	"go-admin/app/{{.PackageName}}/service/dto"
 	"go-admin/common/actions"
@@ -72,10 +71,10 @@ func (e *{{.ClassName}}) Get(id int64, p *actions.DataPermission) (*models.{{.Cl
     if id<=0 {
 		return nil,errors.New("编号不得为空！")
 	}
-	model := &models.{{.ClassName}}
-    err := e.Orm.Model(&data).
+	model := &models.{{.ClassName}}{}
+    err := e.Orm.Model(&models.{{.ClassName}}{}).
         Scopes(
-            actions.Permission(data.TableName(), p),
+            actions.Permission(model.TableName(), p),
         ).First(model, id).Error
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("数据不存在或无权查看该数据%s", err))
@@ -116,13 +115,13 @@ func (e *{{.ClassName}}) Insert(c *dto.{{.ClassName}}InsertReq) error {
     var data models.{{.ClassName}}
     {{- range .Columns }}
     {{- if eq .GoField "Id" -}}
-    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "CreatedAt" }}
     data.CreatedAt = &now
-    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" }}
     data.UpdatedAt = &now
-    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "CreateBy" }}
     data.CreateBy = c.CurrUserId
-    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else if eq .GoField "UpdateBy" }}
     data.UpdateBy = c.CurrUserId
     {{- else }}
     data.{{.GoField}} = c.{{.GoField}}
