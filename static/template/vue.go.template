@@ -91,7 +91,6 @@
         {{- if (.Pk) }}
         {{- else if eq .GoField "CreatedAt" }}
         {{- else if eq .GoField "UpdatedAt" }}
-        {{- else if eq .GoField "DeletedAt" }}
         {{- else if eq .GoField "UpdateBy" }}
         {{- else if eq .GoField "CreateBy" }}
         {{- else }}
@@ -190,7 +189,6 @@ const rules = ref({
   {{- if eq .GoField "CreatedAt" }}
   {{- else if eq .GoField "Id" }}
   {{- else if eq .GoField "UpdatedAt" }}
-  {{- else if eq .GoField "DeletedAt" }}
   {{- else if eq .GoField "UpdateBy" }}
   {{- else if eq .GoField "CreateBy" }}
     {{- else }}
@@ -239,7 +237,6 @@ const reset = () => {
     {{- if (eq $x "1") }}
     {{- if eq .GoField "CreatedAt" }}
     {{- else if eq .GoField "UpdatedAt" }}
-    {{- else if eq .GoField "DeletedAt" }}
     {{- else if eq .GoField "UpdateBy" }}
     {{- else if eq .GoField "CreateBy" }}
     {{- else }}
