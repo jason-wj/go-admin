@@ -4,20 +4,20 @@
       <el-form ref="searchForm" :model="queryParams" :inline="true" label-position="left">
         <el-form-item label="表名称" prop="tableName">
           <el-input
-            v-model="queryParams.tableName"
-            placeholder="请输入表名称"
-            clearable
-            size="small"
-            @keyup.enter.native="handleQuery"
+              v-model="queryParams.tableName"
+              placeholder="请输入表名称"
+              clearable
+              size="small"
+              @keyup.enter.native="handleQuery"
           />
         </el-form-item>
         <el-form-item label="菜单名称" prop="tableComment">
           <el-input
-            v-model="queryParams.tableComment"
-            placeholder="请输入菜单名称"
-            clearable
-            size="small"
-            @keyup.enter.native="handleQuery"
+              v-model="queryParams.tableComment"
+              placeholder="请输入菜单名称"
+              clearable
+              size="small"
+              @keyup.enter.native="handleQuery"
           />
         </el-form-item>
 
@@ -61,11 +61,11 @@
         </el-table-column>
       </el-table>
       <pagination
-        v-show="total>0"
-        v-model:page="queryParams.pageIndex"
-        v-model:limit="queryParams.pageSize"
-        :total="total"
-        @pagination="getList"
+          v-show="total>0"
+          v-model:page="queryParams.pageIndex"
+          v-model:limit="queryParams.pageSize"
+          :total="total"
+          @pagination="getList"
       />
     </div>
 
@@ -85,10 +85,10 @@
         </div>-->
         <el-tabs v-model="preview.activeName" tab-position="left" @tab-click="codeChange">
           <el-tab-pane
-            v-for="(value, key) in preview.data"
-            :key="key"
-            :label="key.substring(key.lastIndexOf('/')+1,key.indexOf('.template'))"
-            :name="key"
+              v-for="(value, key) in preview.data"
+              :key="key"
+              :label="key.substring(key.lastIndexOf('/')+1,key.indexOf('.template'))"
+              :name="key"
           />
           <pre class="pre">
           <Codemirror v-model:value="codestr" :options="cmOptions" border />
@@ -177,10 +177,10 @@ const resetQuery = () => {
 const getList = () => {
   loading.value = true
   listTable(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
-    tableList.value = response.data.list
-    total.value = response.data.count
-    loading.value = false
-  }
+        tableList.value = response.data.list
+        total.value = response.data.count
+        loading.value = false
+      }
   )
 }
 
@@ -289,10 +289,12 @@ const handleToDB = async(row) => {
     type: 'warning'
   }).then(async() => {
     const res = await toDBTable(row.tableId)
-    ElMessage({
-      type: 'success',
-      message: res.msg
-    })
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+    }
   }).catch(() => {
     ElMessage({
       type: 'info',

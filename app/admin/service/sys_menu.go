@@ -85,9 +85,6 @@ func (e *SysMenu) Get(id int64) (*models.SysMenu, error) {
 
 // Insert 创建SysMenu对象
 func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
-	if c.CurrUserId <= 0 {
-		return errors.New("参数错误")
-	}
 	var err error
 	now := time.Now()
 	data := models.SysMenu{}
@@ -107,8 +104,8 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	data.Sort = c.Sort
 	data.Hidden = c.Hidden
 	data.IsFrame = c.IsFrame
-	data.CreateBy = c.CurrUserId
-	data.UpdateBy = c.CurrUserId
+	data.CreateBy = 1
+	data.UpdateBy = 1
 	data.CreatedAt = &now
 	data.UpdatedAt = &now
 	err = e.Orm.Create(&data).Error
@@ -137,8 +134,8 @@ func (e *SysMenu) InsertConf(id int) error {
 
 	Mmenu := dto.SysMenuControl{}
 	Mmenu.Title = tab.TableComment
-	Mmenu.Icon = "pass"
 	Mmenu.Path = "/" + tab.MLTBName
+	Mmenu.Icon = "pass"
 	Mmenu.MenuType = "M"
 	Mmenu.Action = "无"
 	Mmenu.ParentId = 0
