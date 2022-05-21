@@ -8,9 +8,7 @@ type SysMenu struct {
 	Title      string     `json:"title" gorm:"size:128;"`
 	Icon       string     `json:"icon" gorm:"size:128;"`
 	Path       string     `json:"path" gorm:"size:128;"`
-	Paths      string     `json:"paths" gorm:"size:128;"`
 	MenuType   string     `json:"menuType" gorm:"size:1;"`
-	Action     string     `json:"action" gorm:"size:16;"`
 	Permission string     `json:"permission" gorm:"size:255;"`
 	ParentId   int        `json:"parentId" gorm:"size:11;"`
 	KeepAlive  bool       `json:"keepAlive" gorm:"size:8;"`

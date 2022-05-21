@@ -108,9 +108,13 @@ func (e *{{.ClassName}}) QueryOne(queryCondition *dto.{{.ClassName}}QueryReq, p 
 // @Description: 创建{{.ClassName}}对象
 // @receiver e
 // @param c
+// @return int64 插入数据的主键
 // @return error
 //
-func (e *{{.ClassName}}) Insert(c *dto.{{.ClassName}}InsertReq) error {
+func (e *{{.ClassName}}) Insert(c *dto.{{.ClassName}}InsertReq) (int64, error) {
+    if c.CurrUserId <= 0 {
+        return 0, errors.New("参数错误")
+    }
     now := time.Now()
     var data models.{{.ClassName}}
     {{- range .Columns }}
@@ -130,9 +134,9 @@ func (e *{{.ClassName}}) Insert(c *dto.{{.ClassName}}InsertReq) error {
 	err := e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("{{.ClassName}}Service Insert error:%s \r\n", err)
-		return err
+		return 0, err
 	}
-	return nil
+	return data.Id, nil
 }
 
 //

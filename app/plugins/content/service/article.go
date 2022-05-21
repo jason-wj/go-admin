@@ -93,9 +93,9 @@ func (e *Article) Count(c *dto.ArticleQueryReq) (int64, error) {
 }
 
 // Insert 创建Article对象
-func (e *Article) Insert(c *dto.ArticleInsertReq) error {
+func (e *Article) Insert(c *dto.ArticleInsertReq) (int64, error) {
 	if c.CurrUserId <= 0 {
-		return errors.New("参数错误")
+		return 0, errors.New("参数错误")
 	}
 
 	now := time.Now()
@@ -112,9 +112,9 @@ func (e *Article) Insert(c *dto.ArticleInsertReq) error {
 	err := e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("ArticleService Insert error:%s", err)
-		return err
+		return 0, err
 	}
-	return nil
+	return data.Id, nil
 }
 
 // Update 修改Article对象

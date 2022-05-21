@@ -123,29 +123,29 @@ func (e *App) Count(c *dto.AppQueryReq) (int64, error) {
 }
 
 // Insert 创建App对象
-func (e *App) Insert(c *dto.AppInsertReq) error {
+func (e *App) Insert(c *dto.AppInsertReq) (int64, error) {
 	if c.CurrUserId <= 0 {
-		return errors.New("参数错误")
+		return 0, errors.New("参数错误")
 	}
 	if c.Platform == "" {
-		return errors.New("请选择一个平台")
+		return 0, errors.New("请选择一个平台")
 	}
 	if c.Version == "" {
-		return errors.New("请输入版本号")
+		return 0, errors.New("请输入版本号")
 	}
 	if c.DownloadType == "" {
-		return errors.New("请选择下载类型")
+		return 0, errors.New("请选择下载类型")
 	}
 	if c.DownloadType == AppDownloadTypeOss {
 		if c.Type == "" {
-			return errors.New("请选择App类型")
+			return 0, errors.New("请选择App类型")
 		}
 		if c.LocalAddress == "" {
-			return errors.New("请上传App文件")
+			return 0, errors.New("请上传App文件")
 		}
 	}
 	if c.Remark == "" {
-		return errors.New("更新内容不得为空")
+		return 0, errors.New("更新内容不得为空")
 	}
 	query := dto.AppQueryReq{}
 	query.Platform = c.Platform
@@ -153,10 +153,10 @@ func (e *App) Insert(c *dto.AppInsertReq) error {
 	query.Version = c.Version
 	count, err := e.Count(&query)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	if count > 0 {
-		return errors.New("版本已存在,请检查后重新录入")
+		return 0, errors.New("版本已存在,请检查后重新录入")
 	}
 
 	ossKey := ""
@@ -166,7 +166,7 @@ func (e *App) Insert(c *dto.AppInsertReq) error {
 	if c.DownloadType == AppDownloadTypeOss {
 		result, err := e.uploadOssFile(c.Type, c.Version, c.Platform, c.LocalAddress)
 		if err != nil {
-			return err
+			return 0, err
 		}
 		ossKey = result.OssKey
 		buckName = result.BucketName
@@ -192,9 +192,9 @@ func (e *App) Insert(c *dto.AppInsertReq) error {
 	err = e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("SysConfigService Insert error:%s", err)
-		return err
+		return 0, err
 	}
-	return nil
+	return 0, nil
 }
 
 // Update 修改App对象

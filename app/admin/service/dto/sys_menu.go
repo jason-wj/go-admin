@@ -23,11 +23,9 @@ type SysMenuControl struct {
 	Title      string          `form:"title" comment:"显示名称"`    //显示名称
 	Icon       string          `form:"icon" comment:"图标"`       //图标
 	Path       string          `form:"path" comment:"路径"`       //路径
-	Paths      string          `form:"paths" comment:"id路径"`    //id路径
 	MenuType   string          `form:"menuType" comment:"菜单类型"` //菜单类型
 	SysApi     []models.SysApi `form:"sysApi"`
 	Apis       []int           `form:"apis"`
-	Action     string          `form:"action" comment:"请求方式"`      //请求方式
 	Permission string          `form:"permission" comment:"权限编码"`  //权限编码
 	ParentId   int             `form:"parentId" comment:"上级菜单"`    //上级菜单
 	KeepAlive  bool            `form:"keepAlive" comment:"是否缓存"`   //是否缓存

@@ -5,7 +5,7 @@ import (
 )
 
 type Category struct {
-	Id int `json:"id" gorm:"primaryKey;autoIncrement;comment:主键编码"`
+	Id int64 `json:"id" gorm:"primaryKey;autoIncrement;comment:主键编码"`
 
 	Name      string     `json:"name" gorm:"column:name;type:varchar(255);comment:分类名称"`
 	CreatedAt *time.Time `json:"createdAt" gorm:"column:created_at;type:datetime;comment:创建时间"`

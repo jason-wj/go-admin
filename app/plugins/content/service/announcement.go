@@ -94,13 +94,20 @@ func (e *Announcement) Count(c *dto.AnnouncementQueryReq) (int64, error) {
 	return count, nil
 }
 
-// Insert 创建Announcement对象
-func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) error {
+//
+// Insert
+// @Description: 创建Announcement对象
+// @receiver e
+// @param c
+// @return int64 插入数据的主键
+// @return error
+//
+func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) (int64, error) {
 	if c.CurrUserId <= 0 {
-		return errors.New("参数错误")
+		return 0, errors.New("参数错误")
 	}
 	if c.Num < 0 {
-		return errors.New("阅读次数不得小于0！")
+		return 0, errors.New("阅读次数不得小于0！")
 	}
 
 	now := time.Now()
@@ -117,9 +124,9 @@ func (e *Announcement) Insert(c *dto.AnnouncementInsertReq) error {
 	err := e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("AnnouncementService Insert error:%s", err)
-		return err
+		return 0, err
 	}
-	return nil
+	return data.Id, nil
 }
 
 // Update 修改Announcement对象

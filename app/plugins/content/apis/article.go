@@ -93,7 +93,7 @@ func (e Article) Insert(c *gin.Context) {
 		return
 	}
 	req.CurrUserId = uid
-	err = s.Insert(&req)
+	_, err = s.Insert(&req)
 	if err != nil {
 		e.Error(500, err.Error())
 		return

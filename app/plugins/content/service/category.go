@@ -123,9 +123,14 @@ func (e *Category) QueryOne(queryCondition *dto.CategoryQueryReq) (*models.Categ
 // @Description: 创建{{.ClassName}}对象
 // @receiver e
 // @param c
+// @return int64
 // @return error
 //
-func (e *Category) Insert(c *dto.CategoryInsertReq) error {
+func (e *Category) Insert(c *dto.CategoryInsertReq) (int64, error) {
+	if c.CurrUserId <= 0 {
+		return 0, errors.New("参数错误")
+	}
+
 	now := time.Now()
 	data := models.Category{}
 	data.Name = c.Name
@@ -138,9 +143,9 @@ func (e *Category) Insert(c *dto.CategoryInsertReq) error {
 	err := e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("CategoryService Insert error:%s", err)
-		return err
+		return 0, err
 	}
-	return nil
+	return data.Id, nil
 }
 
 //

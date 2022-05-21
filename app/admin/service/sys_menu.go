@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"go-admin/common/core/sdk/pkg"
 	"gorm.io/gorm"
 
 	"go-admin/app/admin/models"
@@ -84,7 +83,7 @@ func (e *SysMenu) Get(id int64) (*models.SysMenu, error) {
 }
 
 // Insert 创建SysMenu对象
-func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
+func (e *SysMenu) Insert(c *dto.SysMenuControl) (int, error) {
 	var err error
 	now := time.Now()
 	data := models.SysMenu{}
@@ -92,9 +91,7 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	data.Title = c.Title
 	data.Icon = c.Icon
 	data.Path = c.Path
-	data.Paths = c.Paths
 	data.MenuType = c.MenuType
-	data.Action = c.Action
 	data.SysApi = c.SysApi
 	data.Permission = c.Permission
 	data.ParentId = c.ParentId
@@ -111,9 +108,9 @@ func (e *SysMenu) Insert(c *dto.SysMenuControl) error {
 	err = e.Orm.Create(&data).Error
 	if err != nil {
 		e.Log.Errorf("SysMenuService Insert error:%s", err)
-		return err
+		return 0, err
 	}
-	return nil
+	return data.MenuId, nil
 }
 
 func (e *SysMenu) InsertConf(id int) error {
@@ -132,142 +129,106 @@ func (e *SysMenu) InsertConf(id int) error {
 	tab, _ := table.Get(e.Orm, true)
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 
-	Mmenu := dto.SysMenuControl{}
-	Mmenu.Title = tab.TableComment
-	Mmenu.Path = "/" + tab.MLTBName
-	Mmenu.Icon = "pass"
-	Mmenu.MenuType = "M"
-	Mmenu.Action = "无"
-	Mmenu.ParentId = 0
-	Mmenu.KeepAlive = false
-	Mmenu.Component = "Layout"
-	Mmenu.Sort = 0
-	Mmenu.Hidden = false
-	Mmenu.IsFrame = "0"
-	Mmenu.CreateBy = 1
-	err = e.Insert(&Mmenu)
-	if err != nil {
-		return err
-	}
-
 	Cmenu := dto.SysMenuControl{}
-	Cmenu.Name = tab.ClassName + "Manage"
+	Cmenu.Name = tab.PackageName + "-" + tab.BusinessName
 	Cmenu.Title = tab.TableComment
 	Cmenu.Icon = "pass"
-	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
+	Cmenu.Path = tab.PackageName + "-" + tab.BusinessName
 	Cmenu.MenuType = "C"
-	Cmenu.Action = "无"
 	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
-	Cmenu.ParentId = Mmenu.MenuId
+	Cmenu.ParentId = 0
 	Cmenu.KeepAlive = false
-	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
+	plugins := ""
+	if tab.IsPlugin == "1" {
+		plugins = "plugins/"
+	}
+	Cmenu.Component = "view/" + plugins + tab.PackageName + "/" + tab.BusinessName + "/index.vue"
 	Cmenu.Sort = 0
 	Cmenu.Hidden = false
 	Cmenu.IsFrame = "0"
 	Cmenu.CreateBy = 1
 	Cmenu.UpdateBy = 1
-	err = e.Insert(&Cmenu)
+	menuId, err := e.Insert(&Cmenu)
 	if err != nil {
 		return err
 	}
 
 	MList := dto.SysMenuControl{}
-	MList.Name = ""
+	MList.Name = tab.PackageName + "-" + tab.BusinessName + "-query"
 	MList.Title = "分页获取" + tab.TableComment
 	MList.Icon = ""
-	MList.Path = tab.TBName
+	MList.Path = ""
 	MList.MenuType = "F"
-	MList.Action = "无"
 	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
-	MList.ParentId = Cmenu.MenuId
+	MList.ParentId = menuId
 	MList.KeepAlive = false
 	MList.Sort = 0
 	MList.Hidden = false
 	MList.IsFrame = "0"
 	MList.CreateBy = 1
 	MList.UpdateBy = 1
-	err = e.Insert(&MList)
+	_, err = e.Insert(&MList)
 	if err != nil {
 		return err
 	}
 
 	MCreate := dto.SysMenuControl{}
-	MCreate.Name = ""
+	MCreate.Name = tab.PackageName + "-" + tab.BusinessName + "-add"
 	MCreate.Title = "创建" + tab.TableComment
 	MCreate.Icon = ""
-	MCreate.Path = tab.TBName
+	MCreate.Path = ""
 	MCreate.MenuType = "F"
-	MCreate.Action = "无"
 	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
-	MCreate.ParentId = Cmenu.MenuId
+	MCreate.ParentId = menuId
 	MCreate.KeepAlive = false
 	MCreate.Sort = 0
 	MCreate.Hidden = false
 	MCreate.IsFrame = "0"
 	MCreate.CreateBy = 1
 	MCreate.UpdateBy = 1
-	err = e.Insert(&MCreate)
+	_, err = e.Insert(&MCreate)
 	if err != nil {
 		return err
 	}
 
 	MUpdate := dto.SysMenuControl{}
-	MUpdate.Name = ""
+	MUpdate.Name = tab.PackageName + "-" + tab.BusinessName + "-edit"
 	MUpdate.Title = "修改" + tab.TableComment
 	MUpdate.Icon = ""
-	MUpdate.Path = tab.TBName
+	MUpdate.Path = ""
 	MUpdate.MenuType = "F"
-	MUpdate.Action = "无"
 	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
-	MUpdate.ParentId = Cmenu.MenuId
+	MUpdate.ParentId = menuId
 	MUpdate.KeepAlive = false
 	MUpdate.Sort = 0
 	MUpdate.Hidden = false
 	MUpdate.IsFrame = "0"
 	MUpdate.CreateBy = 1
 	MUpdate.UpdateBy = 1
-	err = e.Insert(&MUpdate)
+	_, err = e.Insert(&MUpdate)
 	if err != nil {
 		return err
 	}
 
 	MDelete := dto.SysMenuControl{}
-	MDelete.Name = ""
+	MDelete.Name = tab.PackageName + "-" + tab.BusinessName + "-del"
 	MDelete.Title = "删除" + tab.TableComment
 	MDelete.Icon = ""
-	MDelete.Path = tab.TBName
+	MDelete.Path = ""
 	MDelete.MenuType = "F"
-	MDelete.Action = "无"
-	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
-	MDelete.ParentId = Cmenu.MenuId
+	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":del"
+	MDelete.ParentId = menuId
 	MDelete.KeepAlive = false
 	MDelete.Sort = 0
 	MDelete.Hidden = false
 	MDelete.IsFrame = "0"
 	MDelete.CreateBy = 1
 	MDelete.UpdateBy = 1
-	err = e.Insert(&MDelete)
+	_, err = e.Insert(&MDelete)
 	if err != nil {
 		return err
 	}
 	return nil
-}
-
-func (e *SysMenu) initPaths(menu *models.SysMenu) error {
-	var err error
-	var data models.SysMenu
-	parentMenu := new(models.SysMenu)
-	if menu.ParentId != 0 {
-		e.Orm.Model(&data).First(parentMenu, menu.ParentId)
-		if parentMenu.Paths == "" {
-			return errors.New("父级paths异常，请尝试对当前节点父级菜单进行更新操作！")
-		}
-		menu.Paths = parentMenu.Paths + "/" + pkg.IntToString(menu.MenuId)
-	} else {
-		menu.Paths = "/0/" + pkg.IntToString(menu.MenuId)
-	}
-	e.Orm.Model(&data).Where("menu_id = ?", menu.MenuId).Update("paths", menu.Paths)
-	return err
 }
 
 // Update 修改SysMenu对象
@@ -302,9 +263,7 @@ func (e *SysMenu) Update(c *dto.SysMenuControl) error {
 	model.Title = c.Title
 	model.Icon = c.Icon
 	model.Path = c.Path
-	model.Paths = c.Paths
 	model.MenuType = c.MenuType
-	model.Action = c.Action
 	model.Permission = c.Permission
 	model.ParentId = c.ParentId
 	model.KeepAlive = c.KeepAlive
@@ -453,7 +412,6 @@ func menuCall(menuList *[]models.SysMenu, menu models.SysMenu) models.SysMenu {
 		mi.Icon = list[j].Icon
 		mi.Path = list[j].Path
 		mi.MenuType = list[j].MenuType
-		mi.Action = list[j].Action
 		mi.Permission = list[j].Permission
 		mi.ParentId = list[j].ParentId
 		mi.KeepAlive = list[j].KeepAlive
