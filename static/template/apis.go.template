@@ -198,7 +198,7 @@ func (e {{.ClassName}}) Export(c *gin.Context) {
    	}
 	var sysConfService = adminService.NewSysConfigService(&s.Service)
 	//最小规格数
-	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("test_sys_max_export_size","1000"))
+	maxSize, err := strconv.Atoi(sysConfService.GetWithKeyStr("sys_max_export_size","1000"))
 	if err != nil {
 		e.Error(500,  fmt.Sprintf("配置读取异常：%s", err.Error()))
 		return
