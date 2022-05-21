@@ -52,6 +52,30 @@ nohup ./admin server &
 ## 开发注意
 1. 使用自定义配置启动命令：go-admin server -c=config/settings.dev.yml
 2. 检测并将接口加入到sys_api命令：go-admin server -a=true
+3. `生成前端代码后`，view中每个主菜单的文件目录下，需要新建一个`index.vue`，内容固定如下（name按需要改）：
+```vue
+<template>
+  <div>
+    <router-view v-slot="{ Component }">
+      <transition mode="out-in" name="el-fade-in-linear">
+        <keep-alive :include="routerStore.keepAliveRouters">
+          <component :is="Component" />
+        </keep-alive>
+      </transition>
+    </router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: '菜单名称'
+}
+</script>
+<script setup>
+import { useRouterStore } from '@/pinia/modules/router'
+const routerStore = useRouterStore()
+</script>
+```
 
 
 ## 感谢
