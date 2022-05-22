@@ -136,7 +136,7 @@ export default {
 </script>
 
 <script setup>
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, ref, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { resolveBlob } from '@/utils/zipdownload'
 import { export{{.ClassName}}, add{{.ClassName}}, del{{.ClassName}}, get{{.ClassName}}, list{{.ClassName}}, update{{.ClassName}} } from '@/api/{{ if (eq .IsPlugin "1") }}plugins/{{ end }}{{ .PackageName}}/{{ .BusinessName}}'

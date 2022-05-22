@@ -50,7 +50,7 @@ func (e *{{.ClassName}}) GetPage(c *dto.{{.ClassName}}QueryReq, p *actions.DataP
 			cDto.MakeCondition(c.GetNeedSearch()),
 			cDto.Paginate(c.GetPageSize(), c.GetPageIndex()),
 			actions.Permission(data.TableName(), p),
-		).Find(list).Limit(-1).Offset(-1).Count(&count).Error
+		).Find(&list).Limit(-1).Offset(-1).Count(&count).Error
 	if err != nil {
 		e.Log.Errorf("{{.ClassName}}Service GetPage error:%s \r\n", err)
 		return nil, 0, err

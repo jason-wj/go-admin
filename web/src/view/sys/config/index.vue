@@ -140,11 +140,10 @@ export default {
 </script>
 
 <script setup>
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, ref, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { resolveBlob } from '@/utils/zipdownload'
 import { exportConfig, addConfig, delConfig, getConfig, listConfig, updateConfig } from '@/api/sys/config'
-import { nextTick } from 'vue'
 
 const { proxy } = getCurrentInstance()
 
