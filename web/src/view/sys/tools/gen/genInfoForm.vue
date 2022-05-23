@@ -102,7 +102,7 @@ const rules = ref({
   ],
   moduleName: [
     { required: true, message: '请输入生成模块名', trigger: 'blur' },
-    { pattern: /^[a-z\-]*[a-z]$/g, trigger: 'blur', message: '只允许小写字母,例如 sys-demo 格式' }
+    // { pattern: /^[a-z\-]*[a-z]$/g, trigger: 'blur', message: '只允许小写字母,例如 sys-demo 格式' }
   ],
   businessName: [
     { required: true, message: '请输入生成业务名', trigger: 'blur' },

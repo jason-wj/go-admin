@@ -47,7 +47,7 @@ settings:
     # 代码生成读取的数据库名称
     dbname: go-admin
     # 代码生成是使用前端代码存放位置，需要指定到src文件夹，相对路径
-    frontpath: ../go-admin-ui/src
+    frontpath: ./web/src
   cache:
     # 缓存默认时间 单位：秒
     expired: 300

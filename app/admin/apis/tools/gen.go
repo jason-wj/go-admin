@@ -239,7 +239,7 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) 
 		_ = pkg.ZipFilCreate(writer, b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
 		_ = pkg.ZipFilCreate(writer, b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
 		_ = pkg.ZipFilCreate(writer, b4, "./front/api/"+pluginPath+tab.PackageName+"/"+tab.BusinessName+".js")
-		_ = pkg.ZipFilCreate(writer, b5, "./front/views/"+pluginPath+tab.PackageName+"/"+tab.BusinessName+"/index.vue")
+		_ = pkg.ZipFilCreate(writer, b5, "./front/view/"+pluginPath+tab.PackageName+"/"+tab.BusinessName+"/index.vue")
 		_ = pkg.ZipFilCreate(writer, b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
 		_ = pkg.ZipFilCreate(writer, b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
 		return buf
@@ -249,10 +249,10 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) 
 	_ = pkg.PathCreate("./app/" + tab.PackageName + "/router/")
 	_ = pkg.PathCreate("./app/" + tab.PackageName + "/service/dto/")
 	_ = pkg.PathCreate(config.GenConfig.FrontPath + "/api/" + pluginPath + tab.PackageName + "/")
-	err = pkg.PathCreate(config.GenConfig.FrontPath + "/views/" + pluginPath + tab.PackageName + "/" + tab.BusinessName + "/")
+	err = pkg.PathCreate(config.GenConfig.FrontPath + "/view/" + pluginPath + tab.PackageName + "/" + tab.BusinessName + "/")
 	if err != nil {
 		log.Error(err)
-		e.Error(500, fmt.Sprintf("views目录创建失败！错误详情：%s", err.Error()))
+		e.Error(500, fmt.Sprintf("view目录创建失败！错误详情：%s", err.Error()))
 		return nil
 	}
 
@@ -260,7 +260,7 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables, isDownload bool) 
 	pkg.FileCreate(b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
 	pkg.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
 	pkg.FileCreate(b4, config.GenConfig.FrontPath+"/api/"+tab.PackageName+"/"+tab.BusinessName+".js")
-	pkg.FileCreate(b5, config.GenConfig.FrontPath+"/views/"+tab.PackageName+"/"+tab.BusinessName+"/index.vue")
+	pkg.FileCreate(b5, config.GenConfig.FrontPath+"/view/"+tab.PackageName+"/"+tab.BusinessName+"/index.vue")
 	pkg.FileCreate(b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
 	pkg.FileCreate(b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
 	return nil
